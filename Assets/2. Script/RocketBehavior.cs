@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class RocketBehavior : MonoBehaviour
 {
     private float fev1 = 0f;
@@ -14,7 +15,9 @@ public class RocketBehavior : MonoBehaviour
 
     
     public Transform rocketTr = null;
-
+    public Rigidbody rocketRb = null;
+    public GameObject effect1 = null;
+    public GameObject effect2 = null;
 
     /// <summary>
     /// FEV1과 FVC를 받아 필요 수치들 계산.
@@ -35,7 +38,8 @@ public class RocketBehavior : MonoBehaviour
     /// </summary>
     private void Launch()
     {
-        StartCoroutine(StartEffect());
+        PreLaunchEffect();
+        StartCoroutine(LaunchBehavior());
 
     }
 
@@ -43,14 +47,41 @@ public class RocketBehavior : MonoBehaviour
     /// 점화, 발사 전 찌그러지는 로켓, 발사 후 
     /// </summary>
     /// <returns></returns>
-    IEnumerator StartEffect()
+    void PreLaunchEffect()
     {
         if (rocketTr == null)
             rocketTr = this.GetComponent<Transform>();
 
-        //찌그러졌다 발사이펙트
-        //rocketTr.localScale.y=
+        Invoke("FireEffect", 1.0f);
 
-        yield return null;
+        //1초 간, fev1양에 비례하게 찌그러졌다 발사이펙트
+        //rocketTr.localScale.y=
+        
+    }
+
+    void FireEffect()
+    {
+        effect1.SetActive(true);
+        effect2.SetActive(true);
+    }
+
+    /// <summary>
+    /// 발사효과 이후 실제 로켓 움직임
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator LaunchBehavior()
+    {
+        float startFly = Time.time;
+        if (rocketRb == null)
+            rocketRb = this.GetComponent<Rigidbody>();
+
+        yield return chargeTime;
+
+
+
+        rocketRb.AddForce(Vector3.up * flyTime, ForceMode.Acceleration);
+
+        if (Time.time >= startFly + flyTime)
+            StopCoroutine(LaunchBehavior());
     }
 }
