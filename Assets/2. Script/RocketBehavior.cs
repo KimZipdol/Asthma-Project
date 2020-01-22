@@ -1,23 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class RocketBehavior : MonoBehaviour
 {
-    private float fev1 = 0f;
-    private float fvc = 0f;
+    private float fev1 = 700f;
+    private float fvc = 1000f;
     private float ratio = 0f;
     private float chargeRaito = 0f;
-    private float flyRatio = 0f;
+    private float flyRatio = 0.01f;
     private float chargeTime = 0f;
     private float flyTime = 0f;
+    private float startFly = 0f;
+    private float effectTime = 0f;
 
-    
+
     public Transform rocketTr = null;
     public Rigidbody rocketRb = null;
     public GameObject effect1 = null;
     public GameObject effect2 = null;
+    public InputField fev1Input = null;
+    public InputField fvcInput = null;
 
     /// <summary>
     /// FEV1과 FVC를 받아 필요 수치들 계산.
@@ -33,36 +37,56 @@ public class RocketBehavior : MonoBehaviour
         flyTime = fvc * flyRatio;
     }
 
-    /// <summary>
-    /// 로켓 자체의 움직임을 컨트롤
-    /// </summary>
-    private void Launch()
-    {
-        PreLaunchEffect();
-        StartCoroutine(LaunchBehavior());
-
-    }
-
-    /// <summary>
-    /// 점화, 발사 전 찌그러지는 로켓, 발사 후 
-    /// </summary>
-    /// <returns></returns>
-    void PreLaunchEffect()
+    private void Start()
     {
         if (rocketTr == null)
             rocketTr = this.GetComponent<Transform>();
+        if (rocketRb == null)
+            rocketRb = this.GetComponent<Rigidbody>();
 
-        Invoke("FireEffect", 1.0f);
-
-        //1초 간, fev1양에 비례하게 찌그러졌다 발사이펙트
-        //rocketTr.localScale.y=
-        
     }
 
-    void FireEffect()
+    private void Update()
     {
+        if (Input.GetButton("Jump"))
+            Launch();
+    }
+
+    public void BreathInput()
+    {
+        fev1Input.text = "700";
+        fvcInput.text = "1000";
+    }
+
+
+
+    /// <summary>
+    /// 로켓 자체의 움직임을 컨트롤
+    /// </summary>
+    public void Launch()
+    {
+        fev1 = float.Parse(fev1Input.text);
+        fvc = float.Parse(fvcInput.text);
+        calculate(fev1, fvc);
+        effectTime = Time.time;
+        StartCoroutine(PreLaunchEffect());
+    }
+
+    /// <summary>
+    /// 1초 간, fev1양에 비례하게 찌그러졌다 발사이펙트
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator PreLaunchEffect()
+    {
+        while(Time.time<=effectTime+1f)
+        {
+            //rocketTr.localScale.y = fev1
+            yield return null;
+        }
         effect1.SetActive(true);
         effect2.SetActive(true);
+        startFly = Time.time;
+        StartCoroutine(LaunchBehavior());
     }
 
     /// <summary>
@@ -71,17 +95,13 @@ public class RocketBehavior : MonoBehaviour
     /// <returns></returns>
     IEnumerator LaunchBehavior()
     {
-        float startFly = Time.time;
-        if (rocketRb == null)
-            rocketRb = this.GetComponent<Rigidbody>();
-
-        yield return chargeTime;
-
-
-
-        rocketRb.AddForce(Vector3.up * flyTime, ForceMode.Acceleration);
-
-        if (Time.time >= startFly + flyTime)
-            StopCoroutine(LaunchBehavior());
+        
+        Debug.Log("애드포스해라...");
+        while (Time.time <= startFly + flyTime)
+        {
+            yield return 0.1f;
+            rocketRb.AddForce(Vector3.up * flyTime, ForceMode.Force);
+        }
+        StopCoroutine(LaunchBehavior());
     }
 }
