@@ -15,13 +15,15 @@ public class RocketBehavior : MonoBehaviour
     private float startFly = 0f;
     private float effectTime = 0f;
 
-
+    public GameObject Ceiling = null;
     public Transform rocketTr = null;
     public Rigidbody rocketRb = null;
-    public GameObject effect1 = null;
-    public GameObject effect2 = null;
+    public GameObject startEffect = null;
+    public GameObject endEffect = null;
     public InputField fev1Input = null;
     public InputField fvcInput = null;
+    public GameObject UIManager = null;
+    public RawImage rocketCam = null;
 
     /// <summary>
     /// FEV1과 FVC를 받아 필요 수치들 계산.
@@ -83,8 +85,7 @@ public class RocketBehavior : MonoBehaviour
             //rocketTr.localScale.y = fev1
             yield return null;
         }
-        effect1.SetActive(true);
-        effect2.SetActive(true);
+        startEffect.SetActive(true);
         startFly = Time.time;
         StartCoroutine(LaunchBehavior());
     }
@@ -95,13 +96,33 @@ public class RocketBehavior : MonoBehaviour
     /// <returns></returns>
     IEnumerator LaunchBehavior()
     {
-        
-        Debug.Log("애드포스해라...");
+        Ceiling.SendMessage("CeilingOpening");
         while (Time.time <= startFly + flyTime)
         {
             yield return 0.1f;
             rocketRb.AddForce(Vector3.up * flyTime, ForceMode.Force);
         }
+
+        StartCoroutine("FinishRocket");
+    }
+
+    IEnumerator FinishRocket()
+    {
         StopCoroutine(LaunchBehavior());
+
+        float height = rocketTr.position.y;
+        rocketRb.useGravity = false;
+        rocketRb.velocity = Vector3.zero;
+        endEffect.SetActive(true);
+        UIManager.SendMessage("ScoreUI", height);
+
+        
+
+        while(endEffect!=null)
+            yield return 0.1f;
+
+
+        rocketCam.gameObject.SetActive(false);
+        this.gameObject.SetActive(false);
     }
 }

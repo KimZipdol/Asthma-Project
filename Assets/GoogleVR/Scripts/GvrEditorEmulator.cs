@@ -232,7 +232,7 @@ public class GvrEditorEmulator : MonoBehaviour
             if (cam && cam.enabled && cam.stereoTargetEye != StereoTargetEyeMask.None)
             {
                 //cam.transform.localPosition = HeadPosition * cam.transform.lossyScale.y;
-                cam.transform.localRotation = HeadRotation;
+                //cam.transform.localRotation = HeadRotation;
             }
         }
     }
