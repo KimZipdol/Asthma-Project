@@ -893,7 +893,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19e7cf3b6be142718331b0682cd61ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  simuationCanvas: {fileID: 587532016}
   scoreText: {fileID: 1824637248}
   scorePanel: {fileID: 659492120}
 --- !u!1 &659492119
@@ -1360,8 +1359,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1051652861}
-        m_MethodName: blowEnd
+      - m_Target: {fileID: 1892276480}
+        m_MethodName: EndBlowing
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

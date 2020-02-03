@@ -24,12 +24,13 @@ public class RocketBehavior : MonoBehaviour
     private float deformZ = 0.55f;
 
 
-
+    public GameObject EffectCtrl = null;
     public GameObject Ceiling = null;
     public Transform rocketTr = null;
     public Rigidbody rocketRb = null;
     public GameObject startEffect = null;
     public GameObject endEffect = null;
+    public GameObject boostEffect = null;
     public InputField fev1Input = null;
     public InputField fvcInput = null;
     public GameObject UIManager = null;
@@ -121,6 +122,7 @@ public class RocketBehavior : MonoBehaviour
     IEnumerator LaunchBehavior()
     {
         Ceiling.SendMessage("CeilingOpening");
+        EffectCtrl.SendMessage("Boost");
         while (Time.time <= startFly + flyTime)
         {
             yield return 0.1f;

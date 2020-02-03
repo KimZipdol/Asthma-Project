@@ -90,11 +90,11 @@ public class FireReaction : MonoBehaviour
     IEnumerator blowEnd(int i)
     {
         float rotated = 70f - (i * 3f);
-        while (true)
+        while (!isBlowing)
         {
-            if (fireTr.rotation.x <= 0.1f || fireTr.rotation.x >= -0.1f)
+            if (fireTr.rotation.x <= 0.001f)
                 break;
-
+            
             fireTr.RotateAround(rotatePoint, rotateAxis, -1f);
             rotated--;
             yield return 0.00001f;
