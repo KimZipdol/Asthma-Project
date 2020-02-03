@@ -6,6 +6,11 @@ public class CandleControl : MonoBehaviour
 {
     public Transform[] candleFires = null;
 
+    private float fev1;
+    private float fvc;
+    private float smallerNumber;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,39 +24,62 @@ public class CandleControl : MonoBehaviour
     }
 
 
-    public void fev1Reaction(float fev1)
+    public void fev1Reaction()
     {
-        float number = fev1 *  0.01f;
-        StartCoroutine("fireSmaller", number);
+        fev1 = float.Parse(CandleGameManager.instance.fev1Input.text);
+        smallerNumber = fev1 *  0.01f;
+        StartCoroutine("fireSmaller", smallerNumber);
     }
 
-    IEnumerator fireSmaller(float number)
+    IEnumerator fireSmaller(float smallerNumber)
     {
-        for(int i = 0; i<(int)(number+1);i++)
-        {
-            Transform itemTr = candleFires[i].GetComponent<Transform>();
-            float scaleRatio = 0.05f;
-            float candlesToOff = number;
 
+        float candlesToOff = smallerNumber;
+        for (int i = 0; i < 10; i++)
+        {
+            candleFires[i].SendMessage("BlowStart", i);
+
+        }
+        for (int i = 0; i<(int)(smallerNumber + 1);i++)
+        {
             float border = 0.001f;
             if (candlesToOff < 1)
-                border = candlesToOff / 100 * 49;
+                border = (((0.5f - 0.001f) * (1f - candlesToOff)) + 0.001f) * 0.1f;
 
-            while (itemTr.localScale.x > border)
-            {
-                yield return 0.001f;
-                Vector3 scale = Vector3.one * scaleRatio;
-                itemTr.localScale = scale;
-                scaleRatio -= 0.001f;
-            }
+            candleFires[i].SendMessage("fireSmaller", border);
             candlesToOff--;
+            yield return 0.01f;
         }
-
+        
         StopCoroutine("fireSmaller");
     }
 
-    public void fvcReaction(float fvc)
+    public void fvcReaction()
     {
+        fvc = float.Parse(CandleGameManager.instance.fvcInput.text);
+        int offNumber = (int)((fvc / CandleGameManager.instance.maxFvc) * smallerNumber) - 1;
 
+        
+        float number = fvc * 0.01f;
+        StartCoroutine("fireOff", offNumber);
+    }
+
+    IEnumerator fireOff(int offNumber)
+    {
+        yield return 1f;
+        for (int i = 0; i < offNumber; i++)
+        {
+            candleFires[i].SendMessage("fireOff");
+            yield return 0.01f;
+        }
+        
+    }
+
+    public void blowEnd()
+    {
+        for (int i = (int)smallerNumber; i < 10; i++)
+        {
+            candleFires[i].SendMessage("blowFinished", i);
+        }
     }
 }
