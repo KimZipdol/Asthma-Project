@@ -28,6 +28,11 @@ public class InhaleGameManager : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        
+    }
+
     public void BreathInput()
     {
         fev1Input.text = "650";

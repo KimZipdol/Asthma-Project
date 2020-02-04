@@ -55,9 +55,10 @@ public class ObjectCtrl : MonoBehaviour
     IEnumerator ObjectRotate()
     {
         float angle = 20f;
+        Vector3 rotateAxis = playerTr.position - tr.position;
         while (true)
         {
-            tr.rotation = Quaternion.Euler(new Vector3(0, 0, tr.rotation.z+angle));
+            tr.rotation = Quaternion.Euler(rotateAxis + new Vector3(0f,0f,angle));
             angle+=20;
             yield return 0.05f;
         }
