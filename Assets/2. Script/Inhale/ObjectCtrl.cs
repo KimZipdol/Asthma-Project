@@ -43,37 +43,46 @@ public class ObjectCtrl : MonoBehaviour
 
     IEnumerator ObjectInhale()
     {
-        Vector3 target = new Vector3(playerTr.position.x, playerTr.position.y + 0.5f, playerTr.position.z);
-        float inhaleSpeed = (tr.position - target).magnitude * 0.005f;
-        while (true)
+        Vector3 playerPos = new Vector3(-0.071f, 1.5f, -1.47f);
+        //Vector3 playerPos = playerTr.position;
+        //Debug.Log(playerPos);
+        Vector3 target = playerPos - tr.position;
+        float inhaleSpeed = 0.008f;
+        while ((tr.position - playerPos).magnitude > 0.1f)
         {
-            tr.position = Vector3.Lerp(tr.position, target, inhaleSpeed);
+            tr.position += (target * inhaleSpeed);
             yield return 0.01f;
+            //Debug.Log(tr.position);
         }
+        this.gameObject.SetActive(false);
+
     }
 
     IEnumerator ObjectRotate()
     {
-        float angle = 20f;
+        float angle = 1f;
         Vector3 rotateAxis = playerTr.position - tr.position;
-        while (true)
+        while ((tr.position - playerTr.position).magnitude > 0.1f)
         {
-            tr.rotation = Quaternion.Euler(rotateAxis + new Vector3(0f,0f,angle));
-            angle+=20;
-            yield return 0.05f;
+            tr.Rotate(rotateAxis, angle);
+            angle+=1;
+            yield return 0.2f;
         }
+        this.gameObject.SetActive(false);
+
     }
 
     IEnumerator ObjectShrink()
     {
-        float shrinkFactor = 0.01f;
-        Vector3 newScale = Vector3.one * (1 - shrinkFactor);
-        while((tr.position-playerTr.position).magnitude>1f && tr.localScale.x>0.1)
+        float range = (playerTr.position - tr.position).magnitude;
+        float initialRange = range;
+        float scaleFactor;
+        while((tr.position-playerTr.position).magnitude>0.1f)
         {
-            tr.localScale = newScale;
-            shrinkFactor += 0.01f;
-            newScale = Vector3.one * (1 - shrinkFactor);
-            yield return 0.01f;
+            range = (playerTr.position - tr.position).magnitude;
+            scaleFactor = 1 - ((initialRange - range) / initialRange * 0.7f);
+            tr.localScale = Vector3.one * scaleFactor;
+            yield return null;
         }
 
         this.gameObject.SetActive(false);

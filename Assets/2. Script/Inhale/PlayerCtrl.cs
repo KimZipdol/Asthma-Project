@@ -10,6 +10,7 @@ public class PlayerCtrl : MonoBehaviour
     private LineRenderer line;
     private Transform effectTr = null;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,13 +21,14 @@ public class PlayerCtrl : MonoBehaviour
         line.endWidth = 0.05f;
 
         effectTr = inhaleEffect.GetComponent<Transform>();
+
+        StartCoroutine(SetEffectTransform());
     }
 
     // Update is called once per frame
     void Update()
     {
-        effectTr.position = tr.position + (tr.forward * 0.5f) + (Vector3.left * 0.1f);
-        effectTr.rotation = Quaternion.FromToRotation(effectTr.position, tr.position);
+        
 
         Ray ray = new Ray(tr.position, tr.forward);
         RaycastHit hit;
@@ -50,6 +52,16 @@ public class PlayerCtrl : MonoBehaviour
         StartCoroutine(this.ShowLaserBeam());
 
         
+    }
+
+    IEnumerator SetEffectTransform()
+    {
+        while(true)
+        {
+            effectTr.position = tr.position + (tr.forward * 0.3f) + (Vector3.left * 0.1f);
+            effectTr.rotation = Quaternion.FromToRotation(effectTr.forward, tr.position - effectTr.position);
+            yield return 0.01f;
+        }
     }
 
     IEnumerator ShowLaserBeam()
