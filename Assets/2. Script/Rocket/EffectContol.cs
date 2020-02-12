@@ -8,6 +8,7 @@ public class EffectContol : MonoBehaviour
 
     public Transform RocketTr;
     public GameObject boostEffect;
+    public GameObject startEffect = null;
 
     // Start is called before the first frame update
     void Start()
@@ -24,5 +25,12 @@ public class EffectContol : MonoBehaviour
     public void Boost()
     {
         boostEffect.SetActive(true);
+        startEffect.SetActive(true);
+        StartCoroutine(FlyBackground());
+    }
+
+    IEnumerator FlyBackground()
+    {
+        yield return null;
     }
 }

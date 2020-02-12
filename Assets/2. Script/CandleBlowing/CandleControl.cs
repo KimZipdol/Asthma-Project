@@ -9,59 +9,39 @@ public class CandleControl : MonoBehaviour
     private float fev1;
     private float fvc;
     private float smallerNumber;
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    private float sizeBorder = 0.01f;
+    private int offNum = 0;
+    private int offTurn = 0;
 
     public void fev1Reaction()
     {
         fev1 = float.Parse(CandleGameManager.instance.fev1Input.text);
-        smallerNumber = fev1 *  0.01f;
-        StartCoroutine("fireSmaller", smallerNumber);
+        StartCoroutine("fireSmaller");
     }
 
-    IEnumerator fireSmaller(float smallerNumber)
+    IEnumerator fireSmaller()
     {
-
-        float candlesToOff = smallerNumber;
-        for (int i = 0; i < 10; i++)
-        {
-            candleFires[i].SendMessage("BlowStart", i);
-
-        }
-        for (int i = 0; i<(int)(smallerNumber + 1);i++)
-        {
-            float border = 0.001f;
-            if (candlesToOff < 1)
-                border = (((0.5f - 0.001f) * (1f - candlesToOff)) + 0.001f) * 0.1f;
-
-            candleFires[i].SendMessage("fireSmaller", border);
-            candlesToOff--;
-            yield return 0.01f;
-        }
+        candleFires[(int)(fev1 / 100f)].SendMessage("BlowStart", (int)(fev1 / 100f));
+        candleFires[(int)(fev1 / 100f)].SendMessage("FireSmaller", fev1);
+        yield return null;
         
         StopCoroutine("fireSmaller");
     }
 
+    /// <summary>
+    /// 1초 이후 fvc에 따라 줄어들었던 불이 정해진 갯수만큼 꺼지게 하는 것
+    /// offTurn은 이번에 꺼질 차례인 촛불을 의미.
+    /// 꺼칠 차례의 촛불의 FireReaction 스크립트에 꺼지라는 메시지 전달.
+    /// </summary>
     public void fvcReaction()
     {
-        fvc = float.Parse(CandleGameManager.instance.fvcInput.text);
-        int offNumber = (int)((fvc / CandleGameManager.instance.maxFvc) * smallerNumber) - 1;
-
+        offNum = (int)((fvc / 1400f) * (fev1 / 100f));
         
-        float number = fvc * 0.01f;
-        StartCoroutine("fireOff", offNumber);
+        if(offNum>=offTurn)
+        { 
+            candleFires[offTurn].SendMessage("fireOff", fvc);
+            offTurn++;
+        }
     }
 
     IEnumerator fireOff(int offNumber)

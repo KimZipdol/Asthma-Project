@@ -10,8 +10,11 @@ public class FireReaction : MonoBehaviour
     private Vector3 rotatePoint = Vector3.zero;
     private Vector3 rotateAxis = Vector3.right;
     private float maxRotateAngle = 60f;
+    private float originZ = 0f;
 
+    private float trembleRange = 5f;
     public bool isBlowing = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -20,21 +23,33 @@ public class FireReaction : MonoBehaviour
         rotatePoint = fireTr.position;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-
-    }
-
-    public void fireSmaller(float border)
-    {
-        StartCoroutine("smallerAction", border);
+        if (isBlowing)
+            StartCoroutine(fireTremble());
     }
 
     public void BlowStart(int i)
     {
         isBlowing = true;
         StartCoroutine("onBlowed", i);
+    }
+
+    public void FireSmaller(float fev1)
+    {
+
+        StartCoroutine("smallerAction", fev1);
+    }
+
+
+    IEnumerator fireTremble()
+    {
+        while(isBlowing)
+        {
+            Vector3 eulerRot = new Vector3(0f, 0f, Random.Range(-1f * trembleRange, trembleRange));
+            fireTr.rotation = Quaternion.Euler(eulerRot);
+            yield return 1 / 60f;
+        }
     }
 
     IEnumerator onBlowed(int i)
@@ -52,34 +67,19 @@ public class FireReaction : MonoBehaviour
         }
     }
 
-    IEnumerator smallerAction(float border)
+    /// <summary>
+    /// 촛불의 불을 작게 해주는 함수.
+    /// </summary>
+    /// <param name="border"></param>
+    /// <returns></returns>
+    IEnumerator smallerAction(float fev1)
     {
-        if (border != 0.001f)
-            Debug.Log("border: " + border);
-
-        float scaleRatio = 0.05f;
-        while (fireTr.localScale.x > border)
-        {
-            yield return 0.001f;
-            Vector3 scale = Vector3.one * scaleRatio;
-            fireTr.localScale = scale;
-            scaleRatio -= 0.001f;
-        }
-
-        if (border == 0.001f)
-            fireOff();
+        float targetScale = 0.05f - (0.04f * ((fev1 % 100f) / 100f));
+        fireTr.localScale = Vector3.one * targetScale;
+        yield return null;
     }
 
-    public void fireOff()
-    {
-        this.gameObject.SetActive(false);
-    }
-
-
-
-
-
-
+    
 
     void blowFinished(int i)
     {
@@ -100,5 +100,16 @@ public class FireReaction : MonoBehaviour
             yield return 0.00001f;
 
         }
+
+        fireTr.rotation = Quaternion.Euler(Vector3.zero);
+    }
+
+    /// <summary>
+    /// 숨 불기가 끝났을 때 일어나느 ㄴ효과들.
+    /// </summary>
+    /// <param name="fvc"></param>
+    public void fireOff(float fvc)
+    {
+        
     }
 }

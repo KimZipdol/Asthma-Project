@@ -129,9 +129,9 @@ public class RocketBehavior1 : MonoBehaviour
     {
         while (deformed == true && clicktime<=1f)
         {
-            y = 0.5f - ((fev1 / maxFev1) * deformY);
-            x = 0.5f + ((fev1 / maxFev1) * deformX);
-            z = 0.5f + ((fev1 / maxFev1) * deformZ);
+            y = 0.5f - ((float.Parse(fev1Input.text) / maxFev1) * deformY);
+            x = 0.5f + ((float.Parse(fev1Input.text) / maxFev1) * deformX);
+            z = 0.5f + ((float.Parse(fev1Input.text) / maxFev1) * deformZ);
 
             rocketTr.localScale = new Vector3(x, y, z);
             yield return 1/60f;
@@ -179,18 +179,21 @@ public class RocketBehavior1 : MonoBehaviour
         deformed = true;
         launched = true;
 
+        
         Ceiling.SendMessage("CeilingOpening");
         EffectCtrl.SendMessage("Boost");
 
         while (Input.GetButton("Input1") || Input.GetButton("Input2"))
         {
-            Debug.Log("adf");
-            rocketRb.AddForce(Vector3.up * flyTime, ForceMode.Force);
+            rocketRb.AddForce(Vector3.up * 10f, ForceMode.Acceleration);
 
-            if(Input.GetButtonUp("Input1") || Input.GetButtonUp("Input2"))
+            if(Input.GetButtonDown("Input3"))
+            {
                 StartCoroutine("FinishRocket");
 
-            yield return 0.1f;
+            }
+
+            yield return 1/60f;
 
 
         }
