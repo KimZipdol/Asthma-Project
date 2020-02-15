@@ -7,8 +7,8 @@ using UnityEngine.UI;
 public class CandleGameManager1 : MonoBehaviour
 {
     private float clicktime = 0f;
-    private float input1perframe = 10f;
-    private float input2perframe = 5f;
+    private float input1perframe = 11f;
+    private float input2perframe = 6f;
     private int routineNum = 0;
 
 
@@ -80,7 +80,10 @@ public class CandleGameManager1 : MonoBehaviour
 
             if (clicktime >= 1f)
             {
-                if(Input.GetButton("Input3"))
+                if (Input.GetButton("Input3"))
+                {
+                    candleControl.SendMessage("blowEnd");
+                }
 
             }
 

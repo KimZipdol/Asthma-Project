@@ -1877,6 +1877,14 @@ PrefabInstance:
       propertyPath: InitialModule.startSpeed.scalar
       value: -6
       objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 352304b7fbe11f445970df6ae36e6227, type: 3}
+      propertyPath: RotationModule.x.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 352304b7fbe11f445970df6ae36e6227, type: 3}
+      propertyPath: RotationModule.y.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 352304b7fbe11f445970df6ae36e6227, type: 3}
       propertyPath: OnlyDeactivate
       value: 1

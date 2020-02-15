@@ -80,7 +80,10 @@ public class FireReaction : MonoBehaviour
     }
 
     
-
+    /// <summary>
+    /// 호기 종료 직후 반응.  촛불이 바람에 밀려 기울어졌던 것이 돌아오기.
+    /// </summary>
+    /// <param name="i"></param>
     void blowFinished(int i)
     {
         isBlowing = false;
@@ -105,7 +108,7 @@ public class FireReaction : MonoBehaviour
     }
 
     /// <summary>
-    /// 숨 불기가 끝났을 때 일어나느 ㄴ효과들.
+    /// 숨 불기가 1초 이후부터 숨 불기가 끝나기 전까지의 반응. 불 끄기
     /// </summary>
     /// <param name="fvc"></param>
     public void fireOff(float fvc)

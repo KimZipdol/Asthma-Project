@@ -15,7 +15,7 @@ public class CandleControl : MonoBehaviour
 
     public void fev1Reaction()
     {
-        fev1 = float.Parse(CandleGameManager.instance.fev1Input.text);
+        fev1 = float.Parse(CandleGameManager1.instance.fev1Input.text);
         StartCoroutine("fireSmaller");
     }
 
@@ -35,26 +35,18 @@ public class CandleControl : MonoBehaviour
     /// </summary>
     public void fvcReaction()
     {
-        offNum = (int)((fvc / 1400f) * (fev1 / 100f));
+        offNum = (int)((fvc / CandleGameManager1.instance.maxFvc) * (int)(fev1 / 100f));
         
-        if(offNum>=offTurn)
+        if(offNum>offTurn)
         { 
             candleFires[offTurn].SendMessage("fireOff", fvc);
             offTurn++;
         }
     }
 
-    IEnumerator fireOff(int offNumber)
-    {
-        yield return 1f;
-        for (int i = 0; i < offNumber; i++)
-        {
-            candleFires[i].SendMessage("fireOff");
-            yield return 0.01f;
-        }
-        
-    }
-
+    /// <summary>
+    /// 호기 종료 이후에 각 촛불의 기울기를 원래대로 되돌림. 게임컨트롤에서 불러옴
+    /// </summary>
     public void blowEnd()
     {
         for (int i = (int)smallerNumber; i < 10; i++)
