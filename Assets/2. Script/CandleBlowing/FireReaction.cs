@@ -11,9 +11,15 @@ public class FireReaction : MonoBehaviour
     private Vector3 rotateAxis = Vector3.right;
     private float maxRotateAngle = 60f;
     private float originZ = 0f;
+    private bool once = false;
 
     private float trembleRange = 5f;
+
+
     public bool isBlowing = false;
+
+
+    public GameObject offEffect = null;
 
 
     // Start is called before the first frame update
@@ -23,16 +29,13 @@ public class FireReaction : MonoBehaviour
         rotatePoint = fireTr.position;
     }
 
-    private void Update()
-    {
-        if (isBlowing)
-            StartCoroutine(fireTremble());
-    }
 
     public void BlowStart(int i)
     {
         isBlowing = true;
-        StartCoroutine("onBlowed", i);
+        if(!once)
+            StartCoroutine("fireRotateOnBlowed", i);
+        once = true;
     }
 
     public void FireSmaller(float fev1)
@@ -42,19 +45,10 @@ public class FireReaction : MonoBehaviour
     }
 
 
-    IEnumerator fireTremble()
-    {
-        while(isBlowing)
-        {
-            Vector3 eulerRot = new Vector3(0f, 0f, Random.Range(-1f * trembleRange, trembleRange));
-            fireTr.rotation = Quaternion.Euler(eulerRot);
-            yield return 1 / 60f;
-        }
-    }
-
-    IEnumerator onBlowed(int i)
+    IEnumerator fireRotateOnBlowed(int i)
     {
         float rotated = 0f;
+        
         while (isBlowing)
         {
             if (rotated >= (maxRotateAngle - (i * 3)))
@@ -62,8 +56,15 @@ public class FireReaction : MonoBehaviour
 
             fireTr.RotateAround(rotatePoint, rotateAxis, 1f);
             rotated++;
-            yield return 0.00001f;
+            yield return null;
             
+        }
+
+        while (isBlowing)
+        {
+            Vector3 eulerRot = new Vector3(maxRotateAngle - (i * 3), fireTr.rotation.y, Random.Range(-1f * trembleRange, trembleRange));
+            fireTr.rotation = Quaternion.Euler(eulerRot);
+            yield return 1 / 60f;
         }
     }
 
@@ -113,6 +114,8 @@ public class FireReaction : MonoBehaviour
     /// <param name="fvc"></param>
     public void fireOff(float fvc)
     {
-        
+        offEffect.SetActive(true);
+        StopAllCoroutines();
+        this.gameObject.SetActive(false);
     }
 }

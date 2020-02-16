@@ -26,12 +26,15 @@ public class ObjectCtrl : MonoBehaviour
         {
             outliner.enabled = false;
         }
+        else if(isTarget)
+        {
+            outliner.enabled = true;
+        }
     }
 
     public void HighlightOn()
     {
         isTarget = true;
-        outliner.enabled = true;
     }
 
     public void Inhaled()

@@ -16,13 +16,15 @@ public class CandleControl : MonoBehaviour
     public void fev1Reaction()
     {
         fev1 = float.Parse(CandleGameManager1.instance.fev1Input.text);
+        for(int i=0;i<10;i++)
+            candleFires[i].gameObject.SendMessage("BlowStart", i);
         StartCoroutine("fireSmaller");
     }
 
     IEnumerator fireSmaller()
     {
-        candleFires[(int)(fev1 / 100f)].SendMessage("BlowStart", (int)(fev1 / 100f));
-        candleFires[(int)(fev1 / 100f)].SendMessage("FireSmaller", fev1);
+        
+        candleFires[(int)(fev1 / 100f)].gameObject.SendMessage("FireSmaller", fev1);
         yield return null;
         
         StopCoroutine("fireSmaller");
@@ -35,11 +37,12 @@ public class CandleControl : MonoBehaviour
     /// </summary>
     public void fvcReaction()
     {
-        offNum = (int)((fvc / CandleGameManager1.instance.maxFvc) * (int)(fev1 / 100f));
-        
-        if(offNum>offTurn)
+        fvc = float.Parse(CandleGameManager1.instance.fvcInput.text);
+        float offRatio = (fvc / CandleGameManager1.instance.maxFvc);
+        offNum = (int)(offRatio * (int)(fev1 / 100f));
+        if(offNum>offTurn && offRatio<=1.01f)
         { 
-            candleFires[offTurn].SendMessage("fireOff", fvc);
+            candleFires[offTurn].gameObject.SendMessage("fireOff", fvc);
             offTurn++;
         }
     }
@@ -51,7 +54,7 @@ public class CandleControl : MonoBehaviour
     {
         for (int i = (int)smallerNumber; i < 10; i++)
         {
-            candleFires[i].SendMessage("blowFinished", i);
+            candleFires[i].gameObject.SendMessage("blowFinished", i);
         }
     }
 }

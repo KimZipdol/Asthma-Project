@@ -40,6 +40,11 @@ public class CandleGameManager1 : MonoBehaviour
         StartCoroutine("BreathInput");
     }
 
+    /// <summary>
+    /// 호기량에 따른 실시간 입력. 시뮬레이션 패널로의 반영과 동시에 실제 촛불 움직임을 CandleControl에 전달
+    ///
+    /// </summary>
+    /// <returns></returns>
     IEnumerator BreathInput()
     {
         while (true)
@@ -83,6 +88,7 @@ public class CandleGameManager1 : MonoBehaviour
                 if (Input.GetButton("Input3"))
                 {
                     candleControl.SendMessage("blowEnd");
+                    StopCoroutine("BreathInput");
                 }
 
             }
