@@ -5,10 +5,9 @@ using UnityEngine;
 public class PlayerCtrl : MonoBehaviour
 {
     public Transform tr = null;
-    public GameObject inhaleEffect = null;
 
     private LineRenderer line;
-    private Transform effectTr = null;
+    private int effectTurn = 0;
 
 
     // Start is called before the first frame update
@@ -20,9 +19,6 @@ public class PlayerCtrl : MonoBehaviour
         line.startWidth = 0.1f;
         line.endWidth = 0.05f;
 
-        effectTr = inhaleEffect.GetComponent<Transform>();
-
-        StartCoroutine(SetEffectTransform());
     }
 
     // Update is called once per frame
@@ -40,9 +36,11 @@ public class PlayerCtrl : MonoBehaviour
             if (hit.collider.gameObject.CompareTag("INTERACTABLE"))
             {
                 hit.collider.gameObject.SendMessage("HighlightOn");
-                if (Input.GetMouseButton(0))
+                if (Input.GetMouseButtonDown(0))
                 {
-                    inhaleEffect.SetActive(true);
+                    InhaleGameManager.instance.inhaleEffectPool[effectTurn%3].SetActive(true);
+                    effectTurn++;
+                    
                     hit.collider.gameObject.SendMessage("Inhaled");
                 }
             }
@@ -52,16 +50,6 @@ public class PlayerCtrl : MonoBehaviour
         StartCoroutine(this.ShowLaserBeam());
 
         
-    }
-
-    IEnumerator SetEffectTransform()
-    {
-        while(true)
-        {
-            effectTr.position = tr.position + (tr.forward * 0.3f) + (Vector3.left * 0.1f);
-            effectTr.rotation = Quaternion.FromToRotation(effectTr.forward, tr.position - effectTr.position);
-            yield return 0.01f;
-        }
     }
 
     IEnumerator ShowLaserBeam()

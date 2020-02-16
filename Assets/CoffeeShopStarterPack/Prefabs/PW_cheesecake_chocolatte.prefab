@@ -110,6 +110,7 @@ MonoBehaviour:
   outliner: {fileID: 0}
   isTarget: 0
   playerTr: {fileID: 0}
+  spdPerDist: 0.4
 --- !u!114 &8869516866531693320
 MonoBehaviour:
   m_ObjectHideFlags: 0

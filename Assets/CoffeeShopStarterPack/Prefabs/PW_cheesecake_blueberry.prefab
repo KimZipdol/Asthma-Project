@@ -128,3 +128,4 @@ MonoBehaviour:
   outliner: {fileID: 0}
   isTarget: 0
   playerTr: {fileID: 0}
+  spdPerDist: 0.4

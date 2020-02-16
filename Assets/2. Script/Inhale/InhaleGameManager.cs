@@ -5,15 +5,14 @@ using UnityEngine.UI;
 
 public class InhaleGameManager : MonoBehaviour
 {
-    public InputField fev1Input = null;
-    public InputField fvcInput = null;
-    public float maxFev1 = 1000f;
-    public float maxFvc = 1400f;
-
-    public GameObject candleControl = null;
     public GameObject UImanager = null;
+    public Transform playerTr = null;
 
     public static InhaleGameManager instance = null;
+
+    public GameObject effectPrefab = null;
+    public List<GameObject> inhaleEffectPool = new List<GameObject>();
+    private int maxEffectPool = 3;
 
     private void Awake()
     {
@@ -28,30 +27,40 @@ public class InhaleGameManager : MonoBehaviour
 
     }
 
-    private void Update()
-    {
-        
-    }
 
-    public void BreathInput()
+    private void Start()
     {
-        fev1Input.text = "650";
-        fvcInput.text = "1000";
-    }
-
-    /// <summary>
-    /// 불어넣기 시작. 1초간 fev1비례 불끄기
-    /// </summary>
-    public void SimulationStart()
-    {
-        candleControl.SendMessage("fev1Reaction");
-        candleControl.SendMessage("fvcReaction");
-    }
-
-    public void EndBlowing()
-    {
-        UImanager.SendMessage("ScoreUI");
-        candleControl.SendMessage("blowEnd");
+        CreatePool();
+        StartCoroutine(SetEffectTransform());
 
     }
+
+    public void CreatePool()
+    {
+        GameObject objectPools = new GameObject("ObjectPools");
+        for (int i = 0; i < maxEffectPool; i++)
+        {
+            var obj = Instantiate<GameObject>(effectPrefab, objectPools.transform);
+            obj.name = "Effect_" + i.ToString("00");
+            obj.SetActive(false);
+            inhaleEffectPool.Add(obj);
+        }
+    }
+
+
+
+    IEnumerator SetEffectTransform()
+    {
+        while (true)
+        {
+            for(int i = 0;i<maxEffectPool;i++)
+            {
+                inhaleEffectPool[i].transform.position = playerTr.position + (playerTr.forward * 1f) + (Vector3.left * 0.1f);
+                inhaleEffectPool[i].transform.rotation = playerTr.rotation;
+            }
+            yield return 0.01f;
+        }
+    }
+
+
 }

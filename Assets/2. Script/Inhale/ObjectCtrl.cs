@@ -9,6 +9,7 @@ public class ObjectCtrl : MonoBehaviour
     public Transform playerTr = null;
 
     private Transform tr = null;
+    public float spdPerDist;
 
 
     // Start is called before the first frame update
@@ -17,6 +18,7 @@ public class ObjectCtrl : MonoBehaviour
         outliner = this.GetComponent<Outline>();
         tr = this.GetComponent<Transform>();
         playerTr = GameObject.Find("Player").GetComponent<Transform>();
+        spdPerDist = 0.01f;
     }
 
     // Update is called once per frame
@@ -50,12 +52,11 @@ public class ObjectCtrl : MonoBehaviour
         //Vector3 playerPos = playerTr.position;
         //Debug.Log(playerPos);
         Vector3 target = playerPos - tr.position;
-        float inhaleSpeed = 0.008f;
+        float inhaleSpeed = target.magnitude * spdPerDist;
         while ((tr.position - playerPos).magnitude > 0.1f)
         {
             tr.position += (target * inhaleSpeed);
             yield return 0.01f;
-            //Debug.Log(tr.position);
         }
         this.gameObject.SetActive(false);
 
@@ -63,13 +64,13 @@ public class ObjectCtrl : MonoBehaviour
 
     IEnumerator ObjectRotate()
     {
-        float angle = 1f;
+        float angle = 2f;
         Vector3 rotateAxis = playerTr.position - tr.position;
         while ((tr.position - playerTr.position).magnitude > 0.1f)
         {
             tr.Rotate(rotateAxis, angle);
-            angle+=1;
-            yield return 0.2f;
+            angle+=2;
+            yield return 0.1f;
         }
         this.gameObject.SetActive(false);
 
