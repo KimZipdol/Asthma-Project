@@ -185,7 +185,7 @@ public class RocketBehavior1 : MonoBehaviour
 
         while (Input.GetButton("Input1") || Input.GetButton("Input2"))
         {
-            rocketRb.AddForce(Vector3.up * 10f, ForceMode.Acceleration);
+            rocketRb.AddForce(Vector3.up * 100f, ForceMode.Acceleration);
 
             if(Input.GetButtonDown("Input3"))
             {
