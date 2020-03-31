@@ -36,12 +36,11 @@ public class GameManager : MonoBehaviour
         {
             try
             {
-                /*float pressureVal = sp.Read();
-                Debug.Log(pressureVal.ToString());
-                */
+                byte[] pressureByte = new byte[4];
 
-                string value = sp.ReadLine();
-                print(value);
+                sp.Read(pressureByte, 0, 4);
+                Debug.Log(pressureByte[0].ToString());
+
                 sp.BaseStream.Flush();
             }
             catch (System.Exception)
