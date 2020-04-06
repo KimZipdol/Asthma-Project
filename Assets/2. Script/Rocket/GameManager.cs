@@ -7,7 +7,7 @@ using System.IO.Ports;
 public class GameManager : MonoBehaviour
 {
     SerialPort sp = new SerialPort("COM3", 115200);
-
+    byte[] pressureByte = new byte[2];
 
     public static GameManager instance = null;
 
@@ -27,7 +27,10 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         sp.Open();
-        sp.ReadTimeout = 1;
+        sp.ReadTimeout = 20;
+        
+        pressureByte[0] = 0;
+        pressureByte[1] = 0;
     }
 
     void Update()
@@ -36,11 +39,9 @@ public class GameManager : MonoBehaviour
         {
             try
             {
-                byte[] pressureByte = new byte[4];
 
-                sp.Read(pressureByte, 0, 4);
-                Debug.Log(pressureByte[0].ToString());
 
+                Debug.Log(sp.ReadLine());
                 sp.BaseStream.Flush();
             }
             catch (System.Exception)
@@ -49,5 +50,14 @@ public class GameManager : MonoBehaviour
                 throw;
             }
         }
+
+        /*
+        추가개발방향
+        블루투스를 통한 전송
+        무선블루투스 사용시 전원공급방식
+        센서로 받아온 데이터 영점조정 함수
+        게임 내에 영점조정 루틴 개발
+        씬 통합 및 메인메뉴
+        */
     }
 }
