@@ -7,7 +7,6 @@ using System.IO.Ports;
 public class GameManager : MonoBehaviour
 {
     SerialPort sp = new SerialPort("COM3", 115200);
-    byte[] pressureByte = new byte[2];
 
     public static GameManager instance = null;
 
@@ -28,9 +27,6 @@ public class GameManager : MonoBehaviour
     {
         sp.Open();
         sp.ReadTimeout = 20;
-        
-        pressureByte[0] = 0;
-        pressureByte[1] = 0;
     }
 
     void Update()

@@ -35,6 +35,7 @@ public class RocketBehavior : MonoBehaviour
     public InputField fvcInput = null;
     public GameObject UIManager = null;
     public RawImage rocketCam = null;
+    
 
     /// <summary>
     /// FEV1과 FVC를 받아 필요 수치들 계산.
