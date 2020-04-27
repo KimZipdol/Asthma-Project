@@ -6,6 +6,12 @@ using System.IO.Ports;
 
 public class GameManager : MonoBehaviour
 {
+    private float outtakeTime = 0f;
+
+
+    public GameObject rocketControl;
+
+
     SerialPort sp = new SerialPort("COM3", 115200);
 
     public static GameManager instance = null;
@@ -29,23 +35,41 @@ public class GameManager : MonoBehaviour
         sp.ReadTimeout = 20;
     }
 
-    void Update()
+    public void SensorStart()
     {
-        if(sp.IsOpen)
+        StartCoroutine(GetSensor());
+    }
+
+    IEnumerator GetSensor()
+    {
+        while(true)
         {
-            try
+            if (sp.IsOpen)
             {
+                try
+                {
+                    float input = float.Parse(sp.ReadLine());
+                    Debug.Log(input);
+                    sp.BaseStream.Flush();
+                    if(input<=0f)
+                    {
+                        rocketControl.SendMessage("Intake", input);
+                    }
+                    else
+                    {
 
+                    }
+                }
+                catch (System.Exception)
+                {
 
-                Debug.Log(sp.ReadLine());
-                sp.BaseStream.Flush();
+                    throw;
+                }
             }
-            catch (System.Exception)
-            {
 
-                throw;
-            }
+            yield return null;
         }
+
 
         /*
         추가개발방향

@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 public class RocketBehavior1 : MonoBehaviour
 {
+    private float fev1 = 700f;
+    private float maxFev1 = 1000f;
+    private float fvc = 1000f;
+    private float maxFvc = 1400f;
     private float ratio = 0f;
     private float chargeRaito = 0f;
     private float flyRatio = 0.01f;
@@ -19,7 +23,7 @@ public class RocketBehavior1 : MonoBehaviour
     private float deformX = 0.05f;
     private float deformZ = 0.05f;
 
-    private float outtakeTime = 0f;
+    private float clicktime = 0f;
     private float input1perframe = 10f;
     private float input2perframe = 5f;
     private bool launched = false;
@@ -28,7 +32,7 @@ public class RocketBehavior1 : MonoBehaviour
     private float x;
     private float z;
 
-    
+
     public GameObject EffectCtrl = null;
     public GameObject Ceiling = null;
     public Transform rocketTr = null;
@@ -36,19 +40,24 @@ public class RocketBehavior1 : MonoBehaviour
     public GameObject startEffect = null;
     public GameObject endEffect = null;
     public GameObject boostEffect = null;
-    public InputField IntakeInput = null;
     public InputField fev1Input = null;
     public InputField fvcInput = null;
     public GameObject UIManager = null;
     public RawImage rocketCam = null;
-    public Slider intakeGuage = null;
 
-    public float accerlationRation = 10f;
-    public float sensorToBreatheRatio = 1.0f;
-    public float sensorActionPotential = 10f;
-    public float maxFev1 = 1000f;
-    public float maxFvc = 1400f;
-    public float maxIntake = 1000f;
+    /// <summary>
+    /// FEV1과 FVC를 받아 필요 수치들 계산.
+    /// </summary>
+    /// <param name="getFEV1"></param>
+    /// <param name="getFVC"></param>
+    public void calculate(float getFEV1, float getFVC)
+    {
+        fev1 = getFEV1;
+        fvc = getFVC;
+        ratio = fev1 / fvc;
+        chargeTime = fev1 * chargeRaito;
+        flyTime = fvc * flyRatio;
+    }
 
     private void Start()
     {
@@ -56,69 +65,139 @@ public class RocketBehavior1 : MonoBehaviour
             rocketTr = this.GetComponent<Transform>();
         if (rocketRb == null)
             rocketRb = this.GetComponent<Rigidbody>();
+
+        StartCoroutine("BreathInput");
     }
 
+    private void Update()
+    {
+
+    }
+
+    IEnumerator BreathInput()
+    {
+        while (true)
+        {
+
+            if (Input.GetButton("Input1"))
+            {
+                clicktime += 1 / 60f;
+                if (clicktime >= 1f)
+                    fvcInput.text = (clicktime * input1perframe * 60).ToString();
+                else
+                {
+                    fev1Input.text = (clicktime * input1perframe * 60).ToString();
+                    if (deformed == false)
+                    {
+                        deformed = true;
+                        StartCoroutine(SetDeform());
+                    }
+                }
+            }
+
+            if (Input.GetButton("Input2"))
+            {
+                clicktime += 1 / 60f;
+                if (clicktime >= 1f)
+                    fvcInput.text = (clicktime * input2perframe * 60).ToString();
+                else
+                {
+                    fev1Input.text = (clicktime * input2perframe * 60).ToString();
+                    if (deformed == false)
+                    {
+                        deformed = true;
+                        StartCoroutine(SetDeform());
+                    }
+                }
+
+            }
+
+            if (clicktime >= 1f)
+            {
+                if (!deformed && launched)
+                    StartCoroutine(PreLaunchEffect());
+
+                if (!deformed && !launched)
+                    StartCoroutine(LaunchBehavior());
+            }
+
+            yield return 1 / 60f;
+        }
+    }
+
+    IEnumerator SetDeform()
+    {
+        while (deformed == true && clicktime <= 1f)
+        {
+            y = 0.5f - ((float.Parse(fev1Input.text) / maxFev1) * deformY);
+            x = 0.5f + ((float.Parse(fev1Input.text) / maxFev1) * deformX);
+            z = 0.5f + ((float.Parse(fev1Input.text) / maxFev1) * deformZ);
+
+            rocketTr.localScale = new Vector3(x, y, z);
+            yield return 1 / 60f;
+        }
+        deformed = false;
+        launched = true;
+        StopCoroutine(SetDeform());
+    }
 
     /// <summary>
-    /// 통신으로 데이터 받아옴
+    /// fev1에 따라 1초간 로켓의 높이를 찌그러지게. scale.y를 줄이고 scale.z, x를 늘려 찌그러진듯한 효과.
+    /// fev1은 최대 1000으로 가정했으므로 적절히 비율을 설정한다.
+    /// 최대의 경우 y는 절반, x와 z는 10%증가하게 비율을 설정.
+    /// 반복과 동시에 동시진행을 위해 코루틴으로.
     /// </summary>
-    public void GetData(float sensorInput)
+    /// <returns></returns>
+    IEnumerator PreLaunchEffect()
     {
-        if (sensorInput <= sensorActionPotential * -1f)
-            Intake(sensorInput);
-        else if (sensorInput >= sensorActionPotential)
-            Outtake(sensorInput);
-        
+        launched = false;
 
+        float ydiff = 0.5f - rocketTr.localScale.y;
+        float xdiff = rocketTr.localScale.x - 0.5f;
+        float zdiff = rocketTr.localScale.z - 0.5f;
+
+        Vector3 newScale;
+        int iter = 0;
+
+        while (iter < 10)
+        {
+            newScale = new Vector3(rocketTr.localScale.x - (xdiff / 10), rocketTr.localScale.y + (ydiff / 10), rocketTr.localScale.z - (zdiff / 10));
+            rocketTr.localScale = newScale;
+            iter++;
+            yield return 1 / 60f;
+        }
+
+        StopCoroutine(PreLaunchEffect());
     }
 
     /// <summary>
-    /// 게임시작 버튼 클릭 시, 흡기입력 받는 코루틴 시작.
-    /// </summary>
-    void Intake(float sensorInput)
-    {
-        if(sensorInput<=sensorActionPotential * -1f)
-        {
-            float intake = sensorInput * sensorToBreatheRatio * -1f;
-            float ratio = intake / maxIntake;
-            IntakeInput.text = (float.Parse(IntakeInput.text) + intake).ToString();
-            intakeGuage.value = ratio;
-            y = 0.5f - (ratio * deformY);
-            x = 0.5f + (ratio * deformX);
-            z = 0.5f + (ratio * deformZ);
-        }
-        else if(intakeGuage.value != 0f)
-        {
-            StartCoroutine(LaunchBehavior());
-        }
-    }
-
-    void Outtake(float sensorInput)
-    {
-        if (sensorInput <= sensorActionPotential && outtakeTime <= 1f)
-        {
-            outtakeTime += 1 / 60f;
-            float outtake = sensorInput * sensorToBreatheRatio;
-            fev1Input.text = (float.Parse(fev1Input.text) +outtake).ToString();
-            rocketRb.AddForce(Vector3.up * outtake * accerlationRation, ForceMode.Acceleration);
-        }
-        else if(intakeGuage.value == 0f && rocketRb.velocity.magnitude<=1f)
-        {
-            StartCoroutine(FinishRocket());
-        }
-    }
-
-    /// <summary>
-    /// 발사효과 이후 실제 로켓 움직임. 천장에 열기 메시지, 이펙트 시작 메시지, 가속. 종료시 종료코루틴 시작.
+    /// 발사효과 이후 실제 로켓 움직임
     /// </summary>
     /// <returns></returns>
     IEnumerator LaunchBehavior()
     {
+        deformed = true;
+        launched = true;
+
+
         Ceiling.SendMessage("CeilingOpening");
         EffectCtrl.SendMessage("Boost");
-        yield return 1f;
 
-        intakeGuage.value = 0f;
+        while (Input.GetButton("Input1") || Input.GetButton("Input2"))
+        {
+            rocketRb.AddForce(Vector3.up * 100f, ForceMode.Acceleration);
+
+            if (Input.GetButtonDown("Input3"))
+            {
+                StartCoroutine("FinishRocket");
+
+            }
+
+            yield return 1 / 60f;
+
+
+        }
+
     }
 
     IEnumerator FinishRocket()
@@ -131,9 +210,9 @@ public class RocketBehavior1 : MonoBehaviour
         endEffect.SetActive(true);
         UIManager.SendMessage("ScoreUI", height);
 
-        
 
-        while(endEffect!=null)
+
+        while (endEffect != null)
             yield return 0.1f;
 
 
