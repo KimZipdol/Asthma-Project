@@ -28,7 +28,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     private void Start()
     {
         sp.Open();
@@ -37,6 +36,7 @@ public class GameManager : MonoBehaviour
 
     public void SensorStart()
     {
+        rocketControl.SendMessage("InHaleStart");
         StartCoroutine(GetSensor());
     }
 
@@ -57,7 +57,16 @@ public class GameManager : MonoBehaviour
                     }
                     else
                     {
-
+                        if(outtakeTime>=1f)
+                        {
+                            outtakeTime += Time.deltaTime;
+                            rocketControl.SendMessage("FvcOuttake", input);
+                        }
+                        else
+                        {
+                            outtakeTime += Time.deltaTime;
+                            rocketControl.SendMessage("Fev1Outtake", input);
+                        }
                     }
                 }
                 catch (System.Exception)
