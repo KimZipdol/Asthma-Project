@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour
     {
         sp.Open();
         sp.ReadTimeout = 20;
+
+        
     }
 
     public void SensorStart()
@@ -79,6 +81,7 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
+        
 
         /*
         추가개발방향

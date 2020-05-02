@@ -625,6 +625,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b893da0d1c35f409592d792db3c8bd0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rocketTr: {fileID: 1108781260}
   rocketScript: {fileID: 1108781263}
   playerTr: {fileID: 124406240}
   camOffset: {x: 0, y: 0.11, z: -3.67}
