@@ -6,6 +6,10 @@ TagManager:
   tags:
   - FxTemporaire
   - INTERACTABLE
+  - ROCKETGAME
+  - CANDLEGAME
+  - FOODGAME
+  - ENDGAME
   layers:
   - Default
   - TransparentFX
@@ -15,7 +19,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - INTERACTABLE
   - 
   - 
   - 
