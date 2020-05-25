@@ -152,8 +152,8 @@ RectTransform:
   m_Father: {fileID: 628832679}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.45, y: 0.45}
-  m_AnchorMax: {x: 0.55, y: 0.55}
+  m_AnchorMin: {x: 0.47, y: 0.45}
+  m_AnchorMax: {x: 0.53, y: 0.55}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -648,12 +648,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1200}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -715,8 +715,9 @@ GameObject:
   - component: {fileID: 647009708}
   - component: {fileID: 647009712}
   - component: {fileID: 647009713}
+  - component: {fileID: 647009714}
   m_Layer: 8
-  m_Name: GameButton (3)
+  m_Name: EndGameButton
   m_TagString: ENDGAME
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -823,10 +824,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMode: 1
   outlineColor: {r: 1, g: 0.9779215, b: 0.5990566, a: 1}
-  outlineWidth: 1
+  outlineWidth: 10
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &647009714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 647009707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6b92afb905df460eb80bc4ddef47249, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1159264786}
+  thisOutLine: {fileID: 647009713}
 --- !u!1 &779696365
 GameObject:
   m_ObjectHideFlags: 0
@@ -859,8 +874,8 @@ RectTransform:
   m_Father: {fileID: 628832679}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.45, y: 0.45}
-  m_AnchorMax: {x: 0.55, y: 0.55}
+  m_AnchorMin: {x: 0.47, y: 0.45}
+  m_AnchorMax: {x: 0.53, y: 0.55}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -914,8 +929,9 @@ GameObject:
   - component: {fileID: 807846972}
   - component: {fileID: 807846976}
   - component: {fileID: 807846977}
+  - component: {fileID: 807846978}
   m_Layer: 8
-  m_Name: GameButton (1)
+  m_Name: CandleGameButton
   m_TagString: CANDLEGAME
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1022,10 +1038,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMode: 1
   outlineColor: {r: 1, g: 0.9779215, b: 0.5990566, a: 1}
-  outlineWidth: 1
+  outlineWidth: 10
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &807846978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 807846971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6b92afb905df460eb80bc4ddef47249, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1159264786}
+  thisOutLine: {fileID: 807846977}
 --- !u!1 &849486035
 GameObject:
   m_ObjectHideFlags: 0
@@ -1157,8 +1187,8 @@ RectTransform:
   m_Father: {fileID: 628832679}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.495, y: 0.495}
-  m_AnchorMax: {x: 0.505, y: 0.505}
+  m_AnchorMin: {x: 0.497, y: 0.495}
+  m_AnchorMax: {x: 0.503, y: 0.505}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1491,7 +1521,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 2
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 1159264789}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -1629,7 +1659,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce96fcd3c824f874d936729099a8365d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tr: {fileID: 0}
+  tr: {fileID: 1159264792}
+  SelectBG: {fileID: 779696365}
+  SelectImg: {fileID: 12971541}
+  SelectionTime: 2
+  fps: 60
 --- !u!1 &1396060365
 GameObject:
   m_ObjectHideFlags: 0
@@ -1644,8 +1678,9 @@ GameObject:
   - component: {fileID: 1396060366}
   - component: {fileID: 1396060370}
   - component: {fileID: 1396060371}
+  - component: {fileID: 1396060372}
   m_Layer: 8
-  m_Name: GameButton (0)
+  m_Name: RocketGameButton
   m_TagString: ROCKETGAME
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1752,10 +1787,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMode: 1
   outlineColor: {r: 1, g: 0.9779215, b: 0.5990566, a: 1}
-  outlineWidth: 1
+  outlineWidth: 10
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &1396060372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1396060365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6b92afb905df460eb80bc4ddef47249, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1159264786}
+  thisOutLine: {fileID: 1396060371}
 --- !u!1 &1410497065
 GameObject:
   m_ObjectHideFlags: 0
@@ -2290,8 +2339,9 @@ GameObject:
   - component: {fileID: 1909991093}
   - component: {fileID: 1909991097}
   - component: {fileID: 1909991098}
+  - component: {fileID: 1909991099}
   m_Layer: 8
-  m_Name: GameButton (2)
+  m_Name: FoodGameButton
   m_TagString: FOODGAME
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2398,10 +2448,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMode: 1
   outlineColor: {r: 1, g: 0.9779215, b: 0.5990566, a: 1}
-  outlineWidth: 1
+  outlineWidth: 10
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &1909991099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1909991092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6b92afb905df460eb80bc4ddef47249, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1159264786}
+  thisOutLine: {fileID: 1909991098}
 --- !u!1 &2091034414
 GameObject:
   m_ObjectHideFlags: 0
