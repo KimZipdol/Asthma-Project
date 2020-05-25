@@ -216,24 +216,20 @@ public class GvrEditorEmulator2 : MonoBehaviour
     private void UpdateHeadPositionAndRotation()
     {
         HeadRotation = Quaternion.Euler(mouseY, mouseX, mouseZ);
-        //HeadPosition = (HeadRotation * NECK_OFFSET) - (NECK_OFFSET.y * Vector3.up);
+        HeadPosition = (HeadRotation * NECK_OFFSET) - (NECK_OFFSET.y * Vector3.up);
     }
 
     private void ApplyHeadOrientationToVRCameras()
     {
         UpdateAllCameras();
 
-        // Update all VR cameras using Head position and rotation information.
-        for (int i = 0; i < Camera.allCamerasCount; ++i)
-        {
-            Camera cam = allCameras[i];
+        Camera cam = allCameras[0];
 
-            // Check if the Camera is a valid VR Camera, and if so update it to track head motion.
-            if (cam && cam.enabled && cam.stereoTargetEye != StereoTargetEyeMask.None)
-            {
-                //cam.transform.localPosition = HeadPosition * cam.transform.lossyScale.y;
-                //cam.transform.localRotation = HeadRotation;
-            }
+        // Check if the Camera is a valid VR Camera, and if so update it to track head motion.
+        if (cam && cam.enabled && cam.stereoTargetEye != StereoTargetEyeMask.None)
+        {
+            cam.transform.localPosition = HeadPosition * cam.transform.lossyScale.y;
+            cam.transform.localRotation = HeadRotation;
         }
     }
 

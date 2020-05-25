@@ -19,6 +19,8 @@ public class PlayerCtrl : MonoBehaviour
         line.startWidth = 0.1f;
         line.endWidth = 0.05f;
 
+
+        StartCoroutine(this.ShowLaserBeam());
     }
 
     // Update is called once per frame
@@ -47,7 +49,6 @@ public class PlayerCtrl : MonoBehaviour
         }
         else line.SetPosition(1, ray.GetPoint(100.0f));
 
-        StartCoroutine(this.ShowLaserBeam());
 
         
     }

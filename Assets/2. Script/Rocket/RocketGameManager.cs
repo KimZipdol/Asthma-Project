@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO.Ports;
 
-public class GameManager : MonoBehaviour
+public class RocketGameManager : MonoBehaviour
 {
     private float outtakeTime = 0f;
 
@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
 
     SerialPort sp = new SerialPort("COM3", 115200);
 
-    public static GameManager instance = null;
+    public static RocketGameManager instance = null;
 
     private void Awake()
     {

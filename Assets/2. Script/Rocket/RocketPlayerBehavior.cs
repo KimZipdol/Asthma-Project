@@ -6,10 +6,12 @@ using UnityEngine;
 /// <summary>
 /// 로켓발사 후 로켓 따라가도록 이동, 각도를 가속에 따라 돌리도록하여 속도감 줄 예정 플레이어 위치 기준 VR UI 배치예정
 /// </summary>
-public class PlayerBehavior : MonoBehaviour
+public class RocketPlayerBehavior : MonoBehaviour
 {
+    public GameObject menuButtons = null;
     public Transform rocketTr = null;
-    public RocketBehavior2 rocketScript = null;
+    public RocketBehavior1 rocketScript = null;
+    public RocketBehavior2 rocketScript2 = null;
     public Transform playerTr;
     public Vector3 camOffset;
     public float camMoveSpd = 1f;
@@ -21,9 +23,16 @@ public class PlayerBehavior : MonoBehaviour
 
     private void Update()
     {
-        if (rocketScript.currState == RocketBehavior2.RocketState.EXHALE)
+        /*  로켓2
+         * if (rocketScript2.currState == RocketBehavior2.RocketState.EXHALE)
         {
             StartCoroutine(FollowRocket());
+        }*/
+
+        if (rocketScript.rocketRb.velocity.magnitude>=0.3f)
+        {
+            StartCoroutine(FollowRocket());
+            menuButtons.SendMessage("FollowPlayer");
         }
     }
 

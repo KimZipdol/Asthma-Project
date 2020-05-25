@@ -4,17 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class PlayerBehavior : MonoBehaviour
+public class CamRayCast : MonoBehaviour
 {
     public Transform tr = null;
     public GameObject SelectBG = null;
     public Image SelectImg = null;
-    public float SelectionTime = 2f;
+    public float SelectionTime = 3f;
 
     [SerializeField]
     private float fps = 60f;
 
     private LineRenderer line;
+    private GameObject prevHit;
 
     Ray ray = new Ray();
     private RaycastHit hit;
@@ -36,14 +37,13 @@ public class PlayerBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
 
         line.SetPosition(0, tr.position);
         if (Physics.Raycast(tr.position, tr.forward, out hit, 100f))
         {
             line.SetPosition(1, hit.point);
-            
-            if (hit.collider.gameObject.layer==8)
+            if (hit.collider.gameObject.layer == 9)
             {
                 hit.collider.gameObject.SendMessage("OnRayHit");
             }
@@ -66,12 +66,16 @@ public class PlayerBehavior : MonoBehaviour
     IEnumerator SelectGame()
     {
         SelectBG.SetActive(true);
-        while(hit.collider.gameObject.layer == 8)
+        prevHit = hit.collider.gameObject;
+        while (hit.collider.gameObject.layer == 9)
         {
-            if(SelectImg.fillAmount>=0.99)
+            if (SelectImg.fillAmount >= 0.99)
             {
                 switch (hit.collider.gameObject.tag)
                 {
+                    case ("TOMAIN"):
+                        SceneManager.LoadScene("0. StartScene", LoadSceneMode.Single);
+                        break;
                     case ("ROCKETGAME"):
                         SceneManager.LoadScene("1. RocketGame", LoadSceneMode.Single);
                         break;
@@ -82,7 +86,13 @@ public class PlayerBehavior : MonoBehaviour
                         SceneManager.LoadScene("3. Inhaler", LoadSceneMode.Single);
                         break;
                     case ("ENDGAME"):
+#if UNITY_EDITOR
+                        UnityEditor.EditorApplication.isPlaying = false;
+
+#else
                         Application.Quit();
+#endif
+
                         break;
                     default:
                         break;
@@ -91,9 +101,8 @@ public class PlayerBehavior : MonoBehaviour
             SelectImg.fillAmount += 1 / (fps * SelectionTime);
             yield return Time.deltaTime;
         }
-        hit.collider.gameObject.SendMessage("OutLineOff");
+        prevHit.SendMessage("OutLineOff");
         SelectBG.SetActive(false);
         SelectImg.fillAmount = 0f;
-        
     }
 }

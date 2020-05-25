@@ -10,6 +10,8 @@ TagManager:
   - CANDLEGAME
   - FOODGAME
   - ENDGAME
+  - Fluid
+  - TOMAIN
   layers:
   - Default
   - TransparentFX
@@ -20,7 +22,7 @@ TagManager:
   - 
   - 
   - INTERACTABLE
-  - 
+  - MENUBUTTONS
   - 
   - 
   - 
