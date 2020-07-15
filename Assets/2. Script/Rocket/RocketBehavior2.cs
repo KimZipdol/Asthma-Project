@@ -42,10 +42,10 @@ public class RocketBehavior2 : MonoBehaviour
     public RawImage rocketCam = null;
     public Slider intakeGuage = null;
 
-    public enum RocketState { MENU = 0, INHALE, EXHALE, FINISH };
-    public RocketState currState = RocketState.MENU;
+    public enum RocketState { GUIDE = 0, INHALEREADY, INHALE, EXHALE, FINISH };
+    public RocketState currState = RocketState.GUIDE;
 
-    public float accerlationRation = 10f;
+    public float accelerationRatio = 10f;
     public float sensorToBreatheRatio = 1.0f;
     public float sensorActionPotential = 10f;
     public float maxFev1 = 1000f;
@@ -127,7 +127,7 @@ public class RocketBehavior2 : MonoBehaviour
             float outtake = sensorInput * sensorToBreatheRatio;
             fev1Input.text = (float.Parse(fev1Input.text) + outtake).ToString();
             fvcInput.text = fev1Input.text;
-            rocketRb.AddForce(Vector3.up * outtake * accerlationRation, ForceMode.Acceleration);
+            rocketRb.AddForce(Vector3.up * outtake * accelerationRatio, ForceMode.Acceleration);
         }
     }
 
@@ -137,7 +137,7 @@ public class RocketBehavior2 : MonoBehaviour
         {
             float outtake = sensorInput * sensorToBreatheRatio;
             fvcInput.text = (float.Parse(fvcInput.text) + outtake).ToString();
-            rocketRb.AddForce(Vector3.up * outtake * accerlationRation, ForceMode.Acceleration);
+            rocketRb.AddForce(Vector3.up * outtake * accelerationRatio, ForceMode.Acceleration);
         }
     }
 

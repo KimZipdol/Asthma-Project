@@ -85,6 +85,12 @@ public class CamRayCast : MonoBehaviour
                     case ("FOODGAME"):
                         SceneManager.LoadScene("3. Inhaler", LoadSceneMode.Single);
                         break;
+                    case ("UP"):
+                        //로그인화면에 스크롤 맨 위가 아니라면  업
+                        break;
+                    case ("DOWN"):
+                        //로그인화면에서 스크롤 맨 아래가 아니라면 다운 
+                        break;
                     case ("ENDGAME"):
 #if UNITY_EDITOR
                         UnityEditor.EditorApplication.isPlaying = false;

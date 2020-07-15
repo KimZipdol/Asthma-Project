@@ -12,6 +12,8 @@ TagManager:
   - ENDGAME
   - Fluid
   - TOMAIN
+  - UP
+  - DOWN
   layers:
   - Default
   - TransparentFX

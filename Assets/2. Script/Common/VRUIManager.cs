@@ -16,7 +16,7 @@ public class VRUIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        thisTr.position = playerTr.position + (playerTr.forward * 1.5f);
+        thisTr.position = playerTr.position + (playerTr.forward);
         thisTr.LookAt(playerTr);
     }
 }

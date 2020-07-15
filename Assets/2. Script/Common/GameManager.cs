@@ -5,12 +5,6 @@ using System.IO.Ports;
 
 public class GameManager : MonoBehaviour
 {
-    
-
-
-
-
-    
     public static GameManager instance = null;
 
     private void Awake()
@@ -29,12 +23,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         
-
-        
     }
-
-
-        
 
         /*
         추가개발방향
@@ -44,5 +33,5 @@ public class GameManager : MonoBehaviour
         게임 내에 영점조정 루틴 개발
         씬 통합 및 메인메뉴
         */
-    }
+    
 }
