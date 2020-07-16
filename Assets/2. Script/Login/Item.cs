@@ -24,3 +24,35 @@ public class Item : UIBehaviour
 		uiIcon.sprite = Resources.Load<Sprite>((Mathf.Abs(count) % 30 + 1).ToString("icon000"));
 	}
 }
+
+public class PlayerData
+{
+	public string playerName;
+	public int playerLevel;
+	public int playerProgrss;
+	public int playerTrainingCount;
+
+	PlayerData(string input, int level=0, int progress =0, int count=0)
+    {
+		playerName = input;
+		playerLevel = level;
+		playerProgrss = progress;
+		playerTrainingCount = count;
+    }
+
+	public void print()
+    {
+		Debug.Log("Name: " + playerName + ", Level: " + playerLevel
+			+ ", Progress" + playerProgrss + "%, TrainingCount: " + playerTrainingCount);
+    }
+
+	string ObjectToJson(object obj)
+    {
+		return JsonUtility.ToJson(obj);
+    }
+
+	T JsonToObject<T>(string jsondata)
+    {
+		return JsonUtility.FromJson<T>(jsondata);
+    }
+}

@@ -10,6 +10,7 @@ public class ButtonCtrl : MonoBehaviour
 
     public void OnRayHit()
     {
+        Debug.Log(this.gameObject.name);
         thisOutLine.enabled = true;
         player.SendMessage("StartSelection");
     }
