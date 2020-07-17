@@ -25,14 +25,15 @@ public class Item : UIBehaviour
 	}
 }
 
+[System.Serializable]
 public class PlayerData
 {
 	public string playerName;
 	public int playerLevel;
-	public int playerProgrss;
+	public float playerProgrss;
 	public int playerTrainingCount;
 
-	PlayerData(string input, int level=0, int progress =0, int count=0)
+	PlayerData(string input, int level=0, float progress =0, int count=0)
     {
 		playerName = input;
 		playerLevel = level;
