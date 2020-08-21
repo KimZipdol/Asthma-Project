@@ -1,10 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO.Ports;
+using System.IO;
+using System;
+
 
 public class GameManager : MonoBehaviour
 {
+    /*
+    GameManager
+    세이브기능 담당.
+    플레이어 이름, 진행단계, 단계 내 진행정도 저장.
+    게임 내에 영점조정 루틴 개발
+    */
+
+    public string GameDataFileName = ".json";
+
+    int saveCount = 0;
+
+    public GameData _gameData;
+    public GameData gameData
+    {
+        get
+        {
+            if(_gameData == null)
+            {
+                LoadGameData();
+                SaveGameData();
+            }
+            return _gameData;
+        }
+    }
+
+    // 세이브 구현을 위한 Singleton
     public static GameManager instance = null;
 
     private void Awake()
@@ -22,16 +50,39 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        
+        saveCount = PlayerPrefs.GetInt("SaveCount");
     }
 
-        /*
-        추가개발방향
-        블루투스를 통한 전송
-        무선블루투스 사용시 전원공급방식
-        센서로 받아온 데이터 영점조정 함수
-        게임 내에 영점조정 루틴 개발
-        씬 통합 및 메인메뉴
-        */
-    
+    public void LoadGameData()
+    {
+        string filePath = Application.persistentDataPath + GameDataFileName;
+
+        if(File.Exists(filePath))
+        {
+            Debug.Log("불러오기 성공!");
+            string FromJsonData = File.ReadAllText(filePath);
+            _gameData = JsonUtility.FromJson<GameData>(FromJsonData);
+        }
+        else
+        {
+            Debug.Log("새로운 파일 생성");
+
+            _gameData = new GameData();
+        }
+    }
+
+    public void SaveGameData()
+    {
+        string ToJsonData = JsonUtility.ToJson(gameData);
+        string filePath = Application.persistentDataPath + GameDataFileName;
+        File.WriteAllText(filePath, ToJsonData);
+        saveCount++;
+        Debug.Log("저장 완료");
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveGameData();
+        PlayerPrefs.SetInt("SaveCount", saveCount);
+    }
 }

@@ -6,6 +6,11 @@ using System.IO.Ports;
 
 public class NetworkManager : MonoBehaviour
 {
+    /*
+    Network Manager    
+    블루투스 통신을 위한 스크립트
+    */
+    
     SerialPort sp = new SerialPort("COM3", 115200);
     public GameObject rocketControl;
     private float outtakeTime = 0f;
