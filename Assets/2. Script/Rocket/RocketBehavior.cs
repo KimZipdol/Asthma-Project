@@ -122,6 +122,7 @@ public class RocketBehavior : MonoBehaviour
     /// <returns></returns>
     IEnumerator LaunchBehavior()
     {
+        UIManager.SendMessage("HideInhaleHud");
         Ceiling.SendMessage("CeilingOpening");
         EffectCtrl.SendMessage("Boost");
         while (Time.time <= startFly + flyTime)

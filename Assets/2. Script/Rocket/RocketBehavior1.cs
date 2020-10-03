@@ -178,7 +178,7 @@ public class RocketBehavior1 : MonoBehaviour
     {
         deformed = true;
         launched = true;
-
+        UIManager.SendMessage("HideInhaleHud");
 
         Ceiling.SendMessage("CeilingOpening");
         EffectCtrl.SendMessage("Boost");
