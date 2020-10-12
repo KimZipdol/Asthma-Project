@@ -79,6 +79,12 @@ public class CamRayCast : MonoBehaviour
                     case ("ROCKETGAME"):
                         SceneManager.LoadScene("1. RocketGame", LoadSceneMode.Single);
                         break;
+                    case ("ROCKET2"):
+                        SceneManager.LoadScene("1-2. RocketStage2", LoadSceneMode.Single);
+                        break;
+                    case ("ROCKET3"):
+                        SceneManager.LoadScene("1-3. RocketStage3", LoadSceneMode.Single);
+                        break;
                     case ("CANDLEGAME"):
                         SceneManager.LoadScene("2. CandleBlowing", LoadSceneMode.Single);
                         break;

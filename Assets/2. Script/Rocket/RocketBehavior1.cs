@@ -204,18 +204,20 @@ public class RocketBehavior1 : MonoBehaviour
     {
         StopCoroutine(LaunchBehavior());
 
-        float height = rocketTr.position.y;
+        
         rocketRb.useGravity = false;
         rocketRb.velocity = Vector3.zero;
+        float height = rocketTr.position.y;
+        Debug.Log(height.ToString());
         endEffect.SetActive(true);
-        UIManager.SendMessage("ScoreUI", height);
+        
 
 
 
         while (endEffect != null)
             yield return 0.1f;
 
-
+        UIManager.SendMessage("ScoreUI", height);
         rocketCam.gameObject.SetActive(false);
         this.gameObject.SetActive(false);
     }

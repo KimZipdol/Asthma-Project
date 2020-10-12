@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RegistPlayer : MonoBehaviour
+public class CreateID : MonoBehaviour
 {
     public InputField displayNameInput, userNameInput, passwordInput;
 
