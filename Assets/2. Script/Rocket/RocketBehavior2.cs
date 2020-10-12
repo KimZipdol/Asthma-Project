@@ -147,6 +147,7 @@ public class RocketBehavior2 : MonoBehaviour
     /// <returns></returns>
     IEnumerator LaunchBehavior()
     {
+        UIManager.SendMessage("HideInhaleHud");
         Ceiling.SendMessage("CeilingOpening");
         EffectCtrl.SendMessage("Boost");
         currState = RocketState.EXHALE;

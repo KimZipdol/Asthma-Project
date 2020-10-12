@@ -71,13 +71,21 @@ public class CamRayCast : MonoBehaviour
         {
             if (SelectImg.fillAmount >= 0.99)
             {
+                Debug.Log(hit.collider.gameObject.tag);
                 switch (hit.collider.gameObject.tag)
                 {
                     case ("TOMAIN"):
                         SceneManager.LoadScene("0. StartScene", LoadSceneMode.Single);
                         break;
                     case ("ROCKETGAME"):
-                        SceneManager.LoadScene("1. RocketGame", LoadSceneMode.Single);
+                        SceneManager.LoadScene("1-1. RocketGame", LoadSceneMode.Single);
+                        break;
+                    case ("ROCKET2"):
+                        Debug.Log("구아악");
+                        SceneManager.LoadScene("1-2. RocketStage2", LoadSceneMode.Single);
+                        break;
+                    case ("ROCKET3"):
+                        SceneManager.LoadScene("1-3. RocketStage3", LoadSceneMode.Single);
                         break;
                     case ("CANDLEGAME"):
                         SceneManager.LoadScene("2. CandleBlowing", LoadSceneMode.Single);
@@ -89,7 +97,7 @@ public class CamRayCast : MonoBehaviour
                         //로그인화면에 스크롤 맨 위가 아니라면  업
                         break;
                     case ("DOWN"):
-                        //로그인화면에서 스크롤 맨 아래가 아니라면 다운 
+                        //로그인화면에서 스크롤 맨 아래가 아니라면 다운
                         break;
                     case ("ENDGAME"):
 #if UNITY_EDITOR
