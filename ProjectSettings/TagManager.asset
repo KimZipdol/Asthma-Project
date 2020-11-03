@@ -16,6 +16,8 @@ TagManager:
   - DOWN
   - ROCKET2
   - ROCKET3
+  - INPUT
+  - MAINSTART
   layers:
   - Default
   - TransparentFX
@@ -27,7 +29,7 @@ TagManager:
   - 
   - INTERACTABLE
   - MENUBUTTONS
-  - 
+  - INPUTFIELDS
   - 
   - 
   - 

@@ -66,22 +66,34 @@ public class CamRayCast : MonoBehaviour
     IEnumerator SelectGame()
     {
         SelectBG.SetActive(true);
-        prevHit = hit.collider.gameObject;
-        while (hit.collider.gameObject.layer == 9)
+        prevHit = hit.collider.gameObject; 
+        while (hit.collider.gameObject.layer == 9 )
         {
             if (SelectImg.fillAmount >= 0.99)
             {
                 Debug.Log(hit.collider.gameObject.tag);
                 switch (hit.collider.gameObject.tag)
                 {
+                    case ("INPUT"):
+                        hit.collider.gameObject.SendMessage("StartInput");
+                        break;
                     case ("TOMAIN"):
                         SceneManager.LoadScene("0. StartScene", LoadSceneMode.Single);
+                        break;
+                    case ("MAINSTART"):
+                        if (GameManager.instance.getStage == 1)
+                            SceneManager.LoadScene("1-1. RocketGame", LoadSceneMode.Single);
+                        else if (GameManager.instance.getStage == 2)
+                            SceneManager.LoadScene("1-2. RocketStage2", LoadSceneMode.Single);
+                        else if (GameManager.instance.getStage == 3)
+                            SceneManager.LoadScene("1-3. RocketStage3", LoadSceneMode.Single);
+                        else
+                            Debug.Log("스테이지를 입력해주세요");
                         break;
                     case ("ROCKETGAME"):
                         SceneManager.LoadScene("1-1. RocketGame", LoadSceneMode.Single);
                         break;
                     case ("ROCKET2"):
-                        Debug.Log("구아악");
                         SceneManager.LoadScene("1-2. RocketStage2", LoadSceneMode.Single);
                         break;
                     case ("ROCKET3"):

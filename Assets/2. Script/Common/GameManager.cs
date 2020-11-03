@@ -18,6 +18,11 @@ public class GameManager : MonoBehaviour
 
     int saveCount = 0;
 
+    public int getStage { get; set; } = -1;
+
+    public float getProgress { get; set; } = -1f;
+    public int getStar { get; set; } = -1;
+
     public GameData _gameData;
     public GameData gameData
     {
