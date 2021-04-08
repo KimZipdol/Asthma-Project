@@ -172,6 +172,8 @@ public class RocketBehavior2 : MonoBehaviour
             yield return 0.1f;
 
 
+        GameManager.instance.SendMessage("SaveGameData");
+
         rocketCam.gameObject.SetActive(false);
         this.gameObject.SetActive(false);
     }

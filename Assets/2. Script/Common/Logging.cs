@@ -4,7 +4,7 @@ using System.IO;
 using System;
 using System.Text;
 
-public class Log
+public class Logging
 {
     static string directory = Application.persistentDataPath + "/Log";
     static string LogPath = Application.persistentDataPath + "/Log/log.txt";
@@ -26,7 +26,7 @@ public class Log
         }
 
         StreamWriter writer = new StreamWriter(fs);
-        string logfrm = DateTime.Now.ToString("yyyyMMdd hh:mm:ss") + " " + logmsg;
+        string logfrm = DateTime.Now.ToString("yyyyMMdd hh:mm:ss") + " " + logmsg;  //작성 내용. 임시로 현재날짜쓰게돼있음.
         writer.WriteLine(logfrm);
         writer.Close();
         fs.Close();

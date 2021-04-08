@@ -6,9 +6,9 @@ using UnityEngine;
 [Serializable]
 public class GameData
 {
-    public string id;
-    public int stage;
-    public float progress;
+    public string playerId { get; set; }
+    public int stageNum { get; set; }
+    public float progress { get; set; }
     
     // Start is called before the first frame update
     void Start()
@@ -21,4 +21,5 @@ public class GameData
     {
         
     }
+
 }
