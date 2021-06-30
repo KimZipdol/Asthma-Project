@@ -5,13 +5,8 @@ using UnityEngine.UI;
 using System.IO.Ports;
 
 
-public class NetworkManager : MonoBehaviour
+public class NetworkTest : MonoBehaviour
 {
-    /*
-    Network Manager    
-    블루투스 통신 및 센서통신을 위한 스크립트
-    */
-
     private SerialPort serial;
 
     [SerializeField]
@@ -20,35 +15,20 @@ public class NetworkManager : MonoBehaviour
     [SerializeField]
     private int timeOut = 110;
 
-    [SerializeField]
-    private Text sensorText;
 
     public GameObject rocketControl;
     private float outtakeTime = 0f;
 
     //Singleton
     private static NetworkManager instance = null;
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else
-        {
-            Destroy(this);
-        }
-    }
-
-
+    
 
     // Start is called before the first frame update
     void Start()
     {
         //시리얼 포트 초기화
         serial = new SerialPort("COM3", int.Parse(boudRate), Parity.None, 8, StopBits.One);
-
+        SensorStart();
     }
 
     public void SensorStart()
@@ -65,15 +45,13 @@ public class NetworkManager : MonoBehaviour
 
     void Update()
     {
-        
+
         //시리얼이 열려있는지 검사. 타임아웃 시간 안에 데이터를 받아오면 이용, 아니면 타임아웃 에러 로그
         if (serial.IsOpen)
         {
             try
             {
-
-                //Debug.Log(serial.ReadLine());
-                sensorText.text = serial.ReadLine();
+                Debug.Log(serial.ReadLine());
             }
             catch (System.TimeoutException e)
             {
