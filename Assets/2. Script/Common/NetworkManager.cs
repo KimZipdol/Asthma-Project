@@ -46,7 +46,12 @@ public class NetworkManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //시리얼 포트 초기화
+        //시리얼 포트 초기화 - 포트 이름들을 가져와서, 그 중 아두이노 포트를 연다 - 
+        string[] portNames = SerialPort.GetPortNames();
+        for(int i = 0; i<2;i++)
+        {
+
+        }
         serial = new SerialPort("COM3", int.Parse(boudRate), Parity.None, 8, StopBits.One);
 
     }
@@ -54,8 +59,18 @@ public class NetworkManager : MonoBehaviour
     public void SensorStart()
     {
         //rocketControl.SendMessage("InHaleStart");
-        serial.Open();
-        serial.ReadTimeout = timeOut;
+        try
+        {
+            serial.Open();
+            serial.ReadTimeout = timeOut;
+        }
+        catch(System.IO.IOException e)
+        {
+            Debug.Log(e);
+            //MacOS 시리얼 포트 초기화
+            serial = new SerialPort("/dev/tty.usbserial-AQ00EJNL", int.Parse(boudRate), Parity.None, 8, StopBits.One);
+        }
+
     }
 
     public void stopSensor()
