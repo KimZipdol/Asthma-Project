@@ -68,7 +68,7 @@ public class NetworkManager : MonoBehaviour
         {
             Debug.Log(e);
             //MacOS 시리얼 포트 초기화
-            serial = new SerialPort("/dev/tty.usbserial-AQ00EJNL", int.Parse(boudRate), Parity.None, 8, StopBits.One);
+            serial = new SerialPort("/dev/tty.usbmodem142201", int.Parse(boudRate), Parity.None, 8, StopBits.One);
         }
 
     }
