@@ -46,13 +46,22 @@ public class NetworkManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
+
         //시리얼 포트 초기화 - 포트 이름들을 가져와서, 그 중 아두이노 포트를 연다 - 
-        string[] portNames = SerialPort.GetPortNames();
+        /*string[] portNames = SerialPort.GetPortNames();
         for(int i = 0; i<2;i++)
         {
 
         }
-        serial = new SerialPort("COM3", int.Parse(boudRate), Parity.None, 8, StopBits.One);
+        //WinOS-OrangeBoard
+        serial = new SerialPort("COM3", int.Parse(boudRate), Parity.None, 8, StopBits.One);*/
+        //MacOS-Nano 33 BLE
+        serial = new SerialPort("/dev/tty.usbmodem141201", int.Parse(boudRate), Parity.None, 8, StopBits.One);
+
+        serial.DtrEnable = true;
+        //Configuramos control de datos por DTR.
+        // We configure data control by DTR.
 
     }
 
@@ -68,8 +77,9 @@ public class NetworkManager : MonoBehaviour
         {
             Debug.Log(e);
             //MacOS 시리얼 포트 초기화
-            serial = new SerialPort("/dev/tty.usbmodem142201", int.Parse(boudRate), Parity.None, 8, StopBits.One);
+            //serial = new SerialPort("/dev/tty.usbmodem141201", int.Parse(boudRate), Parity.None, 8, StopBits.One);
         }
+        serial.Open();
 
     }
 
@@ -101,5 +111,7 @@ public class NetworkManager : MonoBehaviour
         {
             GameObject.Find("ArduinoState").GetComponent<Text>().text = "연결안됨";
         }
+
+        
     }
 }
