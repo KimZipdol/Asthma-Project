@@ -90,8 +90,14 @@ public class NetworkManager : MonoBehaviour
 
     void Update()
     {
+
+        //chkSerial();
+    }
+
+    //시리얼이 열려있는지 검사. 타임아웃 시간 안에 데이터를 받아오면 이용, 아니면 타임아웃 에러 로그
+    void chkSerial()
+    {
         
-        //시리얼이 열려있는지 검사. 타임아웃 시간 안에 데이터를 받아오면 이용, 아니면 타임아웃 에러 로그
         if (serial.IsOpen)
         {
             try
@@ -111,7 +117,5 @@ public class NetworkManager : MonoBehaviour
         {
             GameObject.Find("ArduinoState").GetComponent<Text>().text = "연결안됨";
         }
-
-        
     }
 }
