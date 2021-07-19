@@ -31,4 +31,8 @@ public class VRUIManager : MonoBehaviour
         hudTr.gameObject.SetActive(false);
     }
 
+    public void ShowInhaleHud()
+    {
+        hudTr.gameObject.SetActive(true);
+    }
 }

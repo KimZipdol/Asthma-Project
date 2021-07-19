@@ -16,6 +16,8 @@ public class CandleGameManager : MonoBehaviour
 
     public static CandleGameManager instance = null;
 
+    private bool simulated = false;
+
     private void Awake()
     {
         if (instance == null)
@@ -33,8 +35,11 @@ public class CandleGameManager : MonoBehaviour
     {
         if (Input.touchCount > 0 || Input.GetKeyDown("space"))
         {
-            BreathInput();
-            SimulationStart();
+            if (!simulated)
+            {
+                
+                StartCoroutine("Simulate");
+            }
         }
     }
 
@@ -60,4 +65,14 @@ public class CandleGameManager : MonoBehaviour
         
     }
 
+    IEnumerator Simulate()
+    {
+        simulated = true;
+        BreathInput();
+        SimulationStart();
+        Invoke("EndBlowing", 5f);
+        yield return null;
+        StopAllCoroutines();
+
+    }
 }

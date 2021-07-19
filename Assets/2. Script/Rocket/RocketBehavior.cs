@@ -35,7 +35,9 @@ public class RocketBehavior : MonoBehaviour
     public InputField fvcInput = null;
     public GameObject UIManager = null;
     public RawImage rocketCam = null;
-    
+
+    private bool simulated = false;
+
 
     /// <summary>
     /// FEV1과 FVC를 받아 필요 수치들 계산.
@@ -64,15 +66,21 @@ public class RocketBehavior : MonoBehaviour
     {
         if (Input.touchCount > 0 || Input.GetKeyDown("space"))
         {
-            BreathInput();
-            Launch();
+            if (!simulated)
+            {
+                simulated = true; 
+                BreathInput();
+                Launch();
+            }
         }
     }
 
     public void BreathInput()
     {
+        
         fev1Input.text = "700";
         fvcInput.text = "1000";
+        
     }
 
     /// <summary>
@@ -145,6 +153,7 @@ public class RocketBehavior : MonoBehaviour
         rocketRb.useGravity = false;
         rocketRb.velocity = Vector3.zero;
         endEffect.SetActive(true);
+        UIManager.SendMessage("ShowInhaleHud");
         UIManager.SendMessage("ScoreUI", height);
 
         
