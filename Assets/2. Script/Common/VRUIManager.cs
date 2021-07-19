@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class VRUIManager : MonoBehaviour
 {
@@ -25,11 +26,22 @@ public class VRUIManager : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    //개체 사용되도록 설정됐을 때
+    private void OnEnable()
+    {
+        //씬 매니저의 sceneLoaded 델리게이트에 onSceneLoaded를 추가한다->씬로드마다 onSceneLoaded작동
+        SceneManager.sceneLoaded += onSceneLoaded;
+    }
+
+    void onSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         hudTr = GameObject.Find("VRUICanvas").GetComponent<RectTransform>();
         playerTr = GameObject.Find("Main Camera").GetComponent<Transform>();
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= onSceneLoaded;
     }
 
     // Update is called once per frame

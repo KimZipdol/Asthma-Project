@@ -71,7 +71,7 @@ public class CamRayCast : MonoBehaviour
         prevHit = hit.collider.gameObject;
         while (hit.collider.gameObject.layer == 9)
         {
-            /*if (SelectImg.fillAmount >= 0.99)
+            if (SelectImg.fillAmount >= 0.99)
             {
                 switch (hit.collider.gameObject.tag)
                 {
@@ -105,7 +105,7 @@ public class CamRayCast : MonoBehaviour
                     default:
                         break;
                 }
-            }*/
+            }
             SelectImg.fillAmount += 1 / (fps * SelectionTime);
             yield return Time.deltaTime;
         }

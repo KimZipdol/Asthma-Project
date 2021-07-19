@@ -164,8 +164,8 @@ public class NetworkManager : MonoBehaviour
     void Update()
     {
 
-        if(checkSerial)
-            chkSerial();
+        /*if(checkSerial)
+            chkSerial();*/
     }
 
     //시리얼이 열려있는지 검사. 타임아웃 시간 안에 데이터를 받아오면 이용, 아니면 타임아웃 에러 로그
