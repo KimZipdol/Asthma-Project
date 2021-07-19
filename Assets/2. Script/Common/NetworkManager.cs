@@ -99,6 +99,7 @@ public class NetworkManager : MonoBehaviour
         forSendingMessage.savePath = Application.streamingAssetsPath;
         forSendingMessage.dataList = dataList;
         logging.SendMessage("WriteCsvFile", forSendingMessage);
+        Debug.Log("보냈다");
     }
 
     void Update()

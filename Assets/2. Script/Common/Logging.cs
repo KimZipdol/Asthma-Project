@@ -128,6 +128,7 @@ public class Logging : MonoBehaviour
 
     public void WriteCsvFile(inputSensorData input)
     {
+        Debug.Log("전달완료");
         WriteCsv(input.dataList, input.savePath);
     }
 }
