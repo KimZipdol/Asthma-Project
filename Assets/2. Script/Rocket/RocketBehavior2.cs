@@ -36,11 +36,13 @@ public class RocketBehavior2 : MonoBehaviour
     public GameObject endEffect = null;
     public GameObject boostEffect = null;
     public InputField IntakeInput = null;
+    public GameObject beforeLaunchUI = null;
     public InputField fev1Input = null;
     public InputField fvcInput = null;
     public GameObject UIManager = null;
     public RawImage rocketCam = null;
-    public Slider intakeGuage = null;
+    public Image intakeGuage = null;
+    public GameObject networkManager = null;
 
     public enum RocketState { GUIDE = 0, INHALEREADY, INHALE, EXHALE, FINISH };
     public RocketState currState = RocketState.GUIDE;
@@ -60,6 +62,13 @@ public class RocketBehavior2 : MonoBehaviour
             rocketRb = this.GetComponent<Rigidbody>();
 
         StartCoroutine(StateCtrl());
+    }
+
+    private void Update()
+    {
+        // 화면 터치 시 다음 단계로. 터치 컨트롤은 실험 진행자가.
+        if (Input.touchCount > 0)
+            currState++;
     }
 
     /// <summary>
@@ -102,15 +111,16 @@ public class RocketBehavior2 : MonoBehaviour
 
             //흡기 게이지 세팅
             float ratio = intake / maxIntake;
-            intakeGuage.value = ratio;
+            intakeGuage.fillAmount = ratio;
 
             //로켓형태변화
             y = 0.5f - (ratio * deformY);
             x = 0.5f + (ratio * deformX);
             z = 0.5f + (ratio * deformZ);
         }
-        else if (intakeGuage.value != 0f)   //흡기압력이 일정 이하(호기로 변화하는 과정)일 때 발사효과 시작
+        else if (intakeGuage.fillAmount != 0f)   //흡기압력이 일정 이하(호기로 변화하는 과정)일 때 발사효과 시작
         {
+            beforeLaunchUI.SetActive(false);
             StartCoroutine(LaunchBehavior());
         }
     }
@@ -153,7 +163,7 @@ public class RocketBehavior2 : MonoBehaviour
         currState = RocketState.EXHALE;
         yield return 1f;
 
-        intakeGuage.value = 0f;
+        intakeGuage.fillAmount = 0f;
     }
 
     IEnumerator FinishRocket()
@@ -177,4 +187,6 @@ public class RocketBehavior2 : MonoBehaviour
         rocketCam.gameObject.SetActive(false);
         this.gameObject.SetActive(false);
     }
+
+    
 }

@@ -23,6 +23,10 @@ public class NetworkManager : MonoBehaviour
     [SerializeField]
     private Text sensorText;
 
+    private bool checkSerial = false;
+    private int serialNum = 0;
+    string serialNameToConnect = null;
+
     public GameObject logging;
     public GameObject rocketControl;
     private float outtakeTime = 0f;
@@ -56,25 +60,80 @@ public class NetworkManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        string portName = FindSerial();
+        Debug.Log(portName);
+        /*try
+        {
+            //WinOS-OrangeBoard
+            //serial = new SerialPort("COM3", int.Parse(boudRate), Parity.None, 8, StopBits.One);
 
+            //WinOS-Nano 33 BLE
+            //serial = new SerialPort("COM5", int.Parse(boudRate), Parity.None, 8, StopBits.One);
 
-        //WinOS-OrangeBoard
-        //serial = new SerialPort("COM3", int.Parse(boudRate), Parity.None, 8, StopBits.One);
+            //MacOS-Nano 33 BLE
+            serial = new SerialPort(portName, int.Parse(boudRate), Parity.None, 8, StopBits.One);
 
-        //WinOS-Nano 33 BLE
-        //serial = new SerialPort("COM5", int.Parse(boudRate), Parity.None, 8, StopBits.One);
+            //AndroidOS-Nano 33 BLE
+            //serial = new SerialPort("COM5", int.Parse(boudRate), Parity.None, 8, StopBits.One);
 
-        //MacOS-Nano 33 BLE
-        serial = new SerialPort("/dev/tty.usbmodem141201", int.Parse(boudRate), Parity.None, 8, StopBits.One);
+            //Configuramos control de datos por DTR.
+            // We configure data control by DTR.
+            serial.DtrEnable = true;
+            serial.Open();
+        }
+        catch(System.Exception e)
+        {
+            Debug.Log(e);
+            portName = FindSerial();
 
-        //AndroidOS-Nano 33 BLE
-        //serial = new SerialPort("COM5", int.Parse(boudRate), Parity.None, 8, StopBits.One);
+            //WinOS-OrangeBoard
+            //serial = new SerialPort("COM3", int.Parse(boudRate), Parity.None, 8, StopBits.One);
 
-        //Configuramos control de datos por DTR.
-        // We configure data control by DTR.
+            //WinOS-Nano 33 BLE
+            //serial = new SerialPort("COM5", int.Parse(boudRate), Parity.None, 8, StopBits.One);
+
+            //MacOS-Nano 33 BLE
+            serial = new SerialPort(portName, int.Parse(boudRate), Parity.None, 8, StopBits.One);
+
+            //AndroidOS-Nano 33 BLE
+            //serial = new SerialPort("COM5", int.Parse(boudRate), Parity.None, 8, StopBits.One);
+
+            //Configuramos control de datos por DTR.
+            // We configure data control by DTR.
+            serial.DtrEnable = true;
+            serial.Open();
+        }*/
+        
+
+    }
+
+    public void runFindSerial()
+    {
+        FindSerial();
+    }
+
+    public string FindSerial()
+    {
+        //serial port search and connect
+        string[] comlist = System.IO.Ports.SerialPort.GetPortNames();
+        
+
+        if (comlist.Length > 0)
+        {
+            serialNameToConnect = comlist[serialNum++];
+            print(serialNum + "번째 포트 이름은: " + serialNameToConnect); ;
+            checkSerial = true;
+            if (serialNum > comlist.Length)
+                serialNum = 0;
+        }
+
+        return serialNameToConnect;
+    }
+
+    public void SetPort()
+    {
+        serial = new SerialPort(serialNameToConnect, int.Parse(boudRate), Parity.None, 8, StopBits.One);
         serial.DtrEnable = true;
-        
-        
 
     }
 
@@ -89,10 +148,7 @@ public class NetworkManager : MonoBehaviour
         catch(System.IO.IOException e)
         {
             Debug.Log(e);
-            //MacOS 시리얼 포트 초기화
-            //serial = new SerialPort("/dev/tty.usbmodem141201", int.Parse(boudRate), Parity.None, 8, StopBits.One);
         }
-        serial.Open();
 
     }
 
@@ -108,7 +164,8 @@ public class NetworkManager : MonoBehaviour
     void Update()
     {
 
-        //chkSerial();
+        if(checkSerial)
+            chkSerial();
     }
 
     //시리얼이 열려있는지 검사. 타임아웃 시간 안에 데이터를 받아오면 이용, 아니면 타임아웃 에러 로그
@@ -120,7 +177,7 @@ public class NetworkManager : MonoBehaviour
             try
             {
 
-                //Debug.Log(serial.ReadLine());
+                Debug.Log(serial.ReadLine());
                 sensorText.text = serial.ReadLine();
 
                 //호흡데이터저장테스트용
@@ -136,6 +193,7 @@ public class NetworkManager : MonoBehaviour
         else if (!serial.IsOpen)
         {
             GameObject.Find("ArduinoState").GetComponent<Text>().text = "연결안됨";
+            //FindSerial();
         }
     }
 
