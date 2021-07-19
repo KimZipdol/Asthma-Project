@@ -29,6 +29,15 @@ public class CandleGameManager : MonoBehaviour
         
     }
 
+    private void Update()
+    {
+        if (Input.touchCount > 0 || Input.GetKeyDown("space"))
+        {
+            BreathInput();
+            SimulationStart();
+        }
+    }
+
     public void BreathInput()
     {
         fev1Input.text = "650";

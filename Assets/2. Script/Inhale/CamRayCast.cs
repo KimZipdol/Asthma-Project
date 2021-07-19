@@ -9,7 +9,9 @@ public class CamRayCast : MonoBehaviour
     public Transform tr = null;
     public GameObject SelectBG = null;
     public Image SelectImg = null;
-    public float SelectionTime = 3f;
+
+    [SerializeField]
+    private float SelectionTime = 50f;
 
     [SerializeField]
     private float fps = 60f;
@@ -69,7 +71,7 @@ public class CamRayCast : MonoBehaviour
         prevHit = hit.collider.gameObject;
         while (hit.collider.gameObject.layer == 9)
         {
-            if (SelectImg.fillAmount >= 0.99)
+            /*if (SelectImg.fillAmount >= 0.99)
             {
                 switch (hit.collider.gameObject.tag)
                 {
@@ -103,7 +105,7 @@ public class CamRayCast : MonoBehaviour
                     default:
                         break;
                 }
-            }
+            }*/
             SelectImg.fillAmount += 1 / (fps * SelectionTime);
             yield return Time.deltaTime;
         }

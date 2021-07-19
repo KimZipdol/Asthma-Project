@@ -62,8 +62,11 @@ public class RocketBehavior : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButton("Jump"))
+        if (Input.touchCount > 0 || Input.GetKeyDown("space"))
+        {
+            BreathInput();
             Launch();
+        }
     }
 
     public void BreathInput()

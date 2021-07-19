@@ -69,11 +69,7 @@ public class RocketBehavior1 : MonoBehaviour
         StartCoroutine("BreathInput");
     }
 
-    private void Update()
-    {
-
-    }
-
+    
     IEnumerator BreathInput()
     {
         while (true)
@@ -221,4 +217,5 @@ public class RocketBehavior1 : MonoBehaviour
         rocketCam.gameObject.SetActive(false);
         this.gameObject.SetActive(false);
     }
+
 }

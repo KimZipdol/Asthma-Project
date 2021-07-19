@@ -38,7 +38,7 @@ public class PlayerCtrl : MonoBehaviour
             if (hit.collider.gameObject.CompareTag("INTERACTABLE"))
             {
                 hit.collider.gameObject.SendMessage("HighlightOn");
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(0) || Input.touchCount>0)
                 {
                     InhaleGameManager.instance.inhaleEffectPool[effectTurn%3].SetActive(true);
                     effectTurn++;
