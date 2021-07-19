@@ -62,10 +62,13 @@ public class NetworkManager : MonoBehaviour
         //serial = new SerialPort("COM3", int.Parse(boudRate), Parity.None, 8, StopBits.One);
 
         //WinOS-Nano 33 BLE
-        serial = new SerialPort("COM5", int.Parse(boudRate), Parity.None, 8, StopBits.One);
+        //serial = new SerialPort("COM5", int.Parse(boudRate), Parity.None, 8, StopBits.One);
 
         //MacOS-Nano 33 BLE
-        //serial = new SerialPort("/dev/tty.usbmodem141201", int.Parse(boudRate), Parity.None, 8, StopBits.One);
+        serial = new SerialPort("/dev/tty.usbmodem141201", int.Parse(boudRate), Parity.None, 8, StopBits.One);
+
+        //AndroidOS-Nano 33 BLE
+        //serial = new SerialPort("COM5", int.Parse(boudRate), Parity.None, 8, StopBits.One);
 
         //Configuramos control de datos por DTR.
         // We configure data control by DTR.

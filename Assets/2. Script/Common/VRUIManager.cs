@@ -9,7 +9,22 @@ public class VRUIManager : MonoBehaviour
 
     [SerializeField]
     private Transform hudTr;
-    
+
+    //Singleton
+    private static VRUIManager instance = null;
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
