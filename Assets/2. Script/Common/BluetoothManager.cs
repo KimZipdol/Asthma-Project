@@ -66,15 +66,20 @@ public class BluetoothManager : MonoBehaviour
             bluetoothHelperInstance.EnableBluetooth();
         BluetoothHelper.GetInstance("BreatheInput");
         Debug.Log("is scanning: " + bluetoothHelperInstance.ScanNearbyDevices());
-
+        
         bluetoothHelperInstance.Connect();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(bluetoothHelperInstance.isConnected());
+        if(bluetoothHelperInstance.isConnected())
+            bluetoothHelperInstance.OnConnected += logConnected;
     }
 
-    
+    private void logConnected(BluetoothHelper helper)
+    {
+        Debug.Log(helper.isConnected());
+        throw new System.NotImplementedException();
+    }
 }
