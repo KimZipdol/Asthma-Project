@@ -60,8 +60,17 @@ public class NetworkManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        string portName = FindSerial();
-        Debug.Log(portName);
+#if UNITY_EDITOR_WIN
+        serial = new SerialPort("COM5", int.Parse(boudRate), Parity.None, 8, StopBits.One);
+#elif UNITY_EDITOR_OSX
+        string[] comlist = System.IO.Ports.SerialPort.GetPortNames();
+        serial = new SerialPort(comlist[1], int.Parse(boudRate), Parity.None, 8, StopBits.One);
+#endif
+        serial.DtrEnable = true;
+
+
+        //string portName = FindSerial();
+        //Debug.Log(portName);
         /*try
         {
             //WinOS-OrangeBoard
@@ -103,7 +112,7 @@ public class NetworkManager : MonoBehaviour
             serial.DtrEnable = true;
             serial.Open();
         }*/
-        
+
 
     }
 
