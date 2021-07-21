@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO.Ports;
+using ArduinoBluetoothAPI;
 
-
-public class NetworkManager : MonoBehaviour
+public class SerialManager : MonoBehaviour
 {
     /*
-    Network Manager    
+    Serial Manager    
     블루투스 통신 및 센서통신을 위한 스크립트
     */
 
@@ -41,7 +41,7 @@ public class NetworkManager : MonoBehaviour
     inputSensorData forSendingMessage;
 
     //Singleton
-    private static NetworkManager instance = null;
+    private static SerialManager instance = null;
     private void Awake()
     {
         if (instance == null)
@@ -65,9 +65,12 @@ public class NetworkManager : MonoBehaviour
 #elif UNITY_EDITOR_OSX
         string[] comlist = System.IO.Ports.SerialPort.GetPortNames();
         serial = new SerialPort(comlist[1], int.Parse(boudRate), Parity.None, 8, StopBits.One);
+#elif UNITY_ANDROID
+        
 #endif
         serial.DtrEnable = true;
 
+        BluetoothHelper.GetInstance("BreatheInput");
 
         //string portName = FindSerial();
         //Debug.Log(portName);

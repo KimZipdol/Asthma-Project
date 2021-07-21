@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using ArduinoBluetoothAPI;
 
 
 public class RocketBehavior2 : MonoBehaviour
@@ -53,6 +54,8 @@ public class RocketBehavior2 : MonoBehaviour
     public float maxFev1 = 1000f;
     public float maxFvc = 1400f;
     public float maxIntake = 1000f;
+
+    BluetoothHelper bluetoothHelper;
 
     private void Start()
     {
