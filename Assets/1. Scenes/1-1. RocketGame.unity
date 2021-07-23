@@ -3150,7 +3150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boudRate: 115200
   timeOut: 110
-  sensorText: {fileID: 1928900035}
+  sensorText: {fileID: 933641301}
   logging: {fileID: 1606492995}
   rocketControl: {fileID: 1108781258}
 --- !u!4 &466326447

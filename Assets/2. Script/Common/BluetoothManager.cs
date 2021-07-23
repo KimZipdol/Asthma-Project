@@ -101,14 +101,14 @@ public class BluetoothManager : MonoBehaviour
         //Subscribe to pressure data Service and Characteristic
         //pressureService = new BluetoothHelperService("00001101-0000-1000-8000-00805f9b34fb");
         //pressureService = new BluetoothHelperService("0x1101");
-        pressureService = new BluetoothHelperService("1101");
+        //pressureService = new BluetoothHelperService("1101");
         //pressureService = new BluetoothHelperService("pressureService");
         //pressureLevelChar = new BluetoothHelperCharacteristic("00002101-0000-1000-8000-00805f9b34fb");
         //pressureLevelChar = new BluetoothHelperCharacteristic("0x2101");
-        pressureLevelChar = new BluetoothHelperCharacteristic("2101");
+        //pressureLevelChar = new BluetoothHelperCharacteristic("2101");
         //pressureLevelChar = new BluetoothHelperCharacteristic("pressureLevelChar");
         //pressureLevelChar.setService("pressureService");
-        pressureService.addCharacteristic(pressureLevelChar);
+        //pressureService.addCharacteristic(pressureLevelChar);
 
         //bluetoothHelperInstance.Subscribe(pressureService);
         //bluetoothHelperInstance.Subscribe(pressureLevelChar);
@@ -136,7 +136,6 @@ public class BluetoothManager : MonoBehaviour
         StartCoroutine("TryConnectBLE");
     }
 
-    //여기서 터짐
     IEnumerator TryConnectBLE()
     {
         while(!bluetoothHelperInstance.isDevicePaired())
@@ -163,13 +162,7 @@ public class BluetoothManager : MonoBehaviour
         StopCoroutine(TryConnectBLE());
     }
 
-    public void QuitBLE()
-    {
-        StopCoroutine(TryConnectBLE());
-        bluetoothHelperInstance.Disconnect();
-        bluetoothHelperInstance.OnConnected -= onConnected;
-        bluetoothHelperInstance.OnDataReceived -= getPressrueData;
-    }
+    
 
     // Update is called once per frame
     void Update()
@@ -185,7 +178,7 @@ public class BluetoothManager : MonoBehaviour
         {
             
             GameObject.Find("ArduinoState").GetComponent<Text>().text = "연결됨";
-            Debug.Log(bluetoothHelperInstance.Read());
+            //Debug.Log(bluetoothHelperInstance.Read());
             sensorText.text = bluetoothHelperInstance.Read();
         }
         else if (!bluetoothHelperInstance.isConnected())
@@ -209,11 +202,20 @@ public class BluetoothManager : MonoBehaviour
         Debug.Log("Device connected: " + helper.isConnected());
         Debug.Log("Device Name: " + helper.getDeviceName());
         Debug.Log("Service Name: " + helper.getGattServices()[0]);
+        Debug.Log("device addr: " + helper.getDeviceAddress());
         //Debug.Log("Service Name: " + helper.getGattServices()[1]);
         //Debug.Log("Service Name: " + helper.getGattServices()[2]);
-        helper.Subscribe(pressureService);
+
+        //Subscribe to pressure data Service and Characteristic
+        pressureService = new BluetoothHelperService("1101");
+        pressureLevelChar = new BluetoothHelperCharacteristic("2101");
+        pressureService.addCharacteristic(pressureLevelChar);
+        //helper.Subscribe(pressureService);
+        //pressureLevelChar.setService("pressureService");
         helper.Subscribe(pressureLevelChar);
         //helper.ReadCharacteristic(pressureLevelChar);
+        //이거 터진다. 왜?
+        helper.ReadCharacteristic(pressureLevelChar);
     }
 
     public void getPressrueData(BluetoothHelper helper)
@@ -254,7 +256,12 @@ public class BluetoothManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        StopAllCoroutines();
+        QuitBLE();
+    }
+
+    public void QuitBLE()
+    {
+        StopCoroutine(TryConnectBLE());
         bluetoothHelperInstance.Disconnect();
         bluetoothHelperInstance.OnConnected -= onConnected;
         bluetoothHelperInstance.OnDataReceived -= getPressrueData;
