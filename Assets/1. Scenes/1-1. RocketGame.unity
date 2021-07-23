@@ -5158,7 +5158,7 @@ GameObject:
   - component: {fileID: 858618448}
   - component: {fileID: 858618447}
   m_Layer: 5
-  m_Name: SetportButton
+  m_Name: DisconnectBLEButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5227,8 +5227,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 329054397}
-        m_MethodName: SetPort
+      - m_Target: {fileID: 466326446}
+        m_MethodName: QuitBLE
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5344,7 +5344,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Set Port
+  m_Text: Disconnect BLE
 --- !u!222 &867493551
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8035,7 +8035,7 @@ GameObject:
   - component: {fileID: 1295693330}
   - component: {fileID: 1295693329}
   m_Layer: 5
-  m_Name: FindportButton
+  m_Name: ConnectBLEButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8104,8 +8104,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 329054397}
-        m_MethodName: runFindSerial
+      - m_Target: {fileID: 466326446}
+        m_MethodName: StartFindingBLE
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11470,7 +11470,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Find Port
+  m_Text: Connect BLE
 --- !u!222 &1993921698
 CanvasRenderer:
   m_ObjectHideFlags: 0
