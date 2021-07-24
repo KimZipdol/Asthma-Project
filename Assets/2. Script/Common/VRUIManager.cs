@@ -6,13 +6,22 @@ using UnityEngine.SceneManagement;
 
 public class VRUIManager : MonoBehaviour
 {
-    public Transform playerTr;
+    public GameObject currGameManager = null;
+    public GameManager gameManager = null;
+
+    public Transform playerTr = null;
 
     [SerializeField]
+    private GameObject hudObj = null;
+
+    private Image fillGuage = null;
+
     private RectTransform hudTr;
+    private float inhaled = 0f;
+    private float fillAmt = 0f;
 
     //Singleton
-    private static VRUIManager instance = null;
+    public static VRUIManager instance = null;
     private void Awake()
     {
         if (instance == null)
@@ -24,6 +33,8 @@ public class VRUIManager : MonoBehaviour
         {
             Destroy(this);
         }
+
+        gameManager = GameManager.instance;
     }
 
     //개체 사용되도록 설정됐을 때
@@ -35,7 +46,27 @@ public class VRUIManager : MonoBehaviour
 
     void onSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        hudTr = GameObject.Find("VRUICanvas").GetComponent<RectTransform>();
+        switch (scene.name)
+        {
+            case ("1-1. RocketGame"):
+                currGameManager = GameObject.Find("RocketGameManager");
+                fillGuage = GameObject.Find("InhaleFill").GetComponent<Image>();
+                break;
+            case ("2. CandleBlowing"):
+                currGameManager = GameObject.Find("CandleGameManager");
+                break;
+            case ("3. Inhaler"):
+                currGameManager = GameObject.Find("InhaleGameManager");
+                break;
+            default:
+                currGameManager = null;
+                break;
+        }
+
+        gameManager = GameManager.instance;
+        //hudObj = GameObject.Find("VRUICanvas");
+        hudObj = GameObject.Find("HudCanvas");
+        hudTr = hudObj.GetComponent<RectTransform>();
         playerTr = GameObject.Find("Main Camera").GetComponent<Transform>();
     }
 
@@ -47,8 +78,18 @@ public class VRUIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //VR hud 위치 조절
         hudTr.position = playerTr.position + (playerTr.forward*0.5f);
         hudTr.rotation = playerTr.rotation;
+
+
+    }
+
+    public void inHaleFill(float inputInhale)
+    {
+        inhaled += inputInhale;
+        fillAmt = inhaled / gameManager.maxIntake;
+        fillGuage.fillAmount = fillAmt;
     }
 
     /// <summary>

@@ -12,7 +12,24 @@ public class GameManager : MonoBehaviour
     세이브기능 담당.
     플레이어 이름, 진행단계, 단계 내 진행정도 저장.
     게임 내에 영점조정 루틴 개발
+    최대흡기/호기량 수치 보유
     */
+
+    //In-game values
+    [SerializeField]
+    public float maxIntake = -4000f;
+    [SerializeField]
+    public float maxFev1 = 1000f;
+    [SerializeField]
+    public float maxFvc = 1100f;
+    [SerializeField]
+    public float accelerationRatio = 10f;
+    [SerializeField]
+    public float sensorToIntakeRatio = 1.0f;
+    [SerializeField]
+    public float sensorToOuttakeRatio = 3.0f;
+    [SerializeField]
+    public float sensorActionPotential = 1f;
 
     public string GameDataFileName = ".json";
 

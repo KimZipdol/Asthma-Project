@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using ArduinoBluetoothAPI;
 
 public class BluetoothManager : MonoBehaviour
@@ -27,8 +28,9 @@ public class BluetoothManager : MonoBehaviour
     private int serialNum = 0;
     string serialNameToConnect = null;
 
-    //public GameObject logging;
-    //public GameObject rocketControl;
+    //In-game
+    public GameObject logging = null;
+    public GameObject currGameManager = null;
     private float outtakeTime = 0f;
 
     //인식된 블루투스 인스턴스
@@ -83,6 +85,30 @@ public class BluetoothManager : MonoBehaviour
             Destroy(this);
         }
 
+        logging = GameObject.Find("LoggingManager");
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnSceneLoaded (Scene scene, LoadSceneMode mode)
+    {
+        switch(scene.name)
+        {
+            case ("1-1. RocketGame"):
+                currGameManager = GameObject.Find("RocketGameManager");
+                break;
+            case ("2. CandleBlowing"):
+                currGameManager = GameObject.Find("CandleGameManager");
+                break;
+            case ("3. Inhaler"):
+                currGameManager = GameObject.Find("InhaleGameManager");
+                break;
+            default:
+                currGameManager = null;
+                break;
+        }
+
+        Debug.Log("OnSceneLoaded: " + scene.name);
+        Debug.Log("Mode: " + mode);
     }
 
     // Start is called before the first frame update
@@ -99,28 +125,7 @@ public class BluetoothManager : MonoBehaviour
         //Device scan
         Debug.Log("is scanning: " + bluetoothHelperInstance.ScanNearbyDevices());
 
-        //Subscribe to pressure data Service and Characteristic
-        //pressureService = new BluetoothHelperService("00001101-0000-1000-8000-00805f9b34fb");
-        //pressureService = new BluetoothHelperService("0x1101");
-        //pressureService = new BluetoothHelperService("1101");
-        //pressureService = new BluetoothHelperService("pressureService");
-        //pressureLevelChar = new BluetoothHelperCharacteristic("00002101-0000-1000-8000-00805f9b34fb");
-        //pressureLevelChar = new BluetoothHelperCharacteristic("0x2101");
-        //pressureLevelChar = new BluetoothHelperCharacteristic("2101");
-        //pressureLevelChar = new BluetoothHelperCharacteristic("pressureLevelChar");
-        //pressureLevelChar.setService("pressureService");
-        //pressureService.addCharacteristic(pressureLevelChar);
-
-        //bluetoothHelperInstance.Subscribe(pressureService);
-        //bluetoothHelperInstance.Subscribe(pressureLevelChar);
-
-
-
-        //Set Device name and address to connect
         bluetoothHelperInstance.setDeviceName("BreatheInput");
-        //bluetoothHelperInstance.setDeviceAddress("09:40:40:8a:39:3a");
-        //bluetoothHelperInstance.setDeviceAddress("59B02319-95E3-4384-AE04-61D68035AC29");
-        //BluetoothHelper.GetInstance("BreatheInput");
 
         StartFindingBLE();
     }
@@ -143,17 +148,19 @@ public class BluetoothManager : MonoBehaviour
         };
         bluetoothHelperInstance.OnCharacteristicChanged += (helper, value, characteristic) =>
         {
-            //Debug.Log(characteristic.getName());
             readData.byte0 = value[0];
             readData.byte1 = value[1];
             readData.byte2 = value[2];
             readData.byte3 = value[3];
             float pressure = readData.encodedFloat;
-            Debug.Log(pressure);
+            //Debug.Log(pressure);
             sensorText.text = pressure.ToString();
-        };
-        //bluetoothHelperInstance.OnDataReceived += getPressrueData;
+            currGameManager.SendMessage("SetsensorData", pressure);
 
+            //호흡데이터저장테스트용
+            dataList.Add(dataToArray(sensorText.text));
+        };
+        
     }
 
     private void OnScanEnded(BluetoothHelper helper, LinkedList<BluetoothDevice> devices)
@@ -255,60 +262,21 @@ public class BluetoothManager : MonoBehaviour
         Debug.Log("Device Name: " + helper.getDeviceName());
         Debug.Log("Service Name: " + helper.getGattServices()[0]);
         Debug.Log("device addr: " + helper.getDeviceAddress());
-        //Debug.Log("Service Name: " + helper.getGattServices()[1]);
-        //Debug.Log("Service Name: " + helper.getGattServices()[2]);
 
         //Subscribe to pressure data Service and Characteristic
         pressureService = new BluetoothHelperService("1101");
         pressureLevelChar = new BluetoothHelperCharacteristic("2101");
         pressureService.addCharacteristic(pressureLevelChar);
-        //helper.Subscribe(pressureService);
-        //pressureLevelChar.setService("pressureService");
+
         helper.Subscribe(pressureLevelChar);
-        //helper.ReadCharacteristic(pressureLevelChar);
-        //이거 터진다. 왜?
+
         helper.ReadCharacteristic(pressureLevelChar);
-    }
-
-    public void getPressrueData(BluetoothHelper helper)
-    {
-        Debug.Log("data 받았다!");
-        readData.byte0 = helper.ReadBytes()[0];
-        readData.byte1 = helper.ReadBytes()[1];
-        readData.byte2 = helper.ReadBytes()[2];
-        readData.byte3 = helper.ReadBytes()[3];
-        float pressure = readData.encodedFloat;
-        //Debug.Log(helper.Read());
-        //sensorText.text = helper.Read();
-        Debug.Log(pressure);
-        sensorText.text = pressure.ToString();
-
-        //호흡데이터저장테스트용
-        dataList.Add(dataToArray(sensorText.text));
-
-        /*try
-        {
-            readData.byte0 = helper.ReadBytes()[0];
-            readData.byte1 = helper.ReadBytes()[1];
-            readData.byte2 = helper.ReadBytes()[2];
-            readData.byte3 = helper.ReadBytes()[3];
-            float pressure = readData.encodedFloat;
-            Debug.Log(pressure);
-            sensorText.text = pressure.ToString();
-
-            //호흡데이터저장테스트용
-            dataList.Add(dataToArray(sensorText.text));
-        }
-        catch (System.TimeoutException e)
-        {
-            Debug.Log(e);
-            throw;
-        }*/
     }
 
     private void OnApplicationQuit()
     {
         QuitBLE();
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     public void QuitBLE()
@@ -316,6 +284,7 @@ public class BluetoothManager : MonoBehaviour
         StopCoroutine(TryConnectBLE());
         bluetoothHelperInstance.Disconnect();
         bluetoothHelperInstance.OnConnected -= onConnected;
-        bluetoothHelperInstance.OnDataReceived -= getPressrueData;
     }
+
+    
 }

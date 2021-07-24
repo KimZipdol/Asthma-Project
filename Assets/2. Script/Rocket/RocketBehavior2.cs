@@ -26,9 +26,6 @@ public class RocketBehavior2 : MonoBehaviour
     private int returnCount = 0;
     
 
-    
-
-
     public GameObject EffectCtrl = null;
     public GameObject Ceiling = null;
     public Transform rocketTr = null;
@@ -37,25 +34,15 @@ public class RocketBehavior2 : MonoBehaviour
     public GameObject endEffect = null;
     public GameObject boostEffect = null;
     public InputField IntakeInput = null;
-    public GameObject beforeLaunchUI = null;
     public InputField fev1Input = null;
     public InputField fvcInput = null;
     public GameObject UIManager = null;
     public RawImage rocketCam = null;
     public Image intakeGuage = null;
     public GameObject networkManager = null;
-
-    public enum RocketState { GUIDE = 0, INHALEREADY, INHALE, EXHALE, FINISH };
-    public RocketState currState = RocketState.GUIDE;
-
-    public float accelerationRatio = 10f;
-    public float sensorToBreatheRatio = 1.0f;
-    public float sensorActionPotential = 10f;
-    public float maxFev1 = 1000f;
-    public float maxFvc = 1400f;
-    public float maxIntake = 1000f;
-
-    BluetoothHelper bluetoothHelper;
+    public RocketGameManager rocketGameManager = null;
+    public GameManager gameManager = null;
+    
 
     private void Start()
     {
@@ -64,27 +51,28 @@ public class RocketBehavior2 : MonoBehaviour
         if (rocketRb == null)
             rocketRb = this.GetComponent<Rigidbody>();
 
-        StartCoroutine(StateCtrl());
+        rocketGameManager = RocketGameManager.instance;
+        gameManager = GameManager.instance;
+
+        IntakeInput.text = "0";
+        fev1Input.text = "0";
+        fvcInput.text = "0";
+
+        StartCoroutine(toExhaleAndFinish());
     }
 
-    private void Update()
-    {
-        // 화면 터치 시 다음 단계로. 터치 컨트롤은 실험 진행자가.
-        if (Input.touchCount > 0)
-            currState++;
-    }
 
     /// <summary>
-    /// 로켓 행동 컨트롤 위한 Flag 변환.
+    /// 로켓 행동 컨트롤 위한 Flag 변환. 그 중에서 불기 중인데 속도가 1f 이하이면 끝내기 시퀀스 시작.
     /// </summary>
     /// <returns></returns>
-    IEnumerator StateCtrl()
+    IEnumerator toExhaleAndFinish()
     {
         while(true)
         {
-            if (rocketRb.velocity.magnitude <= 1f && currState == RocketState.EXHALE)
+            if (rocketRb.velocity.magnitude <= 1f && rocketGameManager.currState == RocketGameManager.RocketState.EXHALE)
             {
-                currState = RocketState.FINISH;
+                rocketGameManager.currState = RocketGameManager.RocketState.FINISH;
                 StartCoroutine(FinishRocket());
             }
             yield return null;
@@ -97,7 +85,7 @@ public class RocketBehavior2 : MonoBehaviour
     /// </summary>
     public void InHaleStart()
     {
-        currState = RocketState.INHALE;
+        rocketGameManager.currState = RocketGameManager.RocketState.INHALE;
     }
 
     /// <summary>
@@ -105,26 +93,24 @@ public class RocketBehavior2 : MonoBehaviour
     /// </summary>
     void Intake(float sensorInput)
     {
-        if ((sensorInput <= sensorActionPotential * -1f) && (currState == RocketState.INHALE))
+        if ((sensorInput <= gameManager.sensorActionPotential * -1f))
         {
-            //입력값과 기존값 더해 총흡기량 계산 및 UI에 표ㅅ
-            float intake = (sensorInput * sensorToBreatheRatio * -1f) + float.Parse(IntakeInput.text);
+            //입력값과 기존값 더해 총흡기량 계산 및 UI에 표시
+            float intake = (sensorInput * gameManager.sensorToIntakeRatio * -1f) + float.Parse(IntakeInput.text);
            
             IntakeInput.text = intake.ToString();
 
             //흡기 게이지 세팅
-            float ratio = intake / maxIntake;
-            intakeGuage.fillAmount = ratio;
+            float ratio = intake / gameManager.maxIntake;
 
             //로켓형태변화
             y = 0.5f - (ratio * deformY);
             x = 0.5f + (ratio * deformX);
             z = 0.5f + (ratio * deformZ);
         }
-        else if (intakeGuage.fillAmount != 0f)   //흡기압력이 일정 이하(호기로 변화하는 과정)일 때 발사효과 시작
+        else if (intakeGuage.fillAmount != 0f)   //흡기압력이 일정 이하(호기로 변화하는 과정)일 때 발사효과 시작. 조건 더 명확하게 고쳐야함
         {
-            beforeLaunchUI.SetActive(false);
-            StartCoroutine(LaunchBehavior());
+            rocketGameManager.SendMessage("InhaleFinished");
         }
     }
 
@@ -135,23 +121,28 @@ public class RocketBehavior2 : MonoBehaviour
     /// <param name="sensorInput"></param>
     void Fev1Outtake(float sensorInput)
     {
-        if (currState == RocketState.EXHALE)
+        if (rocketGameManager.currState == RocketGameManager.RocketState.EXHALE)
         {
-            float outtake = sensorInput * sensorToBreatheRatio;
+            float outtake = sensorInput * gameManager.sensorToOuttakeRatio;
             fev1Input.text = (float.Parse(fev1Input.text) + outtake).ToString();
             fvcInput.text = fev1Input.text;
-            rocketRb.AddForce(Vector3.up * outtake * accelerationRatio, ForceMode.Acceleration);
+            rocketRb.AddForce(Vector3.up * outtake * gameManager.accelerationRatio, ForceMode.Acceleration);
         }
     }
 
     void FvcOuttake(float sensorInput)
     {
-        if (currState == RocketState.EXHALE)
+        if (rocketGameManager.currState == RocketGameManager.RocketState.EXHALE)
         {
-            float outtake = sensorInput * sensorToBreatheRatio;
+            float outtake = sensorInput * gameManager.sensorToOuttakeRatio;
             fvcInput.text = (float.Parse(fvcInput.text) + outtake).ToString();
-            rocketRb.AddForce(Vector3.up * outtake * accelerationRatio, ForceMode.Acceleration);
+            rocketRb.AddForce(Vector3.up * outtake * gameManager.accelerationRatio, ForceMode.Acceleration);
         }
+    }
+
+    void startLaunching()
+    {
+        StartCoroutine(LaunchBehavior());
     }
 
     /// <summary>
@@ -163,7 +154,6 @@ public class RocketBehavior2 : MonoBehaviour
         UIManager.SendMessage("HideInhaleHud");
         Ceiling.SendMessage("CeilingOpening");
         EffectCtrl.SendMessage("Boost");
-        currState = RocketState.EXHALE;
         yield return 1f;
 
         intakeGuage.fillAmount = 0f;

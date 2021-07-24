@@ -448,8 +448,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e12e13d464034f1ead8e292be2b6c82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currGameManager: {fileID: 0}
+  gameManager: {fileID: 0}
   playerTr: {fileID: 963194228}
-  hudTr: {fileID: 1760174569}
+  hudObj: {fileID: 0}
 --- !u!114 &35464640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1301,8 +1303,8 @@ RectTransform:
   m_Children:
   - {fileID: 1661196320}
   - {fileID: 1937480695}
-  m_Father: {fileID: 1760174569}
-  m_RootOrder: 2
+  m_Father: {fileID: 371083664}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.15, y: 0.25}
   m_AnchorMax: {x: 0.85, y: 0.3}
@@ -2425,6 +2427,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2041383652}
+  - {fileID: 173841268}
   m_Father: {fileID: 1760174569}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3151,8 +3154,8 @@ MonoBehaviour:
   boudRate: 115200
   timeOut: 110
   sensorText: {fileID: 933641301}
-  logging: {fileID: 1606492995}
-  rocketControl: {fileID: 1108781258}
+  logging: {fileID: 0}
+  currGameManager: {fileID: 0}
 --- !u!4 &466326447
 Transform:
   m_ObjectHideFlags: 0
@@ -4082,12 +4085,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 702132407}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfe9ec75158d4446ab0894b6db5eac17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rocketControl: {fileID: 0}
+  rocketControl: {fileID: 1108781258}
+  vrUiManager: {fileID: 2028223603}
+  currState: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -4346,6 +4351,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c64ad893d8814de2a97f4e42944f512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxIntake: -4000
+  maxFev1: 1000
+  maxFvc: 1100
+  accelerationRatio: 10
+  sensorToBreatheRatio: 1
+  sensorActionPotential: 1
   GameDataFileName: .json
 --- !u!4 &738313536
 Transform:
@@ -7052,20 +7063,14 @@ MonoBehaviour:
   endEffect: {fileID: 593557027}
   boostEffect: {fileID: 299088034}
   IntakeInput: {fileID: 797538390}
-  beforeLaunchUI: {fileID: 0}
   fev1Input: {fileID: 739760965}
   fvcInput: {fileID: 1397091447}
   UIManager: {fileID: 35464637}
   rocketCam: {fileID: 191882220}
   intakeGuage: {fileID: 1661196321}
   networkManager: {fileID: 329054396}
-  currState: 0
-  accelerationRatio: 10
-  sensorToBreatheRatio: 1
-  sensorActionPotential: 10
-  maxFev1: 1000
-  maxFvc: 1400
-  maxIntake: 1000
+  rocketGameManager: {fileID: 0}
+  gameManager: {fileID: 0}
 --- !u!114 &1108781264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10605,7 +10610,6 @@ RectTransform:
   m_Children:
   - {fileID: 371083664}
   - {fileID: 1928900034}
-  - {fileID: 173841268}
   m_Father: {fileID: 0}
   m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11696,8 +11700,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e12e13d464034f1ead8e292be2b6c82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currGameManager: {fileID: 0}
+  gameManager: {fileID: 0}
   playerTr: {fileID: 963194228}
-  hudTr: {fileID: 0}
+  hudObj: {fileID: 0}
 --- !u!4 &2028223604
 Transform:
   m_ObjectHideFlags: 0
