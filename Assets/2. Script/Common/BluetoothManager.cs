@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -26,8 +27,8 @@ public class BluetoothManager : MonoBehaviour
     private int serialNum = 0;
     string serialNameToConnect = null;
 
-    public GameObject logging;
-    public GameObject rocketControl;
+    //public GameObject logging;
+    //public GameObject rocketControl;
     private float outtakeTime = 0f;
 
     //인식된 블루투스 인스턴스
@@ -88,7 +89,7 @@ public class BluetoothManager : MonoBehaviour
     void Start()
     {
         BluetoothHelper.BLE = true;
-        bluetoothHelperInstance = BluetoothHelper.GetInstance("BreatheInput");
+        bluetoothHelperInstance = BluetoothHelper.GetInstance();
 
         if (!bluetoothHelperInstance.IsBluetoothEnabled())
             bluetoothHelperInstance.EnableBluetooth();
@@ -121,13 +122,65 @@ public class BluetoothManager : MonoBehaviour
         //bluetoothHelperInstance.setDeviceAddress("59B02319-95E3-4384-AE04-61D68035AC29");
         //BluetoothHelper.GetInstance("BreatheInput");
 
-        
+        StartFindingBLE();
     }
 
     private void SetBLEEvents()
     {
         bluetoothHelperInstance.OnConnected += onConnected;
-        bluetoothHelperInstance.OnDataReceived += getPressrueData;
+        bluetoothHelperInstance.OnConnectionFailed += (helper) =>
+        {
+            Debug.Log("Connection failed");
+        };
+        bluetoothHelperInstance.OnScanEnded += OnScanEnded;
+        bluetoothHelperInstance.OnServiceNotFound += (helper, serviceName) =>
+        {
+            Debug.Log(serviceName);
+        };
+        bluetoothHelperInstance.OnCharacteristicNotFound += (helper, serviceName, characteristicName) =>
+        {
+            Debug.Log(characteristicName);
+        };
+        bluetoothHelperInstance.OnCharacteristicChanged += (helper, value, characteristic) =>
+        {
+            //Debug.Log(characteristic.getName());
+            readData.byte0 = value[0];
+            readData.byte1 = value[1];
+            readData.byte2 = value[2];
+            readData.byte3 = value[3];
+            float pressure = readData.encodedFloat;
+            Debug.Log(pressure);
+            sensorText.text = pressure.ToString();
+        };
+        //bluetoothHelperInstance.OnDataReceived += getPressrueData;
+
+    }
+
+    private void OnScanEnded(BluetoothHelper helper, LinkedList<BluetoothDevice> devices)
+    {
+        Debug.Log("FOund " + devices.Count);
+        if (devices.Count == 0)
+        {
+            bluetoothHelperInstance.ScanNearbyDevices();
+            return;
+        }
+
+        foreach (var d in devices)
+        {
+            Debug.Log(d.DeviceName);
+        }
+
+        try
+        {
+            bluetoothHelperInstance.setDeviceName("BreatheInput");
+            bluetoothHelperInstance.Connect();
+            Debug.Log("Connecting");
+        }
+        catch (Exception ex)
+        {
+            bluetoothHelperInstance.ScanNearbyDevices();
+            Debug.Log(ex.Message);
+        }
 
     }
 
@@ -167,7 +220,6 @@ public class BluetoothManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("is device found: " + bluetoothHelperInstance.isDevicePaired());
         chkBLE();
     }
 
@@ -179,7 +231,7 @@ public class BluetoothManager : MonoBehaviour
             
             GameObject.Find("ArduinoState").GetComponent<Text>().text = "연결됨";
             //Debug.Log(bluetoothHelperInstance.Read());
-            sensorText.text = bluetoothHelperInstance.Read();
+            //sensorText.text = bluetoothHelperInstance.Read();
         }
         else if (!bluetoothHelperInstance.isConnected())
         {
