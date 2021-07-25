@@ -18,7 +18,7 @@ public class RocketPlayerBehavior : MonoBehaviour
 
     private void Start()
     {
-        
+
     }
 
     private void Update()
@@ -29,7 +29,7 @@ public class RocketPlayerBehavior : MonoBehaviour
             StartCoroutine(FollowRocket());
         }*/
 
-        if (rocketScript.rocketRb.velocity.magnitude>=0.3f)
+        if (rocketScript.rocketRb.velocity.magnitude >= 0.3f)
         {
             StartCoroutine(FollowRocket());
             menuButtons.SendMessage("FollowPlayer");
@@ -43,7 +43,7 @@ public class RocketPlayerBehavior : MonoBehaviour
     /// <returns></returns>
     IEnumerator FollowRocket()
     {
-        while(true)
+        while (true)
         {
             Vector3 followPos = rocketTr.position + camOffset;
             playerTr.position = Vector3.Lerp(playerTr.position, followPos, camMoveSpd);
