@@ -121,6 +121,11 @@ public class RocketBehavior1 : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// 찌그러진 로켓을 되돌림. 1/6초
+    /// </summary>
+    /// <returns></returns>
     IEnumerator SetDeform()
     {
         while (deformed == true && clicktime <= 1f)
@@ -148,9 +153,9 @@ public class RocketBehavior1 : MonoBehaviour
     {
         launched = false;
 
-        float ydiff = 0.5f - rocketTr.localScale.y;
-        float xdiff = rocketTr.localScale.x - 0.5f;
-        float zdiff = rocketTr.localScale.z - 0.5f;
+        float ydiff = 0.5f - rocketTr.localScale.y;     //-0.5
+        float xdiff = rocketTr.localScale.x - 0.5f;     //0.5
+        float zdiff = rocketTr.localScale.z - 0.5f;     //0.5
 
         Vector3 newScale;
         int iter = 0;

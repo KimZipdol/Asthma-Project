@@ -7,7 +7,8 @@ using UnityEngine.SceneManagement;
 public class VRUIManager : MonoBehaviour
 {
     public GameObject currGameManager = null;
-    public GameManager gameManager = null;
+
+    private GameManager gameManager = null;
 
     public Transform playerTr = null;
 
@@ -82,11 +83,12 @@ public class VRUIManager : MonoBehaviour
         hudTr.position = playerTr.position + (playerTr.forward*0.5f);
         hudTr.rotation = playerTr.rotation;
 
-
+        
     }
 
     public void inHaleFill(float inputInhale)
     {
+        Debug.Log("filling");
         inhaled += inputInhale;
         fillAmt = inhaled / gameManager.maxIntake;
         fillGuage.fillAmount = fillAmt;
@@ -100,4 +102,9 @@ public class VRUIManager : MonoBehaviour
         hudTr.gameObject.SetActive(false);
     }
 
+
+    public void ff(string state )
+    {
+        GameObject.Find("f").GetComponent<Text>().text = state;
+    }
 }

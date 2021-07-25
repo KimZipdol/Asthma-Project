@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OnLaunch : MonoBehaviour
 {
-    private float movetime = 0.7f;
+    public float movetime = 0.7f;
     private bool isLaunching = false;
 
     public Transform leftCeiling = null;

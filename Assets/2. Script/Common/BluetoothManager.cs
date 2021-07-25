@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Android;
 using UnityEngine.SceneManagement;
 using ArduinoBluetoothAPI;
 
@@ -23,8 +24,13 @@ public class BluetoothManager : MonoBehaviour
 
     [SerializeField]
     private Text sensorText;
+    public Text vrSensorText;
+
+    float pressure = 0.0f;
 
     private bool checkSerial = false;
+    public bool checkingBLE = true;
+    
     private int serialNum = 0;
     string serialNameToConnect = null;
 
@@ -72,7 +78,7 @@ public class BluetoothManager : MonoBehaviour
     inputSensorData forSendingMessage;
 
     //Singleton
-    private static BluetoothManager instance = null;
+    public static BluetoothManager instance = null;
     private void Awake()
     {
         if (instance == null)
@@ -93,14 +99,18 @@ public class BluetoothManager : MonoBehaviour
     {
         switch(scene.name)
         {
+            
             case ("1-1. RocketGame"):
                 currGameManager = GameObject.Find("RocketGameManager");
+                StartCoroutine(displaySensorData());
                 break;
             case ("2. CandleBlowing"):
                 currGameManager = GameObject.Find("CandleGameManager");
+                StartCoroutine(displaySensorData());
                 break;
             case ("3. Inhaler"):
                 currGameManager = GameObject.Find("InhaleGameManager");
+                StartCoroutine(displaySensorData());
                 break;
             default:
                 currGameManager = null;
@@ -109,6 +119,23 @@ public class BluetoothManager : MonoBehaviour
 
         Debug.Log("OnSceneLoaded: " + scene.name);
         Debug.Log("Mode: " + mode);
+    }
+
+    IEnumerator displaySensorData()
+    {
+        while(true)
+        {
+            //씬에따른 차이 있어 수정필요
+            sensorText.text = pressure.ToString();
+            //vrSensorText.text = pressure.ToString();
+
+            currGameManager.SendMessage("SetsensorData", pressure);
+
+            //호흡데이터저장테스트용
+            //dataList.Add(dataToArray(sensorText.text));
+            yield return null;
+        }
+        
     }
 
     // Start is called before the first frame update
@@ -124,8 +151,9 @@ public class BluetoothManager : MonoBehaviour
 
         //Device scan
         Debug.Log("is scanning: " + bluetoothHelperInstance.ScanNearbyDevices());
-
-        bluetoothHelperInstance.setDeviceName("BreatheInput");
+        Permission.RequestUserPermission(Permission.CoarseLocation);
+        //bluetoothHelperInstance.setDeviceName("BreatheInput");
+        //bluetoothHelperInstance.setDeviceAddress("09:40:40:8a:39:3a");
 
         StartFindingBLE();
     }
@@ -152,16 +180,13 @@ public class BluetoothManager : MonoBehaviour
             readData.byte1 = value[1];
             readData.byte2 = value[2];
             readData.byte3 = value[3];
-            float pressure = readData.encodedFloat;
+            pressure = readData.encodedFloat;
             //Debug.Log(pressure);
-            sensorText.text = pressure.ToString();
-            currGameManager.SendMessage("SetsensorData", pressure);
 
-            //호흡데이터저장테스트용
-            dataList.Add(dataToArray(sensorText.text));
         };
-        
+
     }
+
 
     private void OnScanEnded(BluetoothHelper helper, LinkedList<BluetoothDevice> devices)
     {
@@ -180,6 +205,7 @@ public class BluetoothManager : MonoBehaviour
         try
         {
             bluetoothHelperInstance.setDeviceName("BreatheInput");
+            //bluetoothHelperInstance.setDeviceAddress("09:40:40:8a:39:3a");
             bluetoothHelperInstance.Connect();
             Debug.Log("Connecting");
         }
@@ -227,7 +253,8 @@ public class BluetoothManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        chkBLE();
+        if(checkingBLE)
+            chkBLE();
     }
 
     void chkBLE()
@@ -235,15 +262,14 @@ public class BluetoothManager : MonoBehaviour
 
         if (bluetoothHelperInstance.isConnected())
         {
-            
-            GameObject.Find("ArduinoState").GetComponent<Text>().text = "연결됨";
-            //Debug.Log(bluetoothHelperInstance.Read());
-            //sensorText.text = bluetoothHelperInstance.Read();
+
+            GameObject.Find("ArduinoState").GetComponent<Text>().text = ("연결됨");
+            GameObject.Find("ff").GetComponent<Text>().text = pressure.ToString();
+            //vrSensorText.text = "Device Name: " + bluetoothHelperInstance.getDeviceName();
         }
         else if (!bluetoothHelperInstance.isConnected())
         {
             GameObject.Find("ArduinoState").GetComponent<Text>().text = "연결안됨";
-            //FindSerial();
         }
     }
 
@@ -271,6 +297,8 @@ public class BluetoothManager : MonoBehaviour
         helper.Subscribe(pressureLevelChar);
 
         helper.ReadCharacteristic(pressureLevelChar);
+
+        
     }
 
     private void OnApplicationQuit()
