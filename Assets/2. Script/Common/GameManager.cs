@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     /*
     GameManager
     세이브기능 담당.
-    플레이어 이름, 진행단계, 단계 내 진행정도 저장.
+    단계별 수행시간, 흡기 및 호기압력  저장.
     게임 내에 영점조정 루틴 개발
     최대흡기/호기량 수치 보유
     */

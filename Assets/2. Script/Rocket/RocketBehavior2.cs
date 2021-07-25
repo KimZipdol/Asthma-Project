@@ -15,6 +15,9 @@ public class RocketBehavior2 : MonoBehaviour
     private float startFly = 0f;
     private float effectTime = 0f;
 
+    private bool launchReady = false;
+    private bool launchStarted = false;
+
     //찌그러지는 비율. fev1 최대 1000 시 y 절반, x, y 10프로 증가토록함.
     private float deformY = 0.25f;
     private float deformX = 0.05f;
@@ -58,7 +61,13 @@ public class RocketBehavior2 : MonoBehaviour
         fev1Input.text = "0";
         fvcInput.text = "0";
 
-        StartCoroutine(toExhaleAndFinish());
+        
+    }
+
+    private void Update()
+    {
+        Debug.Log("rocket speed: " + rocketRb.velocity.magnitude);
+
     }
 
 
@@ -68,15 +77,18 @@ public class RocketBehavior2 : MonoBehaviour
     /// <returns></returns>
     IEnumerator toExhaleAndFinish()
     {
+        Debug.Log("tofinish");
         while(true)
         {
-            if (rocketRb.velocity.magnitude <= 1f && rocketGameManager.currState == RocketGameManager.RocketState.EXHALE)
+            if (rocketRb.velocity.magnitude <= 1.2f)
             {
-                rocketGameManager.currState = RocketGameManager.RocketState.FINISH;
+                rocketGameManager.SendMessage("toFinishState");
                 StartCoroutine(FinishRocket());
+                break;
             }
             yield return null;
         }
+        StopCoroutine(toExhaleAndFinish());
     }
 
 
@@ -89,29 +101,35 @@ public class RocketBehavior2 : MonoBehaviour
     }
 
     /// <summary>
-    /// 게임매니저에서 게임 시작버튼 클릭 시 흡기 시작. 로켓형태변화
+    /// 게임매니저에서 게임 시작버튼 클릭 시 흡기 시작. 입력값 들어올 때 마다 로켓형태변화
     /// </summary>
     void Intake(float sensorInput)
     {
-        if ((sensorInput <= gameManager.sensorActionPotential * -1f))
+        if ((sensorInput <= gameManager.sensorActionPotential * -1f))   //흡기압력이 -1 이하일 때.
         {
             //입력값과 기존값 더해 총흡기량 계산 및 UI에 표시
-            float intake = (sensorInput * gameManager.sensorToIntakeRatio * -1f) + float.Parse(IntakeInput.text);
-           
+            float intake = (sensorInput * gameManager.sensorToIntakeRatio) + float.Parse(IntakeInput.text);
+
             IntakeInput.text = intake.ToString();
 
             //흡기 게이지 세팅
             float ratio = intake / gameManager.maxIntake;
 
+
+
             //로켓형태변화
             y = 0.5f - (ratio * deformY);
             x = 0.5f + (ratio * deformX);
             z = 0.5f + (ratio * deformZ);
+            rocketTr.localScale = new Vector3(x, y, z);
+
         }
-        else if (intakeGuage.fillAmount != 0f)   //흡기압력이 일정 이하(호기로 변화하는 과정)일 때 발사효과 시작. 조건 더 명확하게 고쳐야함
-        {
-            rocketGameManager.SendMessage("InhaleFinished");
-        }
+
+    }
+
+    void ReadyForLaunch()
+    {
+        Ceiling.SendMessage("CeilingOpening");
     }
 
 
@@ -121,47 +139,60 @@ public class RocketBehavior2 : MonoBehaviour
     /// <param name="sensorInput"></param>
     void Fev1Outtake(float sensorInput)
     {
-        if (rocketGameManager.currState == RocketGameManager.RocketState.EXHALE)
-        {
-            float outtake = sensorInput * gameManager.sensorToOuttakeRatio;
-            fev1Input.text = (float.Parse(fev1Input.text) + outtake).ToString();
-            fvcInput.text = fev1Input.text;
-            rocketRb.AddForce(Vector3.up * outtake * gameManager.accelerationRatio, ForceMode.Acceleration);
-        }
+        float outtake = sensorInput * gameManager.sensorToOuttakeRatio;
+        fev1Input.text = (float.Parse(fev1Input.text) + outtake).ToString();
+        fvcInput.text = fev1Input.text;
+        rocketRb.AddForce(Vector3.up * outtake * gameManager.accelerationRatio, ForceMode.Acceleration);
     }
 
     void FvcOuttake(float sensorInput)
     {
-        if (rocketGameManager.currState == RocketGameManager.RocketState.EXHALE)
-        {
-            float outtake = sensorInput * gameManager.sensorToOuttakeRatio;
-            fvcInput.text = (float.Parse(fvcInput.text) + outtake).ToString();
-            rocketRb.AddForce(Vector3.up * outtake * gameManager.accelerationRatio, ForceMode.Acceleration);
-        }
-    }
-
-    void startLaunching()
-    {
-        StartCoroutine(LaunchBehavior());
+        Debug.Log("FVC");
+        Debug.Log(rocketGameManager.outtakeTime);
+        float outtake = sensorInput * gameManager.sensorToOuttakeRatio;
+        fvcInput.text = (float.Parse(fvcInput.text) + outtake).ToString();
+        rocketRb.AddForce(Vector3.up * outtake * gameManager.accelerationRatio, ForceMode.Acceleration);
     }
 
     /// <summary>
     /// 발사효과 이후 실제 로켓 움직임. 천장에 열기 메시지, 이펙트 시작 메시지, 로켓모양복원. 종료시 종료코루틴 시작.
     /// </summary>
     /// <returns></returns>
-    IEnumerator LaunchBehavior()
+    void startLaunching()
     {
-        UIManager.SendMessage("HideInhaleHud");
-        Ceiling.SendMessage("CeilingOpening");
         EffectCtrl.SendMessage("Boost");
-        yield return 1f;
+        StartCoroutine(SetDeform());
+        StartCoroutine(toExhaleAndFinish());
+    }
 
-        intakeGuage.fillAmount = 0f;
+
+    /// <summary>
+    /// 찌그러진 로켓을 되돌림. 1/6초
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator SetDeform()
+    {
+        float changeX = (rocketTr.localScale.x - 0.5f) / 10f;
+        float changeY = (0.5f - rocketTr.localScale.y) / 10f;
+        float changeZ = (rocketTr.localScale.z - 0.5f) / 10f;
+        int itter = 0;
+
+        while (itter<10)
+        {
+            y = rocketTr.localScale.y + changeY;
+            x = rocketTr.localScale.x - changeX;
+            z = rocketTr.localScale.z - changeZ;
+
+            rocketTr.localScale = new Vector3(x, y, z);
+            itter++;
+            yield return 1 / 60f;
+        }
+        StopCoroutine(SetDeform());
     }
 
     IEnumerator FinishRocket()
     {
-        StopCoroutine(LaunchBehavior());
+       StopCoroutine(toExhaleAndFinish());
 
         float height = rocketTr.position.y;
         rocketRb.useGravity = false;

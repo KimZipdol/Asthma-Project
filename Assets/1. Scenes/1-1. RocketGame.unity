@@ -449,7 +449,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currGameManager: {fileID: 0}
-  gameManager: {fileID: 0}
   playerTr: {fileID: 963194228}
   hudObj: {fileID: 0}
 --- !u!114 &35464640
@@ -877,7 +876,7 @@ Transform:
   m_Children:
   - {fileID: 963194228}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &124406241
 MonoBehaviour:
@@ -1712,7 +1711,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &229408329
 GameObject:
@@ -2428,6 +2427,8 @@ RectTransform:
   m_Children:
   - {fileID: 2041383652}
   - {fileID: 173841268}
+  - {fileID: 951826490}
+  - {fileID: 1928900034}
   m_Father: {fileID: 1760174569}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3154,6 +3155,8 @@ MonoBehaviour:
   boudRate: 115200
   timeOut: 110
   sensorText: {fileID: 933641301}
+  vrSensorText: {fileID: 951826491}
+  checkingBLE: 1
   logging: {fileID: 0}
   currGameManager: {fileID: 0}
 --- !u!4 &466326447
@@ -4076,7 +4079,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &702132409
 MonoBehaviour:
@@ -4090,6 +4093,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfe9ec75158d4446ab0894b6db5eac17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outtakeTime: 0
+  gameManager: {fileID: 0}
   rocketControl: {fileID: 1108781258}
   vrUiManager: {fileID: 2028223603}
   currState: 0
@@ -4183,7 +4188,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1001 &719619230
 PrefabInstance:
@@ -4355,7 +4360,8 @@ MonoBehaviour:
   maxFev1: 1000
   maxFvc: 1100
   accelerationRatio: 10
-  sensorToBreatheRatio: 1
+  sensorToIntakeRatio: 1
+  sensorToOuttakeRatio: 3
   sensorActionPotential: 1
   GameDataFileName: .json
 --- !u!4 &738313536
@@ -5813,6 +5819,84 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 949599151}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &951826489
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 951826490}
+  - component: {fileID: 951826492}
+  - component: {fileID: 951826491}
+  m_Layer: 5
+  m_Name: SensorText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &951826490
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951826489}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 371083664}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 160, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &951826491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951826489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 1
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 0.0
+--- !u!222 &951826492
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951826489}
+  m_CullTransparentMesh: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -7836,7 +7920,7 @@ RectTransform:
   - {fileID: 191882219}
   - {fileID: 23305603}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -10609,7 +10693,6 @@ RectTransform:
   m_LocalScale: {x: 0.0012, y: 0.0012, z: 0.0012}
   m_Children:
   - {fileID: 371083664}
-  - {fileID: 1928900034}
   m_Father: {fileID: 0}
   m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10887,6 +10970,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08514fc02045b4d6db90a864f2e9f93d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movetime: 0.3
   leftCeiling: {fileID: 378507456}
   rightCeiling: {fileID: 895934771}
   RocketCam: {fileID: 191882218}
@@ -11036,7 +11120,7 @@ Transform:
   - {fileID: 1835945784}
   - {fileID: 598031970}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1892643354
 PrefabInstance:
@@ -11200,12 +11284,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1928900033}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1760174569}
-  m_RootOrder: 1
+  m_Father: {fileID: 371083664}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.01, y: 0.9}
   m_AnchorMax: {x: 0.2, y: 0.99}
@@ -11701,7 +11785,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currGameManager: {fileID: 0}
-  gameManager: {fileID: 0}
   playerTr: {fileID: 963194228}
   hudObj: {fileID: 0}
 --- !u!4 &2028223604
