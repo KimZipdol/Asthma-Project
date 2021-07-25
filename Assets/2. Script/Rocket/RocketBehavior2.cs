@@ -80,7 +80,7 @@ public class RocketBehavior2 : MonoBehaviour
         Debug.Log("tofinish");
         while(true)
         {
-            if (rocketRb.velocity.magnitude <= 1.2f)
+            if (rocketRb.velocity.magnitude <= 1.05f)
             {
                 rocketGameManager.SendMessage("toFinishState");
                 StartCoroutine(FinishRocket());
@@ -139,7 +139,7 @@ public class RocketBehavior2 : MonoBehaviour
     /// <param name="sensorInput"></param>
     void Fev1Outtake(float sensorInput)
     {
-        float outtake = sensorInput * gameManager.sensorToOuttakeRatio;
+        float outtake = sensorInput * gameManager.sensorToOuttakeRatio * gameManager.outtakeToSpeedRatio;
         fev1Input.text = (float.Parse(fev1Input.text) + outtake).ToString();
         fvcInput.text = fev1Input.text;
         rocketRb.AddForce(Vector3.up * outtake * gameManager.accelerationRatio, ForceMode.Acceleration);
@@ -149,7 +149,7 @@ public class RocketBehavior2 : MonoBehaviour
     {
         Debug.Log("FVC");
         Debug.Log(rocketGameManager.outtakeTime);
-        float outtake = sensorInput * gameManager.sensorToOuttakeRatio;
+        float outtake = sensorInput * gameManager.sensorToOuttakeRatio * gameManager.outtakeToSpeedRatio;
         fvcInput.text = (float.Parse(fvcInput.text) + outtake).ToString();
         rocketRb.AddForce(Vector3.up * outtake * gameManager.accelerationRatio, ForceMode.Acceleration);
     }
@@ -162,6 +162,11 @@ public class RocketBehavior2 : MonoBehaviour
     {
         EffectCtrl.SendMessage("Boost");
         StartCoroutine(SetDeform());
+        Invoke("OnExhale", 2f);
+    }
+
+    void OnExhale()
+    {
         StartCoroutine(toExhaleAndFinish());
     }
 

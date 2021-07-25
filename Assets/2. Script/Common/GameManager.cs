@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public float sensorToOuttakeRatio = 3.0f;
     [SerializeField]
+    public float outtakeToSpeedRatio = 0.8f;
+    [SerializeField]
     public float sensorActionPotential = 1f;
 
     public string GameDataFileName = ".json";

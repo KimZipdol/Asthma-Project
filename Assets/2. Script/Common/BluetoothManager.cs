@@ -159,8 +159,10 @@ public class BluetoothManager : MonoBehaviour
             readData.byte3 = value[3];
             float pressure = readData.encodedFloat;
             //Debug.Log(pressure);
-            sensorText.text = pressure.ToString();
-            vrSensorText.text = pressure.ToString();
+
+            //씬에따른 차이 있어 수정필요
+            //sensorText.text = pressure.ToString();
+            //vrSensorText.text = pressure.ToString();
             
             currGameManager.SendMessage("SetsensorData", pressure);
 

@@ -5,7 +5,10 @@ using UnityEngine;
 public class RocketSoundManager: MonoBehaviour
 {
     GameObject MusicStop;
-    AudioSource backmusic;
+    public AudioSource backmusic;
+    public AudioSource explode;
+    public AudioSource flying;
+    public AudioSource scoreBoard;
     // 배경음악이 재생될 수 있도록 AudioSource 받아서 나오는 코드 
     void Awake()
     {
@@ -26,6 +29,11 @@ public class RocketSoundManager: MonoBehaviour
         //else backmusic.Stop();
     }
 
+    private void Start()
+    {
+        PlayMusic();
+    }
+
     // 배경음악을 멈출 수 있게 하는 코드 
     // 버튼을 눌렀을 때 컨버넌트가 어떻게 연결되는지 잘 모르겠음... 
     public void PlayMusic()
@@ -37,6 +45,17 @@ public class RocketSoundManager: MonoBehaviour
     public void StopMusic()
     {
         backmusic.Stop();
+    }
+
+    public void OnLaunchSound()
+    {
+        explode.Play();
+        flying.Play();
+    }
+
+    public void ScoreBoardSound()
+    {
+        scoreBoard.Play();
     }
 }
 //https://ansohxxn.github.io/unity%20lesson%202/ch9-1/

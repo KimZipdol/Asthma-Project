@@ -15,10 +15,12 @@ public class RocketGameManager : MonoBehaviour
 
     public bool launchReady = false;
     public bool isRocketFlying = false;
+    public bool isFinishScreen = false;
 
     public GameManager gameManager = null;
     public GameObject rocketControl;
     public VRUIManager vrUiManager = null;
+    public RocketSoundManager soundManager = null;
 
     public enum RocketState { GUIDE = 0, INHALEREADY, INHALE, EXHALE, FINISH };
     public RocketState currState = RocketState.GUIDE;
@@ -99,7 +101,7 @@ public class RocketGameManager : MonoBehaviour
                     break;
                 case (RocketState.EXHALE):
                     outtakeTime += Time.deltaTime;
-                    if (outtakeTime >= 1f)
+                    if (outtakeTime >= 1f && sensorData > gameManager.sensorActionPotential)
                     {
                         rocketControl.SendMessage("FvcOuttake", sensorData);
                     }
@@ -113,11 +115,18 @@ public class RocketGameManager : MonoBehaviour
                         vrUiManager.SendMessage("HideInhaleHud");
                         isRocketFlying = true;
                         rocketControl.SendMessage("startLaunching");
+                        soundManager.StopMusic();
+                        soundManager.SendMessage("OnLaunchSound");
                     }
                     break;
 
                 case (RocketState.FINISH):
-                    
+                    if(!isFinishScreen)
+                    {
+                        soundManager.SendMessage("ScoreBoardSound");
+                        isFinishScreen = true;
+                    }
+
                     if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
                     {
                         currState = RocketState.GUIDE;
