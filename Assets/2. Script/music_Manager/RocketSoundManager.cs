@@ -13,7 +13,7 @@ public class RocketSoundManager: MonoBehaviour
     void Awake()
     {
         //Button = GameObject.Find("BackgroundMusic");
-        backmusic = MusicStop.GetComponent<AudioSource>();
+        //backmusic = MusicStop.GetComponent<AudioSource>();
         //if (backmusic.isPlaying) return; // 배경음악이 재생되고 있으면 패스
         //else
         //{

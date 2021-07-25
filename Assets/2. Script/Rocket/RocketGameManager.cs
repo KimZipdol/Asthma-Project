@@ -55,7 +55,7 @@ public class RocketGameManager : MonoBehaviour
     private void Update()
     {
         Debug.Log(currState);
-
+        vrUiManager.SendMessage("ff", currState.ToString());
     }
 
     /// <summary>
