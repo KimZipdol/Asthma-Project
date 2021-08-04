@@ -26,6 +26,8 @@ public class BluetoothManager : MonoBehaviour
     private Text sensorText;
     public Text vrSensorText;
 
+    float pressure = 0.0f;
+
     private bool checkSerial = false;
     public bool checkingBLE = true;
     
@@ -97,14 +99,18 @@ public class BluetoothManager : MonoBehaviour
     {
         switch(scene.name)
         {
+            
             case ("1-1. RocketGame"):
                 currGameManager = GameObject.Find("RocketGameManager");
+                StartCoroutine(displaySensorData());
                 break;
             case ("2. CandleBlowing"):
                 currGameManager = GameObject.Find("CandleGameManager");
+                StartCoroutine(displaySensorData());
                 break;
             case ("3. Inhaler"):
                 currGameManager = GameObject.Find("InhaleGameManager");
+                StartCoroutine(displaySensorData());
                 break;
             default:
                 currGameManager = null;
@@ -113,6 +119,23 @@ public class BluetoothManager : MonoBehaviour
 
         Debug.Log("OnSceneLoaded: " + scene.name);
         Debug.Log("Mode: " + mode);
+    }
+
+    IEnumerator displaySensorData()
+    {
+        while(true)
+        {
+            //씬에따른 차이 있어 수정필요
+            sensorText.text = pressure.ToString();
+            //vrSensorText.text = pressure.ToString();
+
+            currGameManager.SendMessage("SetsensorData", pressure);
+
+            //호흡데이터저장테스트용
+            //dataList.Add(dataToArray(sensorText.text));
+            yield return null;
+        }
+        
     }
 
     // Start is called before the first frame update
@@ -157,20 +180,13 @@ public class BluetoothManager : MonoBehaviour
             readData.byte1 = value[1];
             readData.byte2 = value[2];
             readData.byte3 = value[3];
-            float pressure = readData.encodedFloat;
+            pressure = readData.encodedFloat;
             //Debug.Log(pressure);
 
-            //씬에따른 차이 있어 수정필요
-            //sensorText.text = pressure.ToString();
-            //vrSensorText.text = pressure.ToString();
-            
-            currGameManager.SendMessage("SetsensorData", pressure);
-
-            //호흡데이터저장테스트용
-            dataList.Add(dataToArray(sensorText.text));
         };
-        
+
     }
+
 
     private void OnScanEnded(BluetoothHelper helper, LinkedList<BluetoothDevice> devices)
     {
@@ -246,8 +262,9 @@ public class BluetoothManager : MonoBehaviour
 
         if (bluetoothHelperInstance.isConnected())
         {
-            
-            GameObject.Find("ArduinoState").GetComponent<Text>().text = "연결됨";
+
+            GameObject.Find("ArduinoState").GetComponent<Text>().text = ("연결됨");
+            GameObject.Find("ff").GetComponent<Text>().text = pressure.ToString();
             //vrSensorText.text = "Device Name: " + bluetoothHelperInstance.getDeviceName();
         }
         else if (!bluetoothHelperInstance.isConnected())

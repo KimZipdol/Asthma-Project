@@ -15,12 +15,6 @@ EditorBuildSettings:
     path: Assets/1. Scenes/1-1. RocketGame.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
     path: Assets/1. Scenes/2. CandleBlowing.unity
     guid: d44da030230334bd3a8998c64494136a
   - enabled: 0
