@@ -9,16 +9,17 @@ public class ObjectCtrl : MonoBehaviour
     public Transform playerTr = null;
 
     private Transform tr = null;
-    public float spdPerDist;
-
+    public float spdPerDist = 0.005f;
 
     // Start is called before the first frame update
     void Start()
     {
+        
         outliner = this.GetComponent<Outline>();
+        
         tr = this.GetComponent<Transform>();
         playerTr = GameObject.Find("Player").GetComponent<Transform>();
-        spdPerDist = 0.01f;
+        spdPerDist = 0.005f;
     }
 
     // Update is called once per frame
@@ -48,14 +49,13 @@ public class ObjectCtrl : MonoBehaviour
 
     IEnumerator ObjectInhale()
     {
-        Vector3 playerPos = new Vector3(-0.071f, 1.5f, -1.47f);
-        //Vector3 playerPos = playerTr.position;
-        //Debug.Log(playerPos);
-        Vector3 target = playerPos - tr.position;
-        float inhaleSpeed = target.magnitude * spdPerDist;
-        while ((tr.position - playerPos).magnitude > 0.1f)
+        //플레이어 입 위치
+        Vector3 mouthPos = playerTr.position;
+        Vector3 targetDist = mouthPos - tr.position;
+        float inhaleSpeed = targetDist.magnitude * spdPerDist;
+        while ((tr.position - mouthPos).magnitude > 0.1f)
         {
-            tr.position += (target * inhaleSpeed);
+            tr.position += (targetDist * inhaleSpeed);
             yield return 0.01f;
         }
         this.gameObject.SetActive(false);
@@ -70,23 +70,30 @@ public class ObjectCtrl : MonoBehaviour
         {
             tr.Rotate(rotateAxis, angle);
             angle+=2;
-            yield return 0.1f;
+            yield return 0.2f;
         }
         this.gameObject.SetActive(false);
 
     }
-
+    /// <summary>
+    /// range = 현재 플레이어와 거리
+    /// initialRange = 초기 플레이어와 거리
+    /// scaleFactor = 초기 스케일에서 줄어든 후 스케일비율
+    /// 날아올 때 작아지는 효과 담당
+    /// </summary>
+    /// <returns></returns>
     IEnumerator ObjectShrink()
     {
         float range = (playerTr.position - tr.position).magnitude;
         float initialRange = range;
+        float initialScaleFactor = this.transform.localScale.x;
         float scaleFactor;
-        while((tr.position-playerTr.position).magnitude>0.1f)
+        while(range >0.2f)
         {
             range = (playerTr.position - tr.position).magnitude;
-            scaleFactor = 1 - ((initialRange - range) / initialRange * 0.7f);
+            scaleFactor = initialScaleFactor * (range / initialRange)  + 0.5f * (1 - (range / initialRange)) ;
             tr.localScale = Vector3.one * scaleFactor;
-            yield return null;
+            yield return 0.2f;
         }
 
         this.gameObject.SetActive(false);

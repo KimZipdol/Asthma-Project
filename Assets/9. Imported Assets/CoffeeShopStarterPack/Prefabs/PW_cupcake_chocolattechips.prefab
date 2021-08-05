@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 23797890479227170}
   - component: {fileID: 64498274502159354}
   - component: {fileID: 5975893988798819964}
-  - component: {fileID: 8710914203017898243}
+  - component: {fileID: 1102871241905218808}
   m_Layer: 8
   m_Name: PW_cupcake_chocolattechips
   m_TagString: INTERACTABLE
@@ -57,6 +57,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -91,9 +92,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 09d02e86acc0f4e85ba8435b3f878728, type: 3}
 --- !u!114 &5975893988798819964
 MonoBehaviour:
@@ -110,7 +111,8 @@ MonoBehaviour:
   outliner: {fileID: 0}
   isTarget: 0
   playerTr: {fileID: 0}
---- !u!114 &8710914203017898243
+  spdPerDist: 0
+--- !u!114 &1102871241905218808
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -119,7 +121,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1921254186118406}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Script: {fileID: 11500000, guid: 1dcd42887e1f94cd7b6f2b3e172ee776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   outlineMode: 0
