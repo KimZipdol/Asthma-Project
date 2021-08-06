@@ -155,7 +155,6 @@ public class BluetoothManager : MonoBehaviour
         //bluetoothHelperInstance.setDeviceName("BreatheInput");
         //bluetoothHelperInstance.setDeviceAddress("09:40:40:8a:39:3a");
 
-        StartFindingBLE();
     }
 
     private void SetBLEEvents()
@@ -164,6 +163,7 @@ public class BluetoothManager : MonoBehaviour
         bluetoothHelperInstance.OnConnectionFailed += (helper) =>
         {
             Debug.Log("Connection failed");
+            ((BluetoothHelper)helper).Connect();
         };
         bluetoothHelperInstance.OnScanEnded += OnScanEnded;
         bluetoothHelperInstance.OnServiceNotFound += (helper, serviceName) =>
@@ -217,36 +217,7 @@ public class BluetoothManager : MonoBehaviour
 
     }
 
-    public void StartFindingBLE()
-    {
-        StartCoroutine("TryConnectBLE");
-    }
-
-    IEnumerator TryConnectBLE()
-    {
-        while(!bluetoothHelperInstance.isDevicePaired())
-        {
-            Debug.Log("Scanning");
-            yield return null;
-        }
-
-        while(bluetoothHelperInstance.isDevicePaired() && !bluetoothHelperInstance.isConnected())
-        {
-            Debug.Log("Trying to connect");
-            try
-            {
-                bluetoothHelperInstance.Connect();
-                
-            }
-            catch (BluetoothHelper.BlueToothNotReadyException e)
-            {
-                Debug.Log(e);
-            }
-            yield return null;
-        }
-
-        StopCoroutine(TryConnectBLE());
-    }
+  
 
     
 
@@ -303,13 +274,14 @@ public class BluetoothManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+
         QuitBLE();
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     public void QuitBLE()
     {
-        StopCoroutine(TryConnectBLE());
+       
         bluetoothHelperInstance.Disconnect();
         bluetoothHelperInstance.OnConnected -= onConnected;
     }
