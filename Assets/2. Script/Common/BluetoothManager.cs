@@ -290,13 +290,13 @@ public class BluetoothManager : MonoBehaviour
         Debug.Log("device addr: " + helper.getDeviceAddress());
 
         //Subscribe to pressure data Service and Characteristic
-        pressureService = new BluetoothHelperService("1101");
+        pressureService = new BluetoothHelperService("00001101-0000-1000-8000-00805f9b34fb");
         pressureLevelChar = new BluetoothHelperCharacteristic("2101");
         pressureService.addCharacteristic(pressureLevelChar);
 
         helper.Subscribe(pressureLevelChar);
 
-        helper.ReadCharacteristic(pressureLevelChar);
+        //helper.ReadCharacteristic(pressureLevelChar);
 
         
     }

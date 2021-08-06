@@ -13,6 +13,8 @@ public class RocketGameManager : MonoBehaviour
         sensorData = value;
     }
 
+    private Scene currScene;
+
     public bool launchReady = false;
     public bool isRocketFlying = false;
     public bool isFinishScreen = false;
@@ -50,6 +52,10 @@ public class RocketGameManager : MonoBehaviour
         StartCoroutine(CheckState());
     }
 
+    void GetCurrScene(Scene scene, LoadSceneMode mode)
+    {
+        currScene = scene;
+    }
 
     
     private void Update()
@@ -127,20 +133,23 @@ public class RocketGameManager : MonoBehaviour
                         isFinishScreen = true;
                     }
 
-                    if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
+                    if (currScene.name == "1-3. RocketGame")
                     {
-                        currState = RocketState.GUIDE;
-                        switch(currStage)
+                        if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
                         {
-                            case (1):
-                                setStage2();
-                                break;
-                            case (2):
-                                break;
-                            case (3):
-                                break;
-                            case (4):
-                                break;
+                            currState = RocketState.GUIDE;
+                            switch (currStage)
+                            {
+                                case (1):
+                                    setStage2();
+                                    break;
+                                case (2):
+                                    break;
+                                case (3):
+                                    break;
+                                case (4):
+                                    break;
+                            }
                         }
                     }
                     break;
