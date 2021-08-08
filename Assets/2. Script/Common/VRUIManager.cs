@@ -117,16 +117,11 @@ public class VRUIManager : MonoBehaviour
 
     IEnumerator blockEye()
     {
-        float blockerAlpha = eyeBlocker.color.a;
         eyeBlocker.gameObject.SetActive(true);
-        while (blockerAlpha<=1)
-        {
-            blockerAlpha += 1 / 20f;
-            eyeBlocker.color = new Color(0f, 0f, 0f, blockerAlpha);
-            yield return new WaitForSeconds(1/20f);
-        }
+        eyeBlocker.color = new Color(0f, 0f, 0f, 1f);
         fillGuage.fillAmount = 0f;
         fillAmt = 0f;
+        inhaled = 0f;
         yield return new WaitForSeconds(0.3f);
     }
 
@@ -140,9 +135,9 @@ public class VRUIManager : MonoBehaviour
         float blockerAlpha = eyeBlocker.color.a;
         while (blockerAlpha >= 0)
         {
-            blockerAlpha -= 1 / 20f;
+            blockerAlpha -= 1 / 60f;
             eyeBlocker.color = new Color(0f, 0f, 0f, blockerAlpha);
-            yield return new WaitForSeconds(1 / 20f);
+            yield return new WaitForSeconds(1 / 60f);
         }
         eyeBlocker.gameObject.SetActive(false);
         yield return new WaitForSeconds(0.3f);

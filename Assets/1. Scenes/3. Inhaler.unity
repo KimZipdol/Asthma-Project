@@ -1156,6 +1156,7 @@ MonoBehaviour:
   currGameManager: {fileID: 0}
   playerTr: {fileID: 1759101600}
   hudObj: {fileID: 0}
+  eyeBlocker: {fileID: 0}
 --- !u!114 &95875327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1170,8 +1171,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreText: {fileID: 0}
   scorePanel: {fileID: 0}
+  progressImage: {fileID: 0}
   scoreTr: {fileID: 0}
   playerTr: {fileID: 0}
+  astroman: {fileID: 0}
+  currStage: 1
+  Stars: []
 --- !u!4 &95875328
 Transform:
   m_ObjectHideFlags: 0
@@ -11125,6 +11130,7 @@ MonoBehaviour:
   currGameManager: {fileID: 0}
   playerTr: {fileID: 161015900}
   hudObj: {fileID: 0}
+  eyeBlocker: {fileID: 0}
 --- !u!4 &589842639
 Transform:
   m_ObjectHideFlags: 0
@@ -25678,7 +25684,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1759101599}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7bd2e5da4323491bbeab29b51f3fecf, type: 3}
+  m_Script: {fileID: 11500000, guid: 7dd9668a6b1d849748286ee7538b389c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tr: {fileID: 1759101600}
@@ -25686,6 +25692,7 @@ MonoBehaviour:
   SelectImg: {fileID: 1516763171}
   SelectionTime: 50
   fps: 60
+  messageSended: 0
 --- !u!1001 &1767826510
 PrefabInstance:
   m_ObjectHideFlags: 0

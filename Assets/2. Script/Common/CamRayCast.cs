@@ -9,7 +9,9 @@ public class CamRayCast : MonoBehaviour
     public Transform tr = null;
     public GameObject SelectBG = null;
     public Image SelectImg = null;
-    public float SelectionTime = 50f;
+
+    [SerializeField]
+    private float SelectionTime = 50f;
 
     [SerializeField]
     private float fps = 60f;
@@ -19,6 +21,8 @@ public class CamRayCast : MonoBehaviour
 
     Ray ray = new Ray();
     private RaycastHit hit;
+
+    public bool messageSended = false;
 
 
     // Start is called before the first frame update
@@ -66,32 +70,18 @@ public class CamRayCast : MonoBehaviour
     IEnumerator SelectGame()
     {
         SelectBG.SetActive(true);
-        prevHit = hit.collider.gameObject; 
-        while (hit.collider.gameObject.layer == 9 )
+        prevHit = hit.collider.gameObject;
+        while (hit.collider.gameObject.layer == 9)
         {
             if (SelectImg.fillAmount >= 0.99)
             {
-                Debug.Log(hit.collider.gameObject.tag);
                 switch (hit.collider.gameObject.tag)
                 {
-                    case ("INPUT"):
-                        hit.collider.gameObject.SendMessage("StartInput");
-                        break;
                     case ("TOMAIN"):
                         SceneManager.LoadScene("0. StartScene", LoadSceneMode.Single);
                         break;
-                    case ("MAINSTART"):
-                        if (GameManager.instance.getStage == 1)
-                            SceneManager.LoadScene("1-1. RocketGame", LoadSceneMode.Single);
-                        else if (GameManager.instance.getStage == 2)
-                            SceneManager.LoadScene("1-2. RocketStage2", LoadSceneMode.Single);
-                        else if (GameManager.instance.getStage == 3)
-                            SceneManager.LoadScene("1-345. RocketStage345", LoadSceneMode.Single);
-                        else
-                            Debug.Log("스테이지를 입력해주세요");
-                        break;
                     case ("ROCKETGAME"):
-                        SceneManager.LoadScene("1-1. RocketGame", LoadSceneMode.Single);
+                        SceneManager.LoadScene("1. RocketGame", LoadSceneMode.Single);
                         break;
                     case ("ROCKET2"):
                         SceneManager.LoadScene("1-2. RocketStage2", LoadSceneMode.Single);
@@ -99,17 +89,22 @@ public class CamRayCast : MonoBehaviour
                     case ("ROCKET3"):
                         SceneManager.LoadScene("1-345. RocketStage345", LoadSceneMode.Single);
                         break;
+                    case ("ROCKET45"):
+                        if (!messageSended)
+                        {
+                            GameObject.Find("RocketGameManager").SendMessage("toNextStage");
+                            messageSended = true;
+                        }
+                        else
+                        {
+                            Application.Quit();
+                        }
+                        break;
                     case ("CANDLEGAME"):
                         SceneManager.LoadScene("2. CandleBlowing", LoadSceneMode.Single);
                         break;
                     case ("FOODGAME"):
                         SceneManager.LoadScene("3. Inhaler", LoadSceneMode.Single);
-                        break;
-                    case ("UP"):
-                        //로그인화면에 스크롤 맨 위가 아니라면  업
-                        break;
-                    case ("DOWN"):
-                        //로그인화면에서 스크롤 맨 아래가 아니라면 다운
                         break;
                     case ("ENDGAME"):
 #if UNITY_EDITOR
@@ -124,11 +119,16 @@ public class CamRayCast : MonoBehaviour
                         break;
                 }
             }
-            SelectImg.fillAmount += (1f / (fps * SelectionTime));
+            SelectImg.fillAmount += 1 / (fps * SelectionTime);
             yield return Time.deltaTime;
         }
         prevHit.SendMessage("OutLineOff");
         SelectBG.SetActive(false);
         SelectImg.fillAmount = 0f;
+    }
+
+    public void ResetFlag()
+    {
+        messageSended = false;
     }
 }

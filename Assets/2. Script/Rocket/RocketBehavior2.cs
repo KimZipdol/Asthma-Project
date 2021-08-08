@@ -218,5 +218,8 @@ public class RocketBehavior2 : MonoBehaviour
     {
         rocketTr.position = new Vector3(1.11f, 1.46f, 2.2f);
         rocketRb.useGravity = true;
+        x = 0.5f;
+        y = 0.5f;
+        z = 0.5f;
     }
 }

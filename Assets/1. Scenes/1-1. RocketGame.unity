@@ -451,6 +451,7 @@ MonoBehaviour:
   currGameManager: {fileID: 0}
   playerTr: {fileID: 963194228}
   hudObj: {fileID: 0}
+  eyeBlocker: {fileID: 0}
 --- !u!114 &35464640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4059,6 +4060,11 @@ MonoBehaviour:
   isFinishScreen: 0
   gameManager: {fileID: 0}
   rocketControl: {fileID: 1108781258}
+  rocketUIManager: {fileID: 0}
+  stage3Planet: {fileID: 0}
+  stage4Planet: {fileID: 0}
+  stage5Planet: {fileID: 0}
+  rayCastCam: {fileID: 0}
   vrUiManager: {fileID: 2028223603}
   soundManager: {fileID: 1830762917}
   loggingManager: {fileID: 1606492995}
@@ -6160,7 +6166,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7bd2e5da4323491bbeab29b51f3fecf, type: 3}
+  m_Script: {fileID: 11500000, guid: 7dd9668a6b1d849748286ee7538b389c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tr: {fileID: 963194228}
@@ -6168,6 +6174,7 @@ MonoBehaviour:
   SelectImg: {fileID: 1191676936}
   SelectionTime: 50
   fps: 60
+  messageSended: 0
 --- !u!120 &963194230
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -12503,6 +12510,7 @@ MonoBehaviour:
   currGameManager: {fileID: 0}
   playerTr: {fileID: 963194228}
   hudObj: {fileID: 0}
+  eyeBlocker: {fileID: 0}
 --- !u!4 &2028223604
 Transform:
   m_ObjectHideFlags: 0

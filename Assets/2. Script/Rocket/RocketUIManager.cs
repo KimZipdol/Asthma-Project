@@ -46,8 +46,8 @@ public class RocketUIManager : MonoBehaviour
         //단계별 별 보이기
         for (int i=0; i < currStage; i++)
         {
-            Stars[i].GetComponent<Animation>().enabled = true;
-            Stars[i].GetComponent<AudioSource>().enabled = true;
+            Stars[i].GetComponent<Animation>().Play();
+            Stars[i].GetComponent<AudioSource>().Play();
             yield return new WaitForSeconds(0.5f);
         }
 
@@ -69,8 +69,7 @@ public class RocketUIManager : MonoBehaviour
     {
         for (int i = 0; i < currStage; i++)
         {
-            Stars[i].GetComponent<Animation>().enabled = false;
-            Stars[i].GetComponent<AudioSource>().enabled = false;
+            Stars[i].GetComponent<Animation>().Rewind();
         }
         progressImage.fillAmount = 0f;
         astroman.localPosition = new Vector3(-0.375f, -0.09f, 0f);

@@ -256,7 +256,7 @@ public class RocketGameManager : MonoBehaviour
 
     void setStage4()
     {
-        vrUiManager.SendMessage("BlockEye");
+        vrUiManager.BlockEye();                            
         rocketUIManager.SendMessage("ResetUI");
         stage3Planet.gameObject.SetActive(false);
         stage4Planet.gameObject.SetActive(true);
@@ -265,13 +265,13 @@ public class RocketGameManager : MonoBehaviour
         isRocketFlying = false;
         isFinishScreen = false;
         rocketUIManager.SendMessage("SetStage", currStage);
-        rayCastCam.SendMessage("ResetFlag");
-        vrUiManager.SendMessage("UnBlockEye");
+        rayCastCam.GetComponent<CamRayCast>().messageSended = false;    //작동안함
+        vrUiManager.UnBlockEye();                          
     }
 
     void setStage5()
     {
-        vrUiManager.SendMessage("BlockEye");
+        vrUiManager.BlockEye();
         rocketUIManager.SendMessage("ResetUI");
         stage4Planet.gameObject.SetActive(false);
         stage5Planet.gameObject.SetActive(true);
@@ -279,7 +279,6 @@ public class RocketGameManager : MonoBehaviour
         launchReady = false;
         isRocketFlying = false;
         isFinishScreen = false;
-        rocketUIManager.SendMessage("SetStage", currStage);
-        vrUiManager.SendMessage("UnBlockEye");
+        vrUiManager.UnBlockEye();
     }
 }
