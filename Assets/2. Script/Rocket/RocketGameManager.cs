@@ -23,6 +23,9 @@ public class RocketGameManager : MonoBehaviour
     public GameObject rocketControl;
     public VRUIManager vrUiManager = null;
     public RocketSoundManager soundManager = null;
+    public GameObject loggingManager = null;
+
+    public float clearTime = 0f;
 
     public enum RocketState { GUIDE = 0, INHALEREADY, INHALE, EXHALE, FINISH };
     public RocketState currState = RocketState.GUIDE;
@@ -60,8 +63,6 @@ public class RocketGameManager : MonoBehaviour
     
     private void Update()
     {
-        Debug.Log(currState);
-        vrUiManager.SendMessage("ff", currState.ToString());
     }
 
     /// <summary>
@@ -80,6 +81,7 @@ public class RocketGameManager : MonoBehaviour
                     }
                     break;
                 case (RocketState.INHALEREADY):
+                    clearTime += Time.deltaTime;
                     if (sensorData <= gameManager.sensorActionPotential * -1f)
                     {
                         currState = RocketState.INHALE;
@@ -87,26 +89,47 @@ public class RocketGameManager : MonoBehaviour
                     }
                     break;
                 case (RocketState.INHALE):
-                    if (sensorData > gameManager.sensorActionPotential * -1f)
+                    if (launchReady == false)
                     {
-                        currState = RocketState.EXHALE;
+                        launchReady = true;
+                        rocketControl.SendMessage("ReadyForLaunch");
+                        loggingManager.SendMessage("logPressure", "Inhale Start");
                     }
 
+                    loggingManager.SendMessage("logPressure", sensorData.ToString());
+                    clearTime += Time.deltaTime;
                     intakeTime += Time.deltaTime;
 
                     vrUiManager.SendMessage("inHaleFill", sensorData);
                     rocketControl.SendMessage("Intake", sensorData);
 
-                    if(launchReady==false)
+                    if (sensorData > gameManager.sensorActionPotential * -1f)
                     {
-                        launchReady = true;
-                        rocketControl.SendMessage("ReadyForLaunch");
-                        
+                        currState = RocketState.EXHALE;
                     }
+
+                    
+
+                    
 
                     break;
                 case (RocketState.EXHALE):
+                    if (!isRocketFlying)
+                    {
+                        vrUiManager.SendMessage("HideInhaleHud");
+                        isRocketFlying = true;
+                        rocketControl.SendMessage("startLaunching");
+                        soundManager.StopMusic();
+                        soundManager.SendMessage("OnLaunchSound");
+                        loggingManager.SendMessage("logPressure", "Exhale Start");
+                    }
+
+                    loggingManager.SendMessage("logPressure", sensorData.ToString());
+                    clearTime += Time.deltaTime;
                     outtakeTime += Time.deltaTime;
+
+                    
+
                     if (outtakeTime >= 1f && sensorData > gameManager.sensorActionPotential)
                     {
                         rocketControl.SendMessage("FvcOuttake", sensorData);
@@ -116,24 +139,21 @@ public class RocketGameManager : MonoBehaviour
                         rocketControl.SendMessage("Fev1Outtake", sensorData);
                     }
 
-                    if(!isRocketFlying)
-                    {
-                        vrUiManager.SendMessage("HideInhaleHud");
-                        isRocketFlying = true;
-                        rocketControl.SendMessage("startLaunching");
-                        soundManager.StopMusic();
-                        soundManager.SendMessage("OnLaunchSound");
-                    }
+                    
+
+                    
                     break;
 
                 case (RocketState.FINISH):
                     if(!isFinishScreen)
                     {
                         soundManager.SendMessage("ScoreBoardSound");
+                        loggingManager.SendMessage("logClearTime", clearTime.ToString());
+                        vrUiManager.SendMessage("ShowInhaleHud");
                         isFinishScreen = true;
                     }
 
-                    if (currScene.name == "1-3. RocketGame")
+                    if (currScene.name == "1-345. RocketStage345")
                     {
                         if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
                         {

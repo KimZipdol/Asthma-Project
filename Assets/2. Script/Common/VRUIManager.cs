@@ -102,9 +102,14 @@ public class VRUIManager : MonoBehaviour
         hudTr.gameObject.SetActive(false);
     }
 
-
-    public void ff(string state )
+    public void ShowInhaleHud()
     {
-        GameObject.Find("f").GetComponent<Text>().text = state;
+        hudTr.gameObject.SetActive(true);
     }
+
+
+    //public void ff(string state)
+    //{
+    //    GameObject.Find("f").GetComponent<Text>().text = state;
+    //}
 }

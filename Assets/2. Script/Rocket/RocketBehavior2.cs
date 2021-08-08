@@ -66,7 +66,7 @@ public class RocketBehavior2 : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("rocket speed: " + rocketRb.velocity.magnitude);
+        //Debug.Log("rocket speed: " + rocketRb.velocity.magnitude);
 
     }
 
@@ -77,7 +77,6 @@ public class RocketBehavior2 : MonoBehaviour
     /// <returns></returns>
     IEnumerator toExhaleAndFinish()
     {
-        Debug.Log("tofinish");
         while(true)
         {
             if (rocketRb.velocity.magnitude <= 1.05f)
@@ -147,8 +146,6 @@ public class RocketBehavior2 : MonoBehaviour
 
     void FvcOuttake(float sensorInput)
     {
-        Debug.Log("FVC");
-        Debug.Log(rocketGameManager.outtakeTime);
         float outtake = sensorInput * gameManager.sensorToOuttakeRatio * gameManager.outtakeToSpeedRatio;
         fvcInput.text = (float.Parse(fvcInput.text) + outtake).ToString();
         rocketRb.AddForce(Vector3.up * outtake * gameManager.accelerationRatio, ForceMode.Acceleration);
@@ -211,7 +208,7 @@ public class RocketBehavior2 : MonoBehaviour
             yield return 0.1f;
 
 
-        GameManager.instance.SendMessage("SaveGameData");
+        //GameManager.instance.SendMessage("SaveGameData");
 
         rocketCam.gameObject.SetActive(false);
         this.gameObject.SetActive(false);

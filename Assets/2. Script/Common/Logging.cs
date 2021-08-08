@@ -11,48 +11,131 @@ public class Logging : MonoBehaviour
 {
 
     private string directory = null;
-    private string LogPath = null;
+    private string path = "";
+    //DirectoryInfo directoryInfo = null;
+    FileStream fs = null;
+    StreamWriter writer = null;
 
-    public void log(string logmsg)
+    int count = 1;
+
+    private void Start()
     {
+        //path = pathForDocumentsFile("pressurelog.txt");
+        //directoryInfo = new DirectoryInfo(path);
+        directory = Application.persistentDataPath + "/Log";
+        path = directory + "/log.txt";
+        
+    }
+
+    //안드로이드 로그
+    //
+    //
+    public void logPressure(string pressure)
+    {
+        //Debug.Log("logging");
         if (!System.IO.Directory.Exists(directory))
         {
             System.IO.Directory.CreateDirectory(directory);
         }
 
-        FileStream fs = null;
-        fs = new FileStream(LogPath, FileMode.Append);
-        if (fs.Length > 2048000)
+
+        //디렉토리에 파일이 없으면 만들고, 있으면 열어서 끝으로 이동.  
+        if (!File.Exists(path))
         {
+            fs = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
+        }
+        else
+        {
+            fs = new FileStream(path, FileMode.Append, FileAccess.Write);
+        }
+        writer = new StreamWriter(fs);
+        // 파일이 65000줄 보다 길어 엑셀처리 힘들경우 기존 데이터 닫고 다시 만들기
+        if (fs.Length > 65000)
+        {
+            fs.Flush();
             fs.Close();
-            // 기존 데이터 비우고 다시 열기
-            fs = new FileStream(LogPath, FileMode.Create, FileAccess.Write);
+            fs = new FileStream(directory + "log" + count +".txt", FileMode.CreateNew, FileAccess.Write);
+            path = directory + "log" + count + ".txt";
+            count++;
         }
 
-        StreamWriter writer = new StreamWriter(fs);
-        string logfrm = DateTime.Now.ToString("yyyyMMdd hh:mm:ss") + " " + logmsg;  //작성 내용. 임시로 현재날짜쓰게돼있음.
+        
+        string logfrm = DateTime.Now.ToString("yyyyMMdd hh:mm:ss.fff") + ", " + pressure;  //작성 내용. 임시로 현재날짜쓰게돼있음.
         writer.WriteLine(logfrm);
         writer.Close();
         fs.Close();
     }
 
-    public string Read()
+    public void logClearTime(string clearTime)
     {
-        StreamReader file = File.OpenText(LogPath);
-        bool end = file.EndOfStream;
-        string temp = "";
-        while (!end)
+        //디렉토리에 파일이 없으면 만들고, 있으면 열어서 끝으로 이동.  
+        if (!File.Exists(path))
         {
-            temp = file.ReadLine();
-            end = file.EndOfStream;
+            fs = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
         }
-        file.Close();        //파일을 닫아요  
+        else
+        {
+            fs = new FileStream(path, FileMode.Append, FileAccess.Write);
+        }
+        // 파일이 65000줄 보다 길어 엑셀처리 힘들경우 기존 데이터 닫고 다시 만들기
+        if (fs.Length > 65000)
+        {
+            fs.Flush();
+            fs.Close();
+            fs = new FileStream(directory + "log" + count + ".txt", FileMode.CreateNew, FileAccess.Write);
+            path = directory + "log" + count + ".txt";
+            count++;
+        }
 
-        return temp;
+        StreamWriter writer = new StreamWriter(fs);
+        string logfrm = DateTime.Now.ToString("yyyyMMdd hh:mm:ss.fff") + ", ClearTime, " + clearTime;  //작성 내용. 임시로 현재날짜쓰게돼있음.
+        writer.WriteLine(logfrm);
+        writer.Close();
+        fs.Close();
     }
 
-    //PC데이터 저장용 임시
+    
 
+    public void writeStringToFile(string str, string filename)
+    {
+#if !WEB_BUILD
+        string path = pathForDocumentsFile(filename);
+        FileStream file = new FileStream(path, FileMode.Create, FileAccess.Write);
+
+        StreamWriter sw = new StreamWriter(file);
+        sw.WriteLine(str);
+
+        sw.Close();
+        file.Close();
+#endif
+    }
+
+
+    
+
+    //파일 이름을 받아 저장 경로를 리턴하는 함수
+    public string pathForDocumentsFile(string filename)
+    {
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            string path = Application.persistentDataPath;
+            path = path.Substring(0, path.LastIndexOf('/'));
+            return Path.Combine(path, filename);
+        }
+
+        else
+        {
+            string path = Application.dataPath;
+            path = path.Substring(0, path.LastIndexOf('/'));
+            return Path.Combine(path, filename);
+        }
+    }
+
+
+    /*
+    //PC데이터 저장용 임시
+    //https://coderzero.tistory.com/entry/%EC%9C%A0%EB%8B%88%ED%8B%B0-%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%86%8C%EC%8A%A4-csv-%ED%8C%8C%EC%9D%BC-%EC%9D%BD%EA%B3%A0-%EC%93%B0%EA%B8%B0
+    //위 사이트 참고함
     private bool m_IsWriting;
 
     //CSV 읽기 메서드
@@ -131,4 +214,6 @@ public class Logging : MonoBehaviour
         Debug.Log("전달완료");
         WriteCsv(input.dataList, input.savePath);
     }
+
+    */
 }

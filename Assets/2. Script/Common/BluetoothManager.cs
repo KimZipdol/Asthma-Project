@@ -130,7 +130,6 @@ public class BluetoothManager : MonoBehaviour
             //vrSensorText.text = pressure.ToString();
 
             currGameManager.SendMessage("SetsensorData", pressure);
-
             //호흡데이터저장테스트용
             //dataList.Add(dataToArray(sensorText.text));
             yield return null;
@@ -261,7 +260,11 @@ public class BluetoothManager : MonoBehaviour
         Debug.Log("device addr: " + helper.getDeviceAddress());
 
         //Subscribe to pressure data Service and Characteristic
+#if UNITY_EDITOR_OSX
+        pressureService = new BluetoothHelperService("1101");
+#elif UNITY_ANDROID
         pressureService = new BluetoothHelperService("00001101-0000-1000-8000-00805f9b34fb");
+#endif
         pressureLevelChar = new BluetoothHelperCharacteristic("2101");
         pressureService.addCharacteristic(pressureLevelChar);
 
