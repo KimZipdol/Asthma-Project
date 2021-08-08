@@ -21,6 +21,11 @@ public class RocketGameManager : MonoBehaviour
 
     public GameManager gameManager = null;
     public GameObject rocketControl;
+    public GameObject rocketUIManager = null;
+    public GameObject stage3Planet = null;
+    public GameObject stage4Planet = null;
+    public GameObject stage5Planet = null;
+    public GameObject rayCastCam = null;
     public VRUIManager vrUiManager = null;
     public RocketSoundManager soundManager = null;
     public GameObject loggingManager = null;
@@ -45,14 +50,36 @@ public class RocketGameManager : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        rocketUIManager = GameObject.Find("UIManager");
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        switch (scene.name)
+        {
+
+            case ("1-2. RocketStage2"):
+                currStage = 2;
+                
+                break;
+            case ("1-345. RocketStage345"):
+                currStage = 3;
+                break;
+            
+        }
+        rocketUIManager.SendMessage("SetStage", currStage);
+        Debug.Log("OnSceneLoaded: " + scene.name);
+        Debug.Log("Mode: " + mode);
     }
 
     private void Start()
     {
         gameManager = GameManager.instance;
         vrUiManager = VRUIManager.instance;
+        
         StartCoroutine(CheckState());
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void GetCurrScene(Scene scene, LoadSceneMode mode)
@@ -63,6 +90,7 @@ public class RocketGameManager : MonoBehaviour
     
     private void Update()
     {
+        Debug.Log(sensorData);
     }
 
     /// <summary>
@@ -157,17 +185,11 @@ public class RocketGameManager : MonoBehaviour
                     {
                         if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
                         {
-                            currState = RocketState.GUIDE;
+                            
                             switch (currStage)
                             {
-                                case (1):
-                                    setStage2();
-                                    break;
-                                case (2):
-                                    break;
-                                case (3):
-                                    break;
-                                case (4):
+                                case (5):
+                                    Application.Quit();
                                     break;
                             }
                         }
@@ -205,13 +227,59 @@ public class RocketGameManager : MonoBehaviour
 
     }
 
-    private void resetStage()
+    public void toNextStage()
     {
+        
+        if (currStage==3)
+        {
+            
+            currStage = 4;
+            setStage4();
+            currState = RocketState.GUIDE;
+        }
+        else if(currStage==4)
+        {
+            
+            currStage = 5;
+            setStage5();
+            currState = RocketState.GUIDE;
+        }
         
     }
 
-    void setStage2()
+    private void resetStage()
     {
+        rocketControl.gameObject.SetActive(true);
+        rocketControl.SendMessage("ResetRocket");
+        rocketUIManager.SendMessage("ResetScoreUI");
+    }
+
+    void setStage4()
+    {
+        vrUiManager.SendMessage("BlockEye");
+        rocketUIManager.SendMessage("ResetUI");
+        stage3Planet.gameObject.SetActive(false);
+        stage4Planet.gameObject.SetActive(true);
         resetStage();
+        launchReady = false;
+        isRocketFlying = false;
+        isFinishScreen = false;
+        rocketUIManager.SendMessage("SetStage", currStage);
+        rayCastCam.SendMessage("ResetFlag");
+        vrUiManager.SendMessage("UnBlockEye");
+    }
+
+    void setStage5()
+    {
+        vrUiManager.SendMessage("BlockEye");
+        rocketUIManager.SendMessage("ResetUI");
+        stage4Planet.gameObject.SetActive(false);
+        stage5Planet.gameObject.SetActive(true);
+        resetStage();
+        launchReady = false;
+        isRocketFlying = false;
+        isFinishScreen = false;
+        rocketUIManager.SendMessage("SetStage", currStage);
+        vrUiManager.SendMessage("UnBlockEye");
     }
 }

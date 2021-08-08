@@ -214,5 +214,9 @@ public class RocketBehavior2 : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
-    
+    public void ResetRocket()
+    {
+        rocketTr.position = new Vector3(1.11f, 1.46f, 2.2f);
+        rocketRb.useGravity = true;
+    }
 }

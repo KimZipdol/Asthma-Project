@@ -27,4 +27,6 @@ public class EffectContol : MonoBehaviour
         boostEffect.SetActive(true);
         startEffect.SetActive(true);
     }
+
+
 }

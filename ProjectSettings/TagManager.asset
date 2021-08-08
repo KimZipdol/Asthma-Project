@@ -18,6 +18,7 @@ TagManager:
   - ROCKET3
   - INPUT
   - MAINSTART
+  - ROCKET45
   layers:
   - Default
   - TransparentFX

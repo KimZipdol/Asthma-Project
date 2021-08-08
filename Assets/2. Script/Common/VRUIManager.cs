@@ -16,6 +16,7 @@ public class VRUIManager : MonoBehaviour
     private GameObject hudObj = null;
 
     private Image fillGuage = null;
+    public Image eyeBlocker = null;
 
     private RectTransform hudTr;
     private float inhaled = 0f;
@@ -50,6 +51,8 @@ public class VRUIManager : MonoBehaviour
         switch (scene.name)
         {
             case ("1-1. RocketGame"):
+            case ("1-2. RocketStage2"):
+            case ("1-345. RocketStage345"):
                 currGameManager = GameObject.Find("RocketGameManager");
                 fillGuage = GameObject.Find("InhaleFill").GetComponent<Image>();
                 break;
@@ -105,6 +108,44 @@ public class VRUIManager : MonoBehaviour
     public void ShowInhaleHud()
     {
         hudTr.gameObject.SetActive(true);
+    }
+
+    public void BlockEye()
+    {
+        StartCoroutine(blockEye());
+    }
+
+    IEnumerator blockEye()
+    {
+        float blockerAlpha = eyeBlocker.color.a;
+        eyeBlocker.gameObject.SetActive(true);
+        while (blockerAlpha<=1)
+        {
+            blockerAlpha += 1 / 20f;
+            eyeBlocker.color = new Color(0f, 0f, 0f, blockerAlpha);
+            yield return new WaitForSeconds(1/20f);
+        }
+        fillGuage.fillAmount = 0f;
+        fillAmt = 0f;
+        yield return new WaitForSeconds(0.3f);
+    }
+
+    public void UnBlockEye()
+    {
+        StartCoroutine(unBlockEye());
+    }
+
+    IEnumerator unBlockEye()
+    {
+        float blockerAlpha = eyeBlocker.color.a;
+        while (blockerAlpha >= 0)
+        {
+            blockerAlpha -= 1 / 20f;
+            eyeBlocker.color = new Color(0f, 0f, 0f, blockerAlpha);
+            yield return new WaitForSeconds(1 / 20f);
+        }
+        eyeBlocker.gameObject.SetActive(false);
+        yield return new WaitForSeconds(0.3f);
     }
 
 

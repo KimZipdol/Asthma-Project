@@ -84,7 +84,7 @@ public class BluetoothManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            //DontDestroyOnLoad(this.gameObject);
         }
         else
         {
@@ -92,6 +92,7 @@ public class BluetoothManager : MonoBehaviour
         }
 
         logging = GameObject.Find("LoggingManager");
+
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -103,6 +104,16 @@ public class BluetoothManager : MonoBehaviour
             case ("1-1. RocketGame"):
                 currGameManager = GameObject.Find("RocketGameManager");
                 StartCoroutine(displaySensorData());
+                break;
+            case ("1-2. RocketStage2"):
+                currGameManager = GameObject.Find("RocketGameManager");
+                StartCoroutine(displaySensorData());
+                Start();
+                break;
+            case ("1-345. RocketStage345"):
+                currGameManager = GameObject.Find("RocketGameManager");
+                StartCoroutine(displaySensorData());
+                Start();
                 break;
             case ("2. CandleBlowing"):
                 currGameManager = GameObject.Find("CandleGameManager");
@@ -116,7 +127,7 @@ public class BluetoothManager : MonoBehaviour
                 currGameManager = null;
                 break;
         }
-
+        
         Debug.Log("OnSceneLoaded: " + scene.name);
         Debug.Log("Mode: " + mode);
     }
@@ -126,7 +137,7 @@ public class BluetoothManager : MonoBehaviour
         while(true)
         {
             //씬에따른 차이 있어 수정필요
-            sensorText.text = pressure.ToString();
+            //sensorText.text = pressure.ToString();
             //vrSensorText.text = pressure.ToString();
 
             currGameManager.SendMessage("SetsensorData", pressure);

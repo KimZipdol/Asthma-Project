@@ -86,7 +86,7 @@ public class CamRayCast : MonoBehaviour
                         else if (GameManager.instance.getStage == 2)
                             SceneManager.LoadScene("1-2. RocketStage2", LoadSceneMode.Single);
                         else if (GameManager.instance.getStage == 3)
-                            SceneManager.LoadScene("1-3. RocketStage3", LoadSceneMode.Single);
+                            SceneManager.LoadScene("1-345. RocketStage345", LoadSceneMode.Single);
                         else
                             Debug.Log("스테이지를 입력해주세요");
                         break;

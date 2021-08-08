@@ -29,6 +29,11 @@ public class RocketUIManager : MonoBehaviour
         StartCoroutine(StarsAndProgress());
     }
 
+    public void ResetScoreUI()
+    {
+        scoreTr.gameObject.SetActive(false);
+    }
+
     public void SetStage(int stage)
     {
         currStage = stage;
@@ -36,14 +41,14 @@ public class RocketUIManager : MonoBehaviour
 
     IEnumerator StarsAndProgress()
     {
-        yield return 1f;
+        yield return new WaitForSeconds(1f);
 
         //단계별 별 보이기
-        for(int i=0; i < currStage; i++)
+        for (int i=0; i < currStage; i++)
         {
             Stars[i].GetComponent<Animation>().enabled = true;
             Stars[i].GetComponent<AudioSource>().enabled = true;
-            yield return 0.5f;
+            yield return new WaitForSeconds(0.5f);
         }
 
         //진행바. 별 갯수와 동일하게 진행
@@ -58,5 +63,16 @@ public class RocketUIManager : MonoBehaviour
             astroman.localPosition = new Vector3(nowX, -0.09f, 0f);
             yield return null;
         }
+    }
+
+    public void ResetUI()
+    {
+        for (int i = 0; i < currStage; i++)
+        {
+            Stars[i].GetComponent<Animation>().enabled = false;
+            Stars[i].GetComponent<AudioSource>().enabled = false;
+        }
+        progressImage.fillAmount = 0f;
+        astroman.localPosition = new Vector3(-0.375f, -0.09f, 0f);
     }
 }

@@ -18,6 +18,21 @@ public class Logging : MonoBehaviour
 
     int count = 1;
 
+    //Singleton
+    public static Logging instance = null;
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+
     private void Start()
     {
         //path = pathForDocumentsFile("pressurelog.txt");
