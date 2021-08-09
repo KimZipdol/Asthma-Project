@@ -8,6 +8,9 @@ public class VRUIManager : MonoBehaviour
 {
     public GameObject currGameManager = null;
 
+    public GameObject[] rocketGuidePanels;
+    public GameObject candleGuidePanel;
+
     private GameManager gameManager = null;
 
     public Transform playerTr = null;
@@ -29,7 +32,7 @@ public class VRUIManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            //DontDestroyOnLoad(this.gameObject);
         }
         else
         {
@@ -37,6 +40,8 @@ public class VRUIManager : MonoBehaviour
         }
 
         gameManager = GameManager.instance;
+
+        //rocketGuidePanels = new GameObject[5];
     }
 
     //개체 사용되도록 설정됐을 때
@@ -44,6 +49,7 @@ public class VRUIManager : MonoBehaviour
     {
         //씬 매니저의 sceneLoaded 델리게이트에 onSceneLoaded를 추가한다->씬로드마다 onSceneLoaded작동
         SceneManager.sceneLoaded += onSceneLoaded;
+
     }
 
     void onSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -54,24 +60,31 @@ public class VRUIManager : MonoBehaviour
             case ("1-2. RocketStage2"):
             case ("1-345. RocketStage345"):
                 currGameManager = GameObject.Find("RocketGameManager");
-                fillGuage = GameObject.Find("InhaleFill").GetComponent<Image>();
                 break;
             case ("2. CandleBlowing"):
                 currGameManager = GameObject.Find("CandleGameManager");
                 break;
             case ("3. Inhaler"):
                 currGameManager = GameObject.Find("InhaleGameManager");
+                
                 break;
             default:
                 currGameManager = null;
                 break;
         }
+        //fillGuage = GameObject.Find("InhaleFill").GetComponent<Image>();
+        //gameManager = GameManager.instance;
 
+        //hudObj = GameObject.Find("HudCanvas");
+        //hudTr = hudObj.GetComponent<RectTransform>();
+        //playerTr = GameObject.Find("Main Camera").GetComponent<Transform>();
+    }
+
+    private void Start()
+    {
+        fillGuage = GameObject.Find("InhaleFill").GetComponent<Image>();
         gameManager = GameManager.instance;
-        //hudObj = GameObject.Find("VRUICanvas");
-        hudObj = GameObject.Find("HudCanvas");
         hudTr = hudObj.GetComponent<RectTransform>();
-        playerTr = GameObject.Find("Main Camera").GetComponent<Transform>();
     }
 
     private void OnDisable()
@@ -143,7 +156,27 @@ public class VRUIManager : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
     }
 
+    public void ShowGuide(int currStage)
+    {
+        rocketGuidePanels[currStage - 1].SetActive(true);
+    }
 
+    
+
+    public void HideGuide(int currStage)
+    {
+        rocketGuidePanels[currStage - 1].SetActive(false);
+    }
+
+    public void ShowCandleGuide()
+    {
+        candleGuidePanel.SetActive(true);
+    }
+
+    public void HideCandleGuide()
+    {
+        candleGuidePanel.SetActive(false);
+    }
     //public void ff(string state)
     //{
     //    GameObject.Find("f").GetComponent<Text>().text = state;

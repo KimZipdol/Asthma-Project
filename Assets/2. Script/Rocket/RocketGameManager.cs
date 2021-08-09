@@ -15,6 +15,8 @@ public class RocketGameManager : MonoBehaviour
 
     private Scene currScene;
 
+    public bool isGuiding = false;
+    public bool inhaleReady = false;
     public bool launchReady = false;
     public bool isRocketFlying = false;
     public bool isFinishScreen = false;
@@ -68,15 +70,15 @@ public class RocketGameManager : MonoBehaviour
                 break;
             
         }
+        Debug.Log("currstage: " + currStage);
         rocketUIManager.SendMessage("SetStage", currStage);
-        Debug.Log("OnSceneLoaded: " + scene.name);
-        Debug.Log("Mode: " + mode);
     }
 
     private void Start()
     {
         gameManager = GameManager.instance;
         vrUiManager = VRUIManager.instance;
+        loggingManager = GameObject.Find("LoggingManager");
         
         StartCoroutine(CheckState());
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -90,7 +92,7 @@ public class RocketGameManager : MonoBehaviour
     
     private void Update()
     {
-        Debug.Log(sensorData);
+        
     }
 
     /// <summary>
@@ -103,17 +105,30 @@ public class RocketGameManager : MonoBehaviour
             switch (currState)
             {
                 case (RocketState.GUIDE):
+                    if(!isGuiding)
+                    {
+                        isGuiding = true;
+                        vrUiManager.GetComponent<VRUIManager>().ShowGuide(currStage);
+                    }
+
                     if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
                     {
                         currState = RocketState.INHALEREADY;
                     }
                     break;
                 case (RocketState.INHALEREADY):
+                    if(!inhaleReady)
+                    {
+                        inhaleReady = true;
+                        vrUiManager.GetComponent<VRUIManager>().HideGuide(currStage);
+                    }
+
                     clearTime += Time.deltaTime;
+                    rayCastCam.GetComponent<CamRayCast>().messageSended = false;
                     if (sensorData <= gameManager.sensorActionPotential * -1f)
                     {
                         currState = RocketState.INHALE;
-                        BluetoothManager.instance.checkingBLE = false;
+                        //BluetoothManager.instance.checkingBLE = false;
                     }
                     break;
                 case (RocketState.INHALE):
@@ -123,7 +138,7 @@ public class RocketGameManager : MonoBehaviour
                         rocketControl.SendMessage("ReadyForLaunch");
                         loggingManager.SendMessage("logPressure", "Inhale Start");
                     }
-
+                    rayCastCam.GetComponent<CamRayCast>().messageSended = false;
                     loggingManager.SendMessage("logPressure", sensorData.ToString());
                     clearTime += Time.deltaTime;
                     intakeTime += Time.deltaTime;
@@ -151,20 +166,21 @@ public class RocketGameManager : MonoBehaviour
                         soundManager.SendMessage("OnLaunchSound");
                         loggingManager.SendMessage("logPressure", "Exhale Start");
                     }
-
-                    loggingManager.SendMessage("logPressure", sensorData.ToString());
+                    rayCastCam.GetComponent<CamRayCast>().messageSended = false;
+                    loggingManager.GetComponent<Logging>().logPressure(sensorData.ToString());
                     clearTime += Time.deltaTime;
                     outtakeTime += Time.deltaTime;
 
-                    
 
                     if (outtakeTime >= 1f && sensorData > gameManager.sensorActionPotential)
                     {
                         rocketControl.SendMessage("FvcOuttake", sensorData);
+                        Debug.Log(sensorData);
                     }
                     else if (outtakeTime < 1f)
                     {
                         rocketControl.SendMessage("Fev1Outtake", sensorData);
+                        Debug.Log(sensorData);
                     }
 
                     
@@ -186,12 +202,7 @@ public class RocketGameManager : MonoBehaviour
                         if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
                         {
                             
-                            switch (currStage)
-                            {
-                                case (5):
-                                    Application.Quit();
-                                    break;
-                            }
+                            
                         }
                     }
                     break;
@@ -261,11 +272,14 @@ public class RocketGameManager : MonoBehaviour
         stage3Planet.gameObject.SetActive(false);
         stage4Planet.gameObject.SetActive(true);
         resetStage();
+        isGuiding = false;
+        inhaleReady = false;
         launchReady = false;
         isRocketFlying = false;
         isFinishScreen = false;
         rocketUIManager.SendMessage("SetStage", currStage);
-        rayCastCam.GetComponent<CamRayCast>().messageSended = false;    //작동안함
+        rayCastCam.GetComponent<CamRayCast>().messageSended = false;
+        soundManager.GetComponent<RocketSoundManager>().PlayMusic();
         vrUiManager.UnBlockEye();                          
     }
 
@@ -276,9 +290,13 @@ public class RocketGameManager : MonoBehaviour
         stage4Planet.gameObject.SetActive(false);
         stage5Planet.gameObject.SetActive(true);
         resetStage();
+        isGuiding = false;
+        inhaleReady = false;
         launchReady = false;
         isRocketFlying = false;
         isFinishScreen = false;
+        rocketUIManager.SendMessage("SetStage", currStage);
+        soundManager.GetComponent<RocketSoundManager>().PlayMusic();
         vrUiManager.UnBlockEye();
     }
 }

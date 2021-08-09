@@ -22,6 +22,10 @@ public class GameManager : MonoBehaviour
     public float maxFev1 = 1000f;
     [SerializeField]
     public float maxFvc = 1100f;
+
+    public float maxInhalePressure = -300f;
+    public float maxExhalePressure = 200f;
+
     [SerializeField]
     public float accelerationRatio = 10f;
     [SerializeField]

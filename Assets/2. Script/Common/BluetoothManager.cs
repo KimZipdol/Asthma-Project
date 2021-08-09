@@ -84,7 +84,7 @@ public class BluetoothManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            //DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(this.gameObject);
         }
         else
         {
@@ -127,9 +127,6 @@ public class BluetoothManager : MonoBehaviour
                 currGameManager = null;
                 break;
         }
-        
-        Debug.Log("OnSceneLoaded: " + scene.name);
-        Debug.Log("Mode: " + mode);
     }
 
     IEnumerator displaySensorData()
@@ -245,7 +242,7 @@ public class BluetoothManager : MonoBehaviour
         {
 
             GameObject.Find("ArduinoState").GetComponent<Text>().text = ("연결됨");
-            GameObject.Find("ff").GetComponent<Text>().text = pressure.ToString();
+            //GameObject.Find("ff").GetComponent<Text>().text = pressure.ToString();
             //vrSensorText.text = "Device Name: " + bluetoothHelperInstance.getDeviceName();
         }
         else if (!bluetoothHelperInstance.isConnected())

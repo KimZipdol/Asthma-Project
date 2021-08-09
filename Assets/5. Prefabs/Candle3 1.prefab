@@ -56,6 +56,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -92,6 +93,7 @@ GameObject:
   - component: {fileID: 2613779623472937889}
   - component: {fileID: 2875026115063577851}
   - component: {fileID: 5079879124884470663}
+  - component: {fileID: 4523825807515796480}
   m_Layer: 0
   m_Name: red_flame_0 (4)
   m_TagString: Untagged
@@ -128,6 +130,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -196,6 +199,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isBlowing: 0
   offEffect: {fileID: 2554717200064984256}
+--- !u!114 &4523825807515796480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2787975326378010505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 025308929a0f4422f82bc0926f89e2e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7944555199680769324
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,8 +250,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7944555199680769324}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 2
+  m_Shape: 0
   m_Color: {r: 1, g: 0.5072875, b: 0, a: 1}
   m_Intensity: 1
   m_Range: 2.09
@@ -294,6 +310,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2790699077211534923}
     m_Modifications:
+    - target: {fileID: 1247311384876784, guid: 4adffb0018aeda44e9263f901167af1f, type: 3}
+      propertyPath: m_Name
+      value: CFX_Firework_Trails_Gravity
+      objectReference: {fileID: 0}
+    - target: {fileID: 1247311384876784, guid: 4adffb0018aeda44e9263f901167af1f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4782282035096714, guid: 4adffb0018aeda44e9263f901167af1f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -349,14 +373,6 @@ PrefabInstance:
     - target: {fileID: 4782282035096714, guid: 4adffb0018aeda44e9263f901167af1f, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1247311384876784, guid: 4adffb0018aeda44e9263f901167af1f, type: 3}
-      propertyPath: m_Name
-      value: CFX_Firework_Trails_Gravity
-      objectReference: {fileID: 0}
-    - target: {fileID: 1247311384876784, guid: 4adffb0018aeda44e9263f901167af1f, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4adffb0018aeda44e9263f901167af1f, type: 3}

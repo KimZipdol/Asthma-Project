@@ -7,7 +7,6 @@ TagManager:
   - FxTemporaire
   - INTERACTABLE
   - ROCKETGAME
-  - CANDLEGAME
   - FOODGAME
   - ENDGAME
   - Fluid
@@ -19,6 +18,7 @@ TagManager:
   - INPUT
   - MAINSTART
   - ROCKET45
+  - CANDLENEXTSTAGE
   layers:
   - Default
   - TransparentFX

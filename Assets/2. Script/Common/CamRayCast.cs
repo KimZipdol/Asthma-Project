@@ -41,8 +41,7 @@ public class CamRayCast : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
+        
         line.SetPosition(0, tr.position);
         if (Physics.Raycast(tr.position, tr.forward, out hit, 100f))
         {
@@ -81,7 +80,7 @@ public class CamRayCast : MonoBehaviour
                         SceneManager.LoadScene("0. StartScene", LoadSceneMode.Single);
                         break;
                     case ("ROCKETGAME"):
-                        SceneManager.LoadScene("1. RocketGame", LoadSceneMode.Single);
+                        SceneManager.LoadScene("1-1. RocketGame", LoadSceneMode.Single);
                         break;
                     case ("ROCKET2"):
                         SceneManager.LoadScene("1-2. RocketStage2", LoadSceneMode.Single);
@@ -97,11 +96,15 @@ public class CamRayCast : MonoBehaviour
                         }
                         else
                         {
-                            Application.Quit();
+                            //messageSended = false;
                         }
                         break;
-                    case ("CANDLEGAME"):
-                        SceneManager.LoadScene("2. CandleBlowing", LoadSceneMode.Single);
+                    case ("CANDLENEXTSTAGE"):
+                        if (!messageSended)
+                        {
+                            GameObject.Find("CandleGameManager").SendMessage("toNextStage");
+                            messageSended = true;
+                        }
                         break;
                     case ("FOODGAME"):
                         SceneManager.LoadScene("3. Inhaler", LoadSceneMode.Single);

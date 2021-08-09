@@ -30,7 +30,7 @@ public class CandleGameManager1 : MonoBehaviour
         }
         else if (instance != this)
         {
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
         }
         
     }

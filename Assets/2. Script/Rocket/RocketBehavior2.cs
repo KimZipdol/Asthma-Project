@@ -27,7 +27,9 @@ public class RocketBehavior2 : MonoBehaviour
     private float x;
     private float z;
     private int returnCount = 0;
-    
+    private float outtake = 0f;
+
+
 
     public GameObject EffectCtrl = null;
     public GameObject Ceiling = null;
@@ -67,7 +69,6 @@ public class RocketBehavior2 : MonoBehaviour
     private void Update()
     {
         //Debug.Log("rocket speed: " + rocketRb.velocity.magnitude);
-
     }
 
 
@@ -138,7 +139,7 @@ public class RocketBehavior2 : MonoBehaviour
     /// <param name="sensorInput"></param>
     void Fev1Outtake(float sensorInput)
     {
-        float outtake = sensorInput * gameManager.sensorToOuttakeRatio * gameManager.outtakeToSpeedRatio;
+        outtake = sensorInput * gameManager.sensorToOuttakeRatio * gameManager.outtakeToSpeedRatio;
         fev1Input.text = (float.Parse(fev1Input.text) + outtake).ToString();
         fvcInput.text = fev1Input.text;
         rocketRb.AddForce(Vector3.up * outtake * gameManager.accelerationRatio, ForceMode.Acceleration);
@@ -146,7 +147,7 @@ public class RocketBehavior2 : MonoBehaviour
 
     void FvcOuttake(float sensorInput)
     {
-        float outtake = sensorInput * gameManager.sensorToOuttakeRatio * gameManager.outtakeToSpeedRatio;
+        outtake = sensorInput * gameManager.sensorToOuttakeRatio * gameManager.outtakeToSpeedRatio;
         fvcInput.text = (float.Parse(fvcInput.text) + outtake).ToString();
         rocketRb.AddForce(Vector3.up * outtake * gameManager.accelerationRatio, ForceMode.Acceleration);
     }
