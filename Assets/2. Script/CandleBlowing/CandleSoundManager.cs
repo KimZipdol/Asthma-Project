@@ -6,6 +6,7 @@ public class CandleSoundManager : MonoBehaviour
 {
     public AudioSource backmusic;
     public AudioSource scoreBoard;
+    public AudioSource breathe;
 
     // Start is called before the first frame update
     void Start()
@@ -29,5 +30,10 @@ public class CandleSoundManager : MonoBehaviour
     public void ScoreBoardSound()
     {
         scoreBoard.Play();
+    }
+
+    public void OnBreatheSound()
+    {
+        breathe.Play();
     }
 }

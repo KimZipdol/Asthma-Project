@@ -93,7 +93,7 @@ public class CandleGameManager2 : MonoBehaviour
                     if (sensorData <= gameManager.sensorActionPotential * -1f)
                     {
                         currState = GameState.INHALE;
-                        //BluetoothManager.instance.checkingBLE = false;
+                        BluetoothManager.instance.checkingBLE = false;
                     }
                     break;
                 case (GameState.INHALE):
@@ -126,29 +126,15 @@ public class CandleGameManager2 : MonoBehaviour
                     {
                         vrUiManager.SendMessage("HideInhaleHud");
                         isExhaling = true;
-                        candleControl.SendMessage("startLaunching");
                         soundManager.StopMusic();
-                        soundManager.SendMessage("OnLaunchSound");
+                        soundManager.SendMessage("OnBreatheSound");
                         loggingManager.SendMessage("logPressure", "Exhale Start");
                     }
                     rayCastCam.GetComponent<CamRayCast>().messageSended = false;
                     loggingManager.GetComponent<Logging>().logPressure(sensorData.ToString());
                     clearTime += Time.deltaTime;
                     outtakeTime += Time.deltaTime;
-
-
-                    if (outtakeTime >= 1f && sensorData > gameManager.sensorActionPotential)
-                    {
-                        candleControl.SendMessage("FvcOuttake", sensorData);
-                        Debug.Log(sensorData);
-                    }
-                    else if (outtakeTime < 1f)
-                    {
-                        candleControl.SendMessage("Fev1Outtake", sensorData);
-                        Debug.Log(sensorData);
-                    }
-
-
+                    candleControl.SendMessage("turningOffFire", sensorData);
 
 
                     break;

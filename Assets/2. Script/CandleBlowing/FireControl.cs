@@ -5,6 +5,7 @@ using UnityEngine;
 public class FireControl : MonoBehaviour
 {
     private Transform thisTr;
+    public GameObject offEffect = null;
 
     // Start is called before the first frame update
     void Start()
@@ -12,19 +13,23 @@ public class FireControl : MonoBehaviour
         thisTr = this.GetComponent<Transform>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ShrinkAndOff()
     {
-        StartCoroutine("FireLookUp");
+        StartCoroutine("shrinkAndOff");
     }
 
-    IEnumerator FireLookUp()
+    IEnumerator shrinkAndOff()
     {
-        while (true)
+        while(true)
         {
-            float rotateTo = 0f - thisTr.rotation.eulerAngles.x;
-            thisTr.Rotate(Vector3.left, (rotateTo / 10f));
-            yield return null;
+            if(thisTr.localScale.x<=0.01)
+            {
+                GetComponentInParent<AudioSource>().Play();
+                offEffect.SetActive(true);
+                yield return new WaitForSeconds(1f);
+                this.gameObject.SetActive(false);
+            }
+            thisTr.localScale = thisTr.localScale * 0.9f;
         }
     }
 }

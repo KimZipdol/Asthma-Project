@@ -19,11 +19,11 @@ public class CandleUIManager : MonoBehaviour
     /// 로켓 객체의 RocketBehavior 스크립트로부터 호흡량에 의해 계산된 높이 float변수를 받아 점수화 후 점수 UI 알파값 조절하여 표시
     /// </summary>
     /// <param name="height"></param>
-    public void ScoreUI(float height)
+    public void ScoreUI(float totalAir)
     {
         scoreTr.position = playerTr.position + (playerTr.forward * 2f);
         //scoreTr.LookAt(playerTr.position);
-        scoreText.text = ("점수: " + (int)(height * 100) + "점!");
+        scoreText.text = ("점수: " + (int)(totalAir * 100) + "점!");
         scoreTr.gameObject.SetActive(true);
         StartCoroutine(StarsAndProgress());
     }

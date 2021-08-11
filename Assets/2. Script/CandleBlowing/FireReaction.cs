@@ -112,10 +112,9 @@ public class FireReaction : MonoBehaviour
     /// 숨 불기가 1초 이후부터 숨 불기가 끝나기 전까지의 반응. 불 끄기
     /// </summary>
     /// <param name="fvc"></param>
-    public void fireOff(float fvc)
+    public void fireOff()
     {
         offEffect.SetActive(true);
         StopAllCoroutines();
-        this.gameObject.SetActive(false);
     }
 }
