@@ -1611,6 +1611,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1051652860}
     m_Modifications:
+    - target: {fileID: 2515244356678639166, guid: aa73a9d31dfd049a1b51552625c41a7f,
+        type: 3}
+      propertyPath: OnlyDeactivate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2554717200064984256, guid: aa73a9d31dfd049a1b51552625c41a7f,
         type: 3}
       propertyPath: m_Name
@@ -2689,6 +2694,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1051652860}
     m_Modifications:
+    - target: {fileID: 2515244356678639166, guid: aa73a9d31dfd049a1b51552625c41a7f,
+        type: 3}
+      propertyPath: OnlyDeactivate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2554717200064984256, guid: aa73a9d31dfd049a1b51552625c41a7f,
         type: 3}
       propertyPath: m_Name
@@ -4245,7 +4255,7 @@ MonoBehaviour:
   candleGameManager: {fileID: 1892276483}
   uiManager: {fileID: 1592107275}
   tiltRatio: 300
-  airPerOffcandle: 220
+  airPerOffcandle: 100
 --- !u!1 &1061638322
 GameObject:
   m_ObjectHideFlags: 0
@@ -4540,6 +4550,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1051652860}
     m_Modifications:
+    - target: {fileID: 2515244356678639166, guid: aa73a9d31dfd049a1b51552625c41a7f,
+        type: 3}
+      propertyPath: OnlyDeactivate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2554717200064984256, guid: aa73a9d31dfd049a1b51552625c41a7f,
         type: 3}
       propertyPath: m_Name
@@ -6309,6 +6324,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1051652860}
     m_Modifications:
+    - target: {fileID: 2515244356678639166, guid: aa73a9d31dfd049a1b51552625c41a7f,
+        type: 3}
+      propertyPath: OnlyDeactivate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2554717200064984256, guid: aa73a9d31dfd049a1b51552625c41a7f,
         type: 3}
       propertyPath: m_Name
@@ -6407,6 +6427,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1051652860}
     m_Modifications:
+    - target: {fileID: 2515244356678639166, guid: aa73a9d31dfd049a1b51552625c41a7f,
+        type: 3}
+      propertyPath: OnlyDeactivate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2554717200064984256, guid: aa73a9d31dfd049a1b51552625c41a7f,
         type: 3}
       propertyPath: m_Name
@@ -6487,6 +6512,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1051652860}
     m_Modifications:
+    - target: {fileID: 2515244356678639166, guid: aa73a9d31dfd049a1b51552625c41a7f,
+        type: 3}
+      propertyPath: OnlyDeactivate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2554717200064984256, guid: aa73a9d31dfd049a1b51552625c41a7f,
         type: 3}
       propertyPath: m_Name
@@ -6592,6 +6622,7 @@ MonoBehaviour:
   currGameManager: {fileID: 1892276479}
   rocketGuidePanels: []
   candleGuidePanel: {fileID: 1973943177}
+  inhaleGuidePanel: {fileID: 0}
   playerTr: {fileID: 994903904}
   hudObj: {fileID: 1983960253}
   eyeBlocker: {fileID: 921793682}
@@ -7994,6 +8025,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1051652860}
     m_Modifications:
+    - target: {fileID: 2515244356678639166, guid: aa73a9d31dfd049a1b51552625c41a7f,
+        type: 3}
+      propertyPath: OnlyDeactivate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2554717200064984256, guid: aa73a9d31dfd049a1b51552625c41a7f,
         type: 3}
       propertyPath: m_Name
@@ -8677,6 +8713,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1051652860}
     m_Modifications:
+    - target: {fileID: 2515244356678639166, guid: aa73a9d31dfd049a1b51552625c41a7f,
+        type: 3}
+      propertyPath: OnlyDeactivate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2554717200064984256, guid: aa73a9d31dfd049a1b51552625c41a7f,
         type: 3}
       propertyPath: m_Name
@@ -9193,6 +9234,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1051652860}
     m_Modifications:
+    - target: {fileID: 2515244356678639166, guid: aa73a9d31dfd049a1b51552625c41a7f,
+        type: 3}
+      propertyPath: OnlyDeactivate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2554717200064984256, guid: aa73a9d31dfd049a1b51552625c41a7f,
         type: 3}
       propertyPath: m_Name
@@ -9363,6 +9409,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1051652860}
     m_Modifications:
+    - target: {fileID: 2515244356678639166, guid: aa73a9d31dfd049a1b51552625c41a7f,
+        type: 3}
+      propertyPath: OnlyDeactivate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2554717200064984256, guid: aa73a9d31dfd049a1b51552625c41a7f,
         type: 3}
       propertyPath: m_Name

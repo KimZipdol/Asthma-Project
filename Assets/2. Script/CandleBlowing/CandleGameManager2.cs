@@ -191,9 +191,11 @@ public class CandleGameManager2 : MonoBehaviour
         exhaleReady = false;
         isExhaling = false;
         isFinishScreen = false;
+        currState = GameState.GUIDE;
         candleUIManager.SendMessage("SetStage", currStage);
         rayCastCam.GetComponent<CamRayCast>().messageSended = false;
-        soundManager.GetComponent<RocketSoundManager>().PlayMusic();
+        soundManager.GetComponent<CandleSoundManager>().StopMusic();
+        soundManager.GetComponent<CandleSoundManager>().PlayMusic();
         vrUiManager.UnBlockEye();
     }
 }

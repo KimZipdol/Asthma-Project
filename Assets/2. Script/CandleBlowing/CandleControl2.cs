@@ -29,7 +29,7 @@ public class CandleControl2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(candlesForOff);
+        
     }
 
     public void Intake(float sensorData)
@@ -58,7 +58,8 @@ public class CandleControl2 : MonoBehaviour
         TiltFire(sensorData);
         outtakedAir += sensorData;
         totalAir = (1f + (intakedAir / GameManager.instance.maxIntake)) * outtakedAir;
-        candlesForOff = (int)(totalAir / airPerOffcandle * -1) ;
+        Debug.Log(totalAir);
+        candlesForOff = (int)((totalAir * -1) / airPerOffcandle) ;
         if (offNum == candlesForOff && offNum < 11)
         {
             candleFires[offNum - 1].SendMessage("ShrinkAndOff");
@@ -73,8 +74,13 @@ public class CandleControl2 : MonoBehaviour
         for(int i = 0; i < candleCount; i++)
         {
             candleFires[i].gameObject.SetActive(true);
-            candleFires[i].localScale = Vector3.one;
+            candleFires[i].localScale = Vector3.one * 0.05f;
             candleFires[i].rotation = Quaternion.Euler(Vector3.zero);
         }
+        intakedAir = 0f;
+        outtakedAir = 0f;
+        totalAir = 0f;
+        offNum = 1;
+        outtakeTime = 0f;
     }
 }

@@ -10,6 +10,7 @@ public class VRUIManager : MonoBehaviour
 
     public GameObject[] rocketGuidePanels;
     public GameObject candleGuidePanel;
+    public GameObject inhaleGuidePanel;
 
     private GameManager gameManager = null;
 
@@ -177,6 +178,17 @@ public class VRUIManager : MonoBehaviour
     {
         candleGuidePanel.SetActive(false);
     }
+
+    public void ShowInhaleGuide()
+    {
+        inhaleGuidePanel.SetActive(true);
+    }
+
+    public void HideInhaleGuide()
+    {
+        inhaleGuidePanel.SetActive(false);
+    }
+
     //public void ff(string state)
     //{
     //    GameObject.Find("f").GetComponent<Text>().text = state;
