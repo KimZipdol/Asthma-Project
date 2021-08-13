@@ -7,6 +7,7 @@ public class InhaleSoundManager : MonoBehaviour
     public AudioSource backmusic;
     public AudioSource scoreBoard;
     public AudioSource breathe;
+    public AudioSource chew;
 
     // Start is called before the first frame update
     void Start()
@@ -35,5 +36,10 @@ public class InhaleSoundManager : MonoBehaviour
     public void OnBreatheSound()
     {
         breathe.Play();
+    }
+
+    public void ChewSound()
+    {
+        chew.Play();
     }
 }

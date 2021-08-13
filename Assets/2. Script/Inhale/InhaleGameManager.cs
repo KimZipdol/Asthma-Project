@@ -12,8 +12,9 @@ public class InhaleGameManager : MonoBehaviour
     public List<GameObject> inhaleEffectPool = new List<GameObject>();
     private int maxEffectPool = 3;
 
+    public float inhaleActionPotential = -200f;
     public float outtakeTime = 0f;
-    private float intakeTime = 0f;
+    public float intakedAir = 0f;
     public float sensorData { get; set; }
     public void SetsensorData(float value)
     {
@@ -26,12 +27,9 @@ public class InhaleGameManager : MonoBehaviour
     public bool isFinishScreen = false;
 
     public GameManager gameManager = null;
+    public PlayerCtrl2 playerCtrl = null;
     public GameObject foodReseter = null;
-    public GameObject rocketControl;
     public GameObject inhaleUIManager = null;
-    public GameObject stage3Planet = null;
-    public GameObject stage4Planet = null;
-    public GameObject stage5Planet = null;
     public GameObject rayCastCam = null;
     public VRUIManager vrUiManager = null;
     public InhaleSoundManager soundManager = null;
@@ -39,10 +37,11 @@ public class InhaleGameManager : MonoBehaviour
 
     public float clearTime = 0f;
 
-    public enum GameState { GUIDE = 0, INHALEREADY, INHALE, EXHALE, FINISH };
+    public enum GameState { GUIDE = 0, SEEKINGFOOD, INHALEREADY, INHALE, FINISH };
     public GameState currState = GameState.GUIDE;
 
     public int currStage = 1;
+    public int inhaledFoodCount = 0;
 
     public static InhaleGameManager instance = null;
     private void Awake()
@@ -84,21 +83,23 @@ public class InhaleGameManager : MonoBehaviour
                     if (!isGuiding)
                     {
                         isGuiding = true;
-                        vrUiManager.GetComponent<VRUIManager>().ShowCandleGuide();
+                        vrUiManager.GetComponent<VRUIManager>().ShowInhaleGuide();
                     }
 
                     if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
                     {
-                        currState = GameState.INHALEREADY;
+                        currState = GameState.SEEKINGFOOD;
                     }
+                    break;
+                case (GameState.SEEKINGFOOD):
+                    VRUIManager.instance.HideInhaleHud();
                     break;
                 case (GameState.INHALEREADY):
                     if (!inhaleReady)
                     {
                         inhaleReady = true;
-                        vrUiManager.GetComponent<VRUIManager>().HideCandleGuide();
                     }
-
+                    VRUIManager.instance.ShowInhaleHud();
                     clearTime += Time.deltaTime;
                     rayCastCam.GetComponent<CamRayCast>().messageSended = false;
                     if (sensorData <= gameManager.sensorActionPotential * -1f)
@@ -111,25 +112,19 @@ public class InhaleGameManager : MonoBehaviour
                     if (isInhaleing == false)
                     {
                         isInhaleing = true;
-                        //candleControl.SendMessage("ReadyForLaunch");
                         loggingManager.SendMessage("logPressure", "Inhale Start");
                     }
+
                     rayCastCam.GetComponent<CamRayCast>().messageSended = false;
                     loggingManager.SendMessage("logPressure", sensorData.ToString());
                     clearTime += Time.deltaTime;
-                    intakeTime += Time.deltaTime;
-
+                    intakedAir += sensorData;
                     vrUiManager.SendMessage("inHaleFill", sensorData);
 
-                    if (sensorData > gameManager.sensorActionPotential * -1f)
+                    if (intakedAir < inhaleActionPotential)
                     {
-                        currState = GameState.EXHALE;
+
                     }
-
-
-
-
-
                     break;
                 case (GameState.FINISH):
                     if (!isFinishScreen)
@@ -148,6 +143,16 @@ public class InhaleGameManager : MonoBehaviour
 
 
 
+    }
+
+    public void EyesOnFood()
+    {
+        currState = GameState.INHALEREADY;
+    }
+
+    public void EyesOffFood()
+    {
+        currState = GameState.SEEKINGFOOD;
     }
 
     public void toNextStage()

@@ -18,6 +18,7 @@ public class VRUIManager : MonoBehaviour
 
     [SerializeField]
     private GameObject hudObj = null;
+    public GameObject inhaleHudObj = null;
 
     private Image fillGuage = null;
     public Image eyeBlocker = null;
@@ -96,6 +97,7 @@ public class VRUIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(hudTr.position.ToString());
         //VR hud 위치 조절
         hudTr.position = playerTr.position + (playerTr.forward*0.5f);
         hudTr.rotation = playerTr.rotation;
@@ -111,17 +113,24 @@ public class VRUIManager : MonoBehaviour
         fillGuage.fillAmount = fillAmt;
     }
 
+    public void resetFill()
+    {
+        inhaled = 0f;
+        fillAmt = 0f;
+        fillGuage.fillAmount = 0f;
+    }
+
     /// <summary>
     /// 로켓발사 후 로켓 객체의 RocketBehavior 스크립트로부터 메시지 받아 흡기 Hud숨기기
     /// </summary>
     public void HideInhaleHud()
     {
-        hudTr.gameObject.SetActive(false);
+        inhaleHudObj.SetActive(false);
     }
 
     public void ShowInhaleHud()
     {
-        hudTr.gameObject.SetActive(true);
+        inhaleHudObj.SetActive(true);
     }
 
     public void BlockEye()
