@@ -38,6 +38,13 @@ public class ObjectCtrl : MonoBehaviour
     public void HighlightOn()
     {
         isTarget = true;
+        StartCoroutine(HighlightOff());
+    }
+
+    IEnumerator HighlightOff()
+    {
+        yield return new WaitForSeconds(0.5f);
+        isTarget = false;
     }
 
     public void Inhaled()

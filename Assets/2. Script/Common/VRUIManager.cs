@@ -19,13 +19,14 @@ public class VRUIManager : MonoBehaviour
     [SerializeField]
     private GameObject hudObj = null;
     public GameObject inhaleHudObj = null;
+    private RectTransform inhalehudTr = null;
 
     private Image fillGuage = null;
     public Image eyeBlocker = null;
 
     private RectTransform hudTr;
     private float inhaled = 0f;
-    private float fillAmt = 0f;
+    public float fillAmt = 0f;
 
     //Singleton
     public static VRUIManager instance = null;
@@ -87,6 +88,7 @@ public class VRUIManager : MonoBehaviour
         fillGuage = GameObject.Find("InhaleFill").GetComponent<Image>();
         gameManager = GameManager.instance;
         hudTr = hudObj.GetComponent<RectTransform>();
+        inhalehudTr = inhaleHudObj.GetComponent<RectTransform>();
     }
 
     private void OnDisable()
@@ -97,17 +99,17 @@ public class VRUIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(hudTr.position.ToString());
+        //Debug.Log(hudTr.position.ToString());
         //VR hud 위치 조절
         hudTr.position = playerTr.position + (playerTr.forward*0.5f);
         hudTr.rotation = playerTr.rotation;
-
-        
+        inhalehudTr.position = playerTr.position + (playerTr.forward * 0.5f);
+        inhalehudTr.rotation = playerTr.rotation;
     }
 
     public void inHaleFill(float inputInhale)
     {
-        Debug.Log("filling");
+        //Debug.Log("filling");
         inhaled += inputInhale;
         fillAmt = inhaled / gameManager.maxIntake;
         fillGuage.fillAmount = fillAmt;
