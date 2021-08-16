@@ -137,5 +137,6 @@ public class CamRayCast : MonoBehaviour
     public void ResetFlag()
     {
         messageSended = false;
+        SelectImg.fillAmount = 0f;
     }
 }

@@ -21,8 +21,8 @@ public class InhaleUIManager : MonoBehaviour
     /// <param name="height"></param>
     public void ScoreUI(float height)
     {
-        scoreTr.position = playerTr.position + (playerTr.forward * 2f);
-        //scoreTr.LookAt(playerTr.position);
+        scoreTr.position = (playerTr.forward * 1.3f) + playerTr.up;
+        scoreTr.LookAt((playerTr.forward + (playerTr.up * 0.7f)) * 10f);
         scoreText.text = ("점수: " + (int)(height * 100) + "점!");
         scoreTr.gameObject.SetActive(true);
         StartCoroutine(StarsAndProgress());
@@ -30,13 +30,14 @@ public class InhaleUIManager : MonoBehaviour
 
     public void InhaleScoreUI()
     {
-        scoreTr.position = playerTr.position + (playerTr.forward * 2f);
-        scoreTr.LookAt(playerTr.position);
-        scoreTr.rotation = Quaternion.Euler(
-            new Vector3(scoreTr.rotation.eulerAngles.x
-            , scoreTr.rotation.eulerAngles.y + 180f
-            , scoreTr.rotation.eulerAngles.z));
-        scoreText.text = ("음식 5개를 다 먹었어요! 배불러요!");
+        scoreTr.position = (playerTr.forward * 1.3f) + (playerTr.up * 3f);
+        //scoreTr.LookAt(playerTr.position);
+        //scoreTr.rotation = Quaternion.Euler(
+        //    new Vector3(scoreTr.rotation.eulerAngles.x
+        //    , scoreTr.rotation.eulerAngles.y + 180f
+        //    , scoreTr.rotation.eulerAngles.z));
+        scoreTr.LookAt((playerTr.forward + (playerTr.up * 0.7f)) * 10f);
+        scoreText.text = ("음식 5개를 다 먹었어요! 더 먹어볼까요?");
         scoreTr.gameObject.SetActive(true);
         StartCoroutine(StarsAndProgress());
     }

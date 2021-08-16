@@ -33,6 +33,7 @@ public class CandleGameManager2 : MonoBehaviour
     public GameState currState = GameState.GUIDE;
 
     public int currStage = 1;
+    public int guideCount = 1;
 
     public static CandleGameManager2 instance = null;
     private void Awake()
@@ -73,12 +74,30 @@ public class CandleGameManager2 : MonoBehaviour
                     if (!isGuiding)
                     {
                         isGuiding = true;
-                        vrUiManager.GetComponent<VRUIManager>().ShowCandleGuide();
+                        vrUiManager.GetComponent<VRUIManager>().ShowCandleGuide(currStage);
+                        rayCastCam.GetComponent<CamRayCast>().ResetFlag();
                     }
 
                     if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
                     {
-                        currState = GameState.INHALEREADY;
+                        if (currStage == 1)
+                        {
+                            if (guideCount == 4)
+                            {
+                                vrUiManager.GetComponent<VRUIManager>().HideCandleStartGuide(guideCount);
+                                currState = GameState.INHALEREADY;
+                            }
+                            else if (guideCount >= 0 && guideCount < 4)
+                            {
+                                vrUiManager.GetComponent<VRUIManager>().ShowCandleStartGuide(guideCount);
+                                guideCount++;
+                                yield return new WaitForSeconds(1f);
+                            }
+                        }
+                        else
+                        {
+                            currState = GameState.INHALEREADY;
+                        }
                     }
                     break;
                 case (GameState.INHALEREADY):
@@ -89,7 +108,7 @@ public class CandleGameManager2 : MonoBehaviour
                     }
 
                     clearTime += Time.deltaTime;
-                    rayCastCam.GetComponent<CamRayCast>().messageSended = false;
+                    rayCastCam.GetComponent<CamRayCast>().ResetFlag();
                     if (sensorData <= gameManager.sensorActionPotential * -1f)
                     {
                         currState = GameState.INHALE;

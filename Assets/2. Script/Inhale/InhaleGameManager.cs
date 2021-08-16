@@ -40,6 +40,7 @@ public class InhaleGameManager : MonoBehaviour
     public enum GameState { GUIDE = 0, SEEKINGFOOD, INHALEREADY, INHALE, FINISH };
     public GameState currState = GameState.GUIDE;
 
+    public int guideCount = 1;
     public int currStage = 1;
 
     public static InhaleGameManager instance = null;
@@ -88,13 +89,32 @@ public class InhaleGameManager : MonoBehaviour
                     if (!isGuiding)
                     {
                         isGuiding = true;
-                        vrUiManager.GetComponent<VRUIManager>().ShowInhaleGuide();
+                        vrUiManager.GetComponent<VRUIManager>().ShowInhaleGuide(currStage);
+                        rayCastCam.GetComponent<CamRayCast>().ResetFlag();
                     }
 
                     if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
                     {
-                        currState = GameState.SEEKINGFOOD;
-                        vrUiManager.HideInhaleGuide();
+                        if (currStage == 1)
+                        {
+                            if (guideCount == 5)
+                            {
+                                vrUiManager.GetComponent<VRUIManager>().HideInhaleStartGuide(guideCount);
+                                currState = GameState.INHALEREADY;
+                            }
+                            else if (guideCount >= 0 && guideCount < 5)
+                            {
+                                vrUiManager.GetComponent<VRUIManager>().ShowInhaleStartGuide(guideCount);
+                                guideCount++;
+                                yield return new WaitForSeconds(1f);
+                            }
+                        }
+                        else
+                        {
+                            vrUiManager.HideInhaleGuide();
+                            currState = GameState.SEEKINGFOOD;
+                        }
+                        
                     }
                     break;
                 case (GameState.SEEKINGFOOD):

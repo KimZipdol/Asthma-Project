@@ -21,8 +21,8 @@ public class CandleUIManager : MonoBehaviour
     /// <param name="height"></param>
     public void ScoreUI(float totalAir)
     {
-        scoreTr.position = playerTr.position + (playerTr.forward * 2f);
-        //scoreTr.LookAt(playerTr.position);
+        scoreTr.position = playerTr.position + (playerTr.forward * 1.3f) + playerTr.up;
+        scoreTr.LookAt((playerTr.forward + (playerTr.up * 0.7f)) * 10f);
         scoreText.text = ("점수: " + (int)(totalAir * 100) + "점!");
         scoreTr.gameObject.SetActive(true);
         StartCoroutine(StarsAndProgress());

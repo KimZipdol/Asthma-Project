@@ -21,6 +21,8 @@ public class RocketGameManager : MonoBehaviour
     public bool isRocketFlying = false;
     public bool isFinishScreen = false;
 
+    public int guideCount = 1;
+
     public GameManager gameManager = null;
     public GameObject rocketControl;
     public GameObject rocketUIManager = null;
@@ -109,11 +111,30 @@ public class RocketGameManager : MonoBehaviour
                     {
                         isGuiding = true;
                         vrUiManager.GetComponent<VRUIManager>().ShowGuide(currStage);
+                        vrUiManager.SetHeightProgress(0.0f);
+                        rocketUIManager.SendMessage("ResetUI");
                     }
 
                     if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
                     {
-                        currState = RocketState.INHALEREADY;
+                        if (currStage == 1)
+                        {
+                            if (guideCount == 4)
+                            {
+                                vrUiManager.GetComponent<VRUIManager>().HideRocketStartGuide(guideCount);
+                                currState = RocketState.INHALEREADY;
+                            }
+                            else if (guideCount >= 0 && guideCount < 4)
+                            {
+                                vrUiManager.GetComponent<VRUIManager>().ShowRocketStartGuide(guideCount);
+                                guideCount++;
+                                yield return new WaitForSeconds(1f);
+                            }
+                        }
+                        else
+                        {
+                            currState = RocketState.INHALEREADY;
+                        }
                     }
                     break;
                 case (RocketState.INHALEREADY):
@@ -135,7 +156,10 @@ public class RocketGameManager : MonoBehaviour
                     if (launchReady == false)
                     {
                         launchReady = true;
-                        rocketControl.SendMessage("ReadyForLaunch");
+                        if (currStage == 1)
+                        {
+                            rocketControl.SendMessage("ReadyForLaunch");
+                        }
                         loggingManager.SendMessage("logPressure", "Inhale Start");
                     }
                     rayCastCam.GetComponent<CamRayCast>().messageSended = false;
@@ -170,17 +194,15 @@ public class RocketGameManager : MonoBehaviour
                     loggingManager.GetComponent<Logging>().logPressure(sensorData.ToString());
                     clearTime += Time.deltaTime;
                     outtakeTime += Time.deltaTime;
-
+                    vrUiManager.SetHeightProgress(rocketControl.GetComponent<Transform>().position.y);
 
                     if (outtakeTime >= 1f && sensorData > gameManager.sensorActionPotential)
                     {
                         rocketControl.SendMessage("FvcOuttake", sensorData);
-                        Debug.Log(sensorData);
                     }
                     else if (outtakeTime < 1f)
                     {
                         rocketControl.SendMessage("Fev1Outtake", sensorData);
-                        Debug.Log(sensorData);
                     }
 
                     
@@ -193,29 +215,17 @@ public class RocketGameManager : MonoBehaviour
                     {
                         soundManager.SendMessage("ScoreBoardSound");
                         loggingManager.SendMessage("logClearTime", clearTime.ToString());
-                        vrUiManager.SendMessage("ShowInhaleHud");
+                        //vrUiManager.SendMessage("ShowInhaleHud");
                         isFinishScreen = true;
                     }
 
-                    if (currScene.name == "1-345. RocketStage345")
-                    {
-                        if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
-                        {
-                            
-                            
-                        }
-                    }
                     break;
                     
             }
 
-            //if (currState == RocketState.EXHALE)
-                //break;
-
             yield return null;
         }
 
-        StopCoroutine(CheckState());
         
         
     }

@@ -69,7 +69,12 @@ public class RocketUIManager : MonoBehaviour
     {
         for (int i = 0; i < currStage; i++)
         {
+            Stars[i].GetComponent<Animation>().enabled = false;
+            Stars[i].SetActive(false);
+            Stars[i].GetComponent<Animation>().Stop();
             Stars[i].GetComponent<Animation>().Rewind();
+            Stars[i].GetComponent<Animation>().enabled = true;
+            Stars[i].SetActive(true);
         }
         progressImage.fillAmount = 0f;
         astroman.localPosition = new Vector3(-0.375f, -0.09f, 0f);
