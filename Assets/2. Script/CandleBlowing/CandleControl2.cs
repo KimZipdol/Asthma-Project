@@ -10,7 +10,7 @@ public class CandleControl2 : MonoBehaviour
 
     private int candleCount = 10;
     private int offNum = 1;
-    private int candlesForOff = 0;
+    public int candlesForOff = 0;
 
     private float intakedAir = 0f;
     private float outtakedAir = 0f;

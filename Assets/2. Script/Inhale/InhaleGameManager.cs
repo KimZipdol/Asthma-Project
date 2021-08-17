@@ -43,6 +43,9 @@ public class InhaleGameManager : MonoBehaviour
     public int guideCount = 1;
     public int currStage = 1;
 
+    private int maxFoodeat = 25;
+    public int currFoodeat = 0;
+
     public static InhaleGameManager instance = null;
     private void Awake()
     {
@@ -118,8 +121,6 @@ public class InhaleGameManager : MonoBehaviour
                     }
                     break;
                 case (GameState.SEEKINGFOOD):
-                    currStage = gameManager.inhaleCurrStage;
-
                     VRUIManager.instance.HideInhaleHud();
                     clearTime += Time.deltaTime;
                     playerCtrl.SeekingFood();
@@ -160,10 +161,9 @@ public class InhaleGameManager : MonoBehaviour
                         yield return new WaitForSeconds(1f);
                         soundManager.ChewSound();
                     }
-                    if(foodReseter.GetComponent<InhaledFoodsControl>().foodCount == 5)
+                    if(currFoodeat==currStage * 5)
                     {
                         currState = GameState.FINISH;
-                        
                     }
                     break;
                 case (GameState.FINISH):
@@ -173,7 +173,7 @@ public class InhaleGameManager : MonoBehaviour
                         soundManager.SendMessage("ScoreBoardSound");
                         loggingManager.SendMessage("logClearTime", clearTime.ToString());
                         vrUiManager.SendMessage("ShowInhaleHud");
-                        foodReseter.SendMessage("ResetFoods");
+                        //foodReseter.SendMessage("ResetFoods");
                         isFinishScreen = true;
                     }
                     break;

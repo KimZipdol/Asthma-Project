@@ -10,6 +10,7 @@ public class CandleUIManager : MonoBehaviour
     public Transform scoreTr = null;
     public Transform playerTr = null;
     public RectTransform astroman = null;
+    public CandleControl2 candleControl = null;
 
     public int currStage = 1;
     public GameObject[] Stars = null;
@@ -23,7 +24,17 @@ public class CandleUIManager : MonoBehaviour
     {
         scoreTr.position = playerTr.position + (playerTr.forward * 1.3f) + playerTr.up;
         scoreTr.LookAt((playerTr.forward + (playerTr.up * 0.7f)) * 10f);
-        scoreText.text = ("점수: " + (int)(totalAir * 100) + "점!");
+        //2345스테이지 촛불 갯수 늘어나면 어떻게 할지 개발필요
+        if(candleControl.candlesForOff<10)
+        {
+            scoreText.text = ("촛불 10개 중에 " + candleControl.candlesForOff + "개를 껐어요!"
+            + "\n조금 아쉽네요! 다음엔 더 많이 끌수 있을까요?");
+        }
+        else
+        {
+            scoreText.text = ("촛불 10개를 모두 다 껐어요! 굉장해요!");
+            //올클리어 이펙트 개발
+        }
         scoreTr.gameObject.SetActive(true);
         StartCoroutine(StarsAndProgress());
     }

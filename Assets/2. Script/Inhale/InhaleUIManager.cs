@@ -37,7 +37,16 @@ public class InhaleUIManager : MonoBehaviour
         //    , scoreTr.rotation.eulerAngles.y + 180f
         //    , scoreTr.rotation.eulerAngles.z));
         scoreTr.LookAt((playerTr.forward + (playerTr.up * 0.7f)) * 10f);
-        scoreText.text = ("음식 5개를 다 먹었어요! 더 먹어볼까요?");
+        if (currStage != 5)
+        {
+            scoreText.text = ("음식" + InhaleGameManager.instance.currFoodeat
+                + "개를 먹었어요!\n 25개까지 더 먹어볼까요?");
+        }
+        else
+        {
+            scoreText.text = ("음식 25개를 다 먹었어요!");
+            //올클리어 이펙트 개발
+        }
         scoreTr.gameObject.SetActive(true);
         StartCoroutine(StarsAndProgress());
     }

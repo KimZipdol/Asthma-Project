@@ -74,7 +74,8 @@ public class PlayerCtrl2 : MonoBehaviour
     public void InhaleFood()
     {
         isResetting = true;
-        inhaledFoodsControl.SetInhaledFood(hit.collider.gameObject);
+        //inhaledFoodsControl.SetInhaledFood(hit.collider.gameObject);
+        InhaleGameManager.instance.currFoodeat++;
         InhaleGameManager.instance.inhaleEffectPool[effectTurn % 3].SetActive(true);
         effectTurn++;
         hit.collider.gameObject.SendMessage("Inhaled");

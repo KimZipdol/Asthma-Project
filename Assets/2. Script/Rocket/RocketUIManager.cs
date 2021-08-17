@@ -24,7 +24,7 @@ public class RocketUIManager : MonoBehaviour
     {
         scoreTr.position = playerTr.position + (playerTr.forward * 2f);
         //scoreTr.LookAt(playerTr.position);
-        scoreText.text = ("점수: " + (int)(height * 100) + "점!");
+        scoreText.text = (height.ToString("$$$.$") + "미터까지 비행에 성공했어요!");
         scoreTr.gameObject.SetActive(true);
         StartCoroutine(StarsAndProgress());
     }

@@ -46,8 +46,6 @@ public class GameManager : MonoBehaviour
     public float getProgress { get; set; } = -1f;
     public int getStar { get; set; } = -1;
 
-    public int inhaleCurrStage = 1;
-
     public GameData _gameData;
     public GameData gameData
     {

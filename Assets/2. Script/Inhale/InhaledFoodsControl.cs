@@ -27,11 +27,12 @@ public class InhaledFoodsControl : MonoBehaviour
         inhaledFoodsRot[foodCount] = food.GetComponent<Transform>().rotation;
         inhaledFoodsScale[foodCount] = food.GetComponent<Transform>().localScale;
         foodCount++;
+        
     }
 
     public void ResetFoods()
     {
-        for(int i=0;i<foodCount;i++)
+        for (int i = 0; i < foodCount; i++)
         {
             inhaledFoods[i].SetActive(true);
             inhaledFoods[i].GetComponent<Transform>().position = inhaledFoodsPos[i];
