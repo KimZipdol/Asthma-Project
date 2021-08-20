@@ -11,9 +11,21 @@ public class CandleUIManager : MonoBehaviour
     public Transform playerTr = null;
     public RectTransform astroman = null;
     public CandleControl2 candleControl = null;
+    public ParticleSystem perfectEffect = null;
+    public AudioSource perfectSound = null;
+    public Animation[] showStarAnims = null;
+    public CandleSoundManager soundManager;
+    public GameObject showStarSource = null;
+    public Text offCandleTxt = null;
 
     public int currStage = 1;
     public GameObject[] Stars = null;
+
+    private void Update()
+    {
+        offCandleTxt.text = CandleGameManager2.instance.candleOffedOnThisStage
+            + " / " + (10 * currStage) + "개";
+    }
 
 
     /// <summary>
@@ -25,17 +37,22 @@ public class CandleUIManager : MonoBehaviour
         scoreTr.position = playerTr.position + (playerTr.forward * 1.3f) + playerTr.up;
         scoreTr.LookAt((playerTr.forward + (playerTr.up * 0.7f)) * 10f);
         //2345스테이지 촛불 갯수 늘어나면 어떻게 할지 개발필요
-        if(candleControl.candlesForOff<10)
+        if (candleControl.candlesForOff < (10 * currStage))
         {
-            scoreText.text = ("촛불 10개 중에 " + candleControl.candlesForOff + "개를 껐어요!"
-            + "\n조금 아쉽네요! 다음엔 더 많이 끌수 있을까요?");
+            scoreText.text = ("촛불 " + (10*currStage)+ "개 중에 " + CandleGameManager2.instance.candleOffedOnThisStage + "개를 껐어요!"
+            + "\n다음엔 더 많이 끌수 있을까요?");
+            scoreTr.gameObject.SetActive(true);
+            soundManager.SendMessage("ScoreBoardSound");
         }
         else
         {
-            scoreText.text = ("촛불 10개를 모두 다 껐어요! 굉장해요!");
-            //올클리어 이펙트 개발
+            scoreText.text = ("촛불을 모두 다 껐어요! 굉장해요!");
+            scoreTr.gameObject.SetActive(true);
+            //올클리어 이펙트
+            perfectEffect.Play();
+            soundManager.OnPerfectGame();
         }
-        scoreTr.gameObject.SetActive(true);
+
         StartCoroutine(StarsAndProgress());
     }
 
@@ -75,6 +92,12 @@ public class CandleUIManager : MonoBehaviour
         }
     }
 
+    public void GetOffCandleStar(int num)
+    {
+
+        showStarAnims[num - 1].Play();
+    }
+
     public void ResetUI()
     {
         for (int i = 0; i < currStage; i++)
@@ -83,5 +106,22 @@ public class CandleUIManager : MonoBehaviour
         }
         progressImage.fillAmount = 0f;
         astroman.localPosition = new Vector3(-0.375f, -0.09f, 0f);
+        scoreTr.position = new Vector3(3f, 1.5f, -3.69f);
+        scoreTr.rotation = Quaternion.Euler(0f, 0f, 0f);
     }
+
+    public void ResetShowStars()
+    {
+        for (int i = 1; i < 11; i++)
+        {
+            Destroy(showStarAnims[i - 1].gameObject);
+            GameObject obj = Instantiate(showStarSource, GameObject.Find("ShowStar" + i).GetComponent<Transform>());
+            obj.name = "FillStar" + i;
+            //obj.GetComponent<RectTransform>().localPosition = new Vector3(-770f + (140f * i), -240f, 0f);
+            //obj.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, 0f);
+            showStarAnims[i - 1] = obj.GetComponent<Animation>();
+        }
+    }
+
 }
+

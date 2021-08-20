@@ -11,25 +11,33 @@ public class CandleGameManager2 : MonoBehaviour
     {
         sensorData = value;
     }
+    private float prevSensorData = 0f;
 
     public bool isGuiding = false;
     public bool inhaleReady = false;
     public bool exhaleReady = false;
     public bool isExhaling = false;
+    public bool isExhaled = false;
     public bool isFinishScreen = false;
 
+    public CandlePlayerCtrl playerCtrl = null;
     public GameManager gameManager = null;
     public GameObject candleUIManager = null;
-    public GameObject candleControl = null;
+    public GameObject[] candleControl = null;
     public GameObject rayCastCam = null;
+    public GameObject selectionStick = null;
+    public GameObject[] candleStages = null;
 
     public VRUIManager vrUiManager = null;
     public CandleSoundManager soundManager = null;
     public GameObject loggingManager = null;
+    public int currCandleSeeing = 1;
+    public int blowedCandles = 1;
+    public int candleOffedOnThisStage = 0;
 
     public float clearTime = 0f;
 
-    public enum GameState { GUIDE = 0, INHALEREADY, INHALE, EXHALE, FINISH };
+    public enum GameState { GUIDE = 0, SEEKINGCANDLE, INHALEREADY, INHALE, EXHALE, FINISH };
     public GameState currState = GameState.GUIDE;
 
     public int currStage = 1;
@@ -71,6 +79,7 @@ public class CandleGameManager2 : MonoBehaviour
             switch (currState)
             {
                 case (GameState.GUIDE):
+                    VRUIManager.instance.HideInhaleHud();
                     if (!isGuiding)
                     {
                         isGuiding = true;
@@ -85,7 +94,7 @@ public class CandleGameManager2 : MonoBehaviour
                             if (guideCount == 4)
                             {
                                 vrUiManager.GetComponent<VRUIManager>().HideCandleStartGuide(guideCount);
-                                currState = GameState.INHALEREADY;
+                                currState = GameState.SEEKINGCANDLE;
                             }
                             else if (guideCount >= 0 && guideCount < 4)
                             {
@@ -96,9 +105,17 @@ public class CandleGameManager2 : MonoBehaviour
                         }
                         else
                         {
-                            currState = GameState.INHALEREADY;
+                            vrUiManager.GetComponent<VRUIManager>().HideCandleGuide();
+                            currState = GameState.SEEKINGCANDLE;
                         }
                     }
+                    break;
+                case (GameState.SEEKINGCANDLE):
+                    yield return new WaitForSeconds(0.5f);
+                    selectionStick.SetActive(true);
+                    clearTime += Time.deltaTime;
+                    //playerCtrl.SeekingCandle();
+                    vrUiManager.resetFill();
                     break;
                 case (GameState.INHALEREADY):
                     if (!inhaleReady)
@@ -106,7 +123,7 @@ public class CandleGameManager2 : MonoBehaviour
                         inhaleReady = true;
                         vrUiManager.GetComponent<VRUIManager>().HideCandleGuide();
                     }
-
+                    vrUiManager.ShowInhaleHud();
                     clearTime += Time.deltaTime;
                     rayCastCam.GetComponent<CamRayCast>().ResetFlag();
                     if (sensorData <= gameManager.sensorActionPotential * -1f)
@@ -122,18 +139,19 @@ public class CandleGameManager2 : MonoBehaviour
                         //candleControl.SendMessage("ReadyForLaunch");
                         loggingManager.SendMessage("logPressure", "Inhale Start");
                     }
+
+                    if (sensorData > 0f && sensorData-prevSensorData>=3f)
+                    {
+                        currState = GameState.EXHALE;
+                    }
                     rayCastCam.GetComponent<CamRayCast>().messageSended = false;
                     loggingManager.SendMessage("logPressure", sensorData.ToString());
                     clearTime += Time.deltaTime;
                     intakeTime += Time.deltaTime;
 
                     vrUiManager.SendMessage("inHaleFill", sensorData);
-                    candleControl.SendMessage("Intake", sensorData);
-
-                    if (sensorData > gameManager.sensorActionPotential * -1f)
-                    {
-                        currState = GameState.EXHALE;
-                    }
+                    candleControl[currCandleSeeing].SendMessage("Intake", sensorData);
+                    prevSensorData = sensorData;
 
 
 
@@ -143,7 +161,7 @@ public class CandleGameManager2 : MonoBehaviour
                 case (GameState.EXHALE):
                     if (!isExhaling)
                     {
-                        vrUiManager.SendMessage("HideInhaleHud");
+                        //vrUiManager.SendMessage("HideInhaleHud");
                         isExhaling = true;
                         soundManager.StopMusic();
                         soundManager.SendMessage("OnBreatheSound");
@@ -153,19 +171,37 @@ public class CandleGameManager2 : MonoBehaviour
                     loggingManager.GetComponent<Logging>().logPressure(sensorData.ToString());
                     clearTime += Time.deltaTime;
                     outtakeTime += Time.deltaTime;
-                    candleControl.SendMessage("turningOffFire", sensorData);
-
-
+                    candleControl[currCandleSeeing].SendMessage("turningOffFire", sensorData);
+                    if (blowedCandles >= currStage)
+                    {
+                        currState = GameState.FINISH;
+                    }
+                    else if(isExhaled && sensorData<=gameManager.sensorActionPotential)
+                    {
+                        isExhaled = false;
+                        blowedCandles++;
+                        candleOffedOnThisStage += candleControl[currCandleSeeing].GetComponent<CandleControl2>().candlesForOff;
+                        currState = GameState.SEEKINGCANDLE;
+                    }
                     break;
 
                 case (GameState.FINISH):
                     if (!isFinishScreen)
                     {
-                        soundManager.SendMessage("ScoreBoardSound");
+                        //soundManager.SendMessage("ScoreBoardSound");
                         loggingManager.SendMessage("logClearTime", clearTime.ToString());
                         vrUiManager.SendMessage("ShowInhaleHud");
                         isFinishScreen = true;
+                        selectionStick.SetActive(false);
                     }
+
+                    if((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
+                    {
+                        selectionStick.SetActive(false);
+                        if (isFinishScreen)
+                            toNextStage();
+                    }
+
                     break;
 
             }
@@ -175,6 +211,18 @@ public class CandleGameManager2 : MonoBehaviour
 
 
 
+    }
+
+    public void EyesOnCandle()
+    {
+        currState = GameState.INHALEREADY;
+    }
+
+    public void EyesOffCandle()
+    {
+        currState = GameState.SEEKINGCANDLE;
+        vrUiManager.HideInhaleHud();
+        vrUiManager.resetFill();
     }
 
     public void toNextStage()
@@ -195,15 +243,18 @@ public class CandleGameManager2 : MonoBehaviour
                 break;
         }
 
-        resetStage();
+        resetStage(currStage);
 
     }
 
-    private void resetStage()
+    private void resetStage(int stage)
     {
         vrUiManager.BlockEye();
-        candleUIManager.SendMessage("ResetUI") ;
-        candleControl.SendMessage("ResetCandles");
+        for (int i = 1; i < stage; i++)
+        {
+            candleControl[i].SendMessage("ResetCandles");
+            candleStages[i - 1].SetActive(true);
+        }
         candleUIManager.SendMessage("ResetScoreUI");
         isGuiding = false;
         inhaleReady = false;
@@ -211,10 +262,15 @@ public class CandleGameManager2 : MonoBehaviour
         isExhaling = false;
         isFinishScreen = false;
         currState = GameState.GUIDE;
+        blowedCandles = 1;
+        candleUIManager.SendMessage("ResetUI");
+        candleUIManager.SendMessage("ResetShowStars");
         candleUIManager.SendMessage("SetStage", currStage);
         rayCastCam.GetComponent<CamRayCast>().messageSended = false;
         soundManager.GetComponent<CandleSoundManager>().StopMusic();
         soundManager.GetComponent<CandleSoundManager>().PlayMusic();
         vrUiManager.UnBlockEye();
     }
+
+    
 }

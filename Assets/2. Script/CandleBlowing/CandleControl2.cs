@@ -85,9 +85,9 @@ public class CandleControl2 : MonoBehaviour
         {
             candleFires[offNum - 1].SendMessage("ShrinkAndOff");
             candleFires[offNum - 1].SendMessage("FireOff");
-            Debug.Log(offNum);
+            Debug.Log("ShowStar" + offNum);
+            uiManager.GetComponent<CandleUIManager>().GetOffCandleStar(offNum);
             offNum++;
-
         }
     }
 
@@ -104,5 +104,6 @@ public class CandleControl2 : MonoBehaviour
         totalAir = 0f;
         offNum = 1;
         outtakeTime = 0f;
+
     }
 }

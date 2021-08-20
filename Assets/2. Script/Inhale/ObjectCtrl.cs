@@ -25,26 +25,42 @@ public class ObjectCtrl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!isTarget)
-        {
-            outliner.enabled = false;
-        }
-        else if(isTarget)
-        {
-            outliner.enabled = true;
-        }
+        //if(!isTarget)
+        //{
+        //    outliner.enabled = false;
+        //}
+        //else if(isTarget)
+        //{
+        //    outliner.enabled = true;
+        //}
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        outliner.enabled = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        outliner.enabled = false;
     }
 
     public void HighlightOn()
     {
-        isTarget = true;
-        StartCoroutine(HighlightOff());
+        //isTarget = true;
+        outliner.enabled = true;
+        //StartCoroutine(HighlightOff());
     }
 
     IEnumerator HighlightOff()
     {
         yield return new WaitForSeconds(0.5f);
         isTarget = false;
+    }
+
+    public void LightOff()
+    {
+        outliner.enabled = false;
     }
 
     public void Inhaled()
