@@ -25,6 +25,7 @@ public class CandleUIManager : MonoBehaviour
     {
         offCandleTxt.text = CandleGameManager2.instance.candleOffedOnThisStage
             + " / " + (10 * currStage) + "개";
+        
     }
 
 
@@ -32,14 +33,15 @@ public class CandleUIManager : MonoBehaviour
     /// 로켓 객체의 RocketBehavior 스크립트로부터 호흡량에 의해 계산된 높이 float변수를 받아 점수화 후 점수 UI 알파값 조절하여 표시
     /// </summary>
     /// <param name="height"></param>
-    public void ScoreUI(float totalAir)
+    public void ScoreUI(int candleOffed)
     {
         scoreTr.position = playerTr.position + (playerTr.forward * 1.3f) + playerTr.up;
         scoreTr.LookAt((playerTr.forward + (playerTr.up * 0.7f)) * 10f);
+        Debug.Log(candleOffed + " / " + 10 * currStage);
         //2345스테이지 촛불 갯수 늘어나면 어떻게 할지 개발필요
-        if (candleControl.candlesForOff < (10 * currStage))
+        if (candleOffed < (10 * currStage))
         {
-            scoreText.text = ("촛불 " + (10*currStage)+ "개 중에 " + CandleGameManager2.instance.candleOffedOnThisStage + "개를 껐어요!"
+            scoreText.text = ("촛불 " + (10*currStage)+ "개 중에 " + candleOffed + "개를 껐어요!"
             + "\n다음엔 더 많이 끌수 있을까요?");
             scoreTr.gameObject.SetActive(true);
             soundManager.SendMessage("ScoreBoardSound");
@@ -96,6 +98,7 @@ public class CandleUIManager : MonoBehaviour
     {
 
         showStarAnims[num - 1].Play();
+        showStarAnims[num - 1].gameObject.GetComponent<AudioSource>().Play();
     }
 
     public void ResetUI()
@@ -117,10 +120,15 @@ public class CandleUIManager : MonoBehaviour
             Destroy(showStarAnims[i - 1].gameObject);
             GameObject obj = Instantiate(showStarSource, GameObject.Find("ShowStar" + i).GetComponent<Transform>());
             obj.name = "FillStar" + i;
-            //obj.GetComponent<RectTransform>().localPosition = new Vector3(-770f + (140f * i), -240f, 0f);
-            //obj.GetComponent<RectTransform>().rotation = Quaternion.Euler(0f, 0f, 0f);
             showStarAnims[i - 1] = obj.GetComponent<Animation>();
         }
+        if(showStarAnims[0]==null)
+        {
+            GameObject obj = Instantiate(showStarSource, GameObject.Find("ShowStar" + 1).GetComponent<Transform>());
+            obj.name = "FillStar" + 1;
+            showStarAnims[0] = obj.GetComponent<Animation>();
+        }
+
     }
 
 }

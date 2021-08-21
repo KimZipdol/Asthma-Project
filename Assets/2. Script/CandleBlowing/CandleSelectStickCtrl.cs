@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class CandleSelectStickCtrl : MonoBehaviour
 {
+    private void Update()
+    {
+        
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("INTERACTABLE") && CandleGameManager2.instance.currState!=CandleGameManager2.GameState.FINISH)

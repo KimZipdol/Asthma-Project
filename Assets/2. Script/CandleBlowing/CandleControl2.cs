@@ -84,14 +84,13 @@ public class CandleControl2 : MonoBehaviour
         if (offNum <= candlesForOff && offNum < 11)
         {
             candleFires[offNum - 1].SendMessage("ShrinkAndOff");
-            candleFires[offNum - 1].SendMessage("FireOff");
-            Debug.Log("ShowStar" + offNum);
             uiManager.GetComponent<CandleUIManager>().GetOffCandleStar(offNum);
             offNum++;
+            candleGameManager.candleOffedOnThisStage++;
         }
     }
 
-    void ResetCandles()
+    public void ResetCandles()
     {
         for(int i = 0; i < candleCount; i++)
         {
@@ -104,6 +103,8 @@ public class CandleControl2 : MonoBehaviour
         totalAir = 0f;
         offNum = 1;
         outtakeTime = 0f;
-
+        sensorPlus = 0f;
+        sensorMinus = 0f;
+        candlesForOff = 0;
     }
 }

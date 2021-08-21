@@ -5460,18 +5460,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 618843225}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: -1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -66.66666}
   m_LocalScale: {x: 0.39515126, y: 0.32883584, z: 833.3334}
   m_Children:
   - {fileID: 759517444}
-  m_Father: {fileID: 1827026021}
+  m_Father: {fileID: 1601338939}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -257.5625, y: -130.00012}
-  m_SizeDelta: {x: -343.34863, y: 132.63794}
+  m_AnchoredPosition: {x: -257.5625, y: 46.499954}
+  m_SizeDelta: {x: 256.65137, y: 57.63794}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &618843227
 MonoBehaviour:
@@ -15825,7 +15825,7 @@ MonoBehaviour:
   astroman: {fileID: 251848957}
   candleControl: {fileID: 1051652862}
   perfectEffect: {fileID: 2098153454}
-  perfectSound: {fileID: 0}
+  perfectSound: {fileID: 1504764648}
   showStarAnims:
   - {fileID: 274016458}
   - {fileID: 234057205}
@@ -15892,6 +15892,7 @@ RectTransform:
   - {fileID: 1691553886}
   - {fileID: 1261301900}
   - {fileID: 1827026021}
+  - {fileID: 618843226}
   m_Father: {fileID: 1351736863}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -18399,7 +18400,6 @@ RectTransform:
   - {fileID: 456344676}
   - {fileID: 1499125850}
   - {fileID: 687494768}
-  - {fileID: 618843226}
   m_Father: {fileID: 1601338939}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
