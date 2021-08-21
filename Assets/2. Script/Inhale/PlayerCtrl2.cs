@@ -45,31 +45,32 @@ public class PlayerCtrl2 : MonoBehaviour
             {
                 if (InhaleGameManager.instance.currState == InhaleGameManager.GameState.SEEKINGFOOD && isResetting == false)
                 {
-                    InhaleGameManager.instance.EyesOnFood();
-                    hit.collider.gameObject.SendMessage("HighlightOn");
-                    prevHit = hit.collider.gameObject;
+                    //InhaleGameManager.instance.EyesOnFood();
+                    //hit.collider.gameObject.SendMessage("HighlightOn");
+                    //prevHit = hit.collider.gameObject;
+                    Debug.Log(hit.collider.gameObject.name);
                 }
             }
             else
             {
-                InhaleGameManager.instance.EyesOffFood();
+                //InhaleGameManager.instance.EyesOffFood();
             }
 
         }
         else line.SetPosition(1, ray.GetPoint(100.0f));
     }
 
-    IEnumerator PrevHighlightOff()
-    {
-        while(true)
-        {
-            if (prevHit != null && hit.collider.gameObject != prevHit)
-            {
-                yield return null;
-                prevHit.SendMessage("HighlightOff");
-            }
-        }
-    }
+    //IEnumerator PrevHighlightOff()
+    //{
+    //    while(true)
+    //    {
+    //        if (prevHit != null && hit.collider.gameObject != prevHit)
+    //        {
+    //            yield return null;
+    //            prevHit.SendMessage("HighlightOff");
+    //        }
+    //    }
+    //}
 
     public void InhaleFood()
     {
@@ -78,8 +79,8 @@ public class PlayerCtrl2 : MonoBehaviour
         InhaleGameManager.instance.currFoodeat++;
         InhaleGameManager.instance.inhaleEffectPool[effectTurn % 3].SetActive(true);
         effectTurn++;
-        hit.collider.gameObject.SendMessage("Inhaled");
-        hit = new RaycastHit();
+        //hit.collider.gameObject.SendMessage("Inhaled");
+        //hit = new RaycastHit();
         InhaleGameManager.instance.EyesOffFood();
         Invoke("RestStateAfterInhale", 2f);
     }

@@ -61,11 +61,11 @@ public class CandleControl2 : MonoBehaviour
 
     private void turningOffFire(float sensorData)
     {
-        if (sensorData < GameManager.instance.sensorActionPotential && outtakeTime>1f)
-        {
-            uiManager.SendMessage("ScoreUI", totalAir);
-            candleGameManager.currState = CandleGameManager2.GameState.FINISH;
-        }
+        //if (sensorData < GameManager.instance.sensorActionPotential && outtakeTime>1f)
+        //{
+        //    uiManager.SendMessage("ScoreUI", totalAir);
+        //    candleGameManager.currState = CandleGameManager2.GameState.FINISH;
+        //}
         if (sensorData < 0f)
         {
             sensorPlus = (sensorData * -1f);
@@ -81,6 +81,7 @@ public class CandleControl2 : MonoBehaviour
         totalAir = (1f + (intakedAir / GameManager.instance.maxIntake)) * outtakedAir;
         candlesForOff = (int)(totalAir / airPerOffcandle) ;
         //Debug.Log(candlesForOff);
+        //offNum은 이번에 끌 차례인 촛불, candlesForOff는 호흡입력 결과 꺼야하는 촛불 수
         if (offNum <= candlesForOff && offNum < 11)
         {
             candleFires[offNum - 1].SendMessage("ShrinkAndOff");

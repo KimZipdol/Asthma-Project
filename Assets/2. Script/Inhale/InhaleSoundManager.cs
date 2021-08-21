@@ -8,6 +8,7 @@ public class InhaleSoundManager : MonoBehaviour
     public AudioSource scoreBoard;
     public AudioSource breathe;
     public AudioSource chew;
+    public AudioSource perfectSound;
 
     // Start is called before the first frame update
     void Start()
@@ -41,5 +42,10 @@ public class InhaleSoundManager : MonoBehaviour
     public void ChewSound()
     {
         chew.Play();
+    }
+
+    public void OnPerfectGame()
+    {
+        perfectSound.Play();
     }
 }

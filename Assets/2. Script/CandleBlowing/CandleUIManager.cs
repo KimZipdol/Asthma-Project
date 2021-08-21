@@ -21,6 +21,26 @@ public class CandleUIManager : MonoBehaviour
     public int currStage = 1;
     public GameObject[] Stars = null;
 
+    public static CandleUIManager instance = null;
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            //Destroy(this.gameObject);
+        }
+        //showStarAnims = new Animation[10];
+        
+    }
+
+    private void Start()
+    {
+        //ResetShowStars();
+    }
+
     private void Update()
     {
         offCandleTxt.text = CandleGameManager2.instance.candleOffedOnThisStage
@@ -35,27 +55,29 @@ public class CandleUIManager : MonoBehaviour
     /// <param name="height"></param>
     public void ScoreUI(int candleOffed)
     {
-        scoreTr.position = playerTr.position + (playerTr.forward * 1.3f) + playerTr.up;
-        scoreTr.LookAt((playerTr.forward + (playerTr.up * 0.7f)) * 10f);
-        Debug.Log(candleOffed + " / " + 10 * currStage);
-        //2345스테이지 촛불 갯수 늘어나면 어떻게 할지 개발필요
-        if (candleOffed < (10 * currStage))
+        if(candleOffed<=currStage * 10)
         {
-            scoreText.text = ("촛불 " + (10*currStage)+ "개 중에 " + candleOffed + "개를 껐어요!"
-            + "\n다음엔 더 많이 끌수 있을까요?");
-            scoreTr.gameObject.SetActive(true);
-            soundManager.SendMessage("ScoreBoardSound");
-        }
-        else
-        {
-            scoreText.text = ("촛불을 모두 다 껐어요! 굉장해요!");
-            scoreTr.gameObject.SetActive(true);
-            //올클리어 이펙트
-            perfectEffect.Play();
-            soundManager.OnPerfectGame();
-        }
+            scoreTr.position = playerTr.position + (playerTr.forward * 1.3f) + playerTr.up;
+            scoreTr.LookAt((playerTr.forward + (playerTr.up * 0.7f)) * 10f);
+            Debug.Log(candleOffed + " / " + 10 * currStage);
+            if (candleOffed < (10 * currStage))
+            {
+                scoreText.text = ("촛불 " + (10 * currStage) + "개 중에 " + candleOffed + "개를 껐어요!"
+                + "\n다음엔 더 많이 끌수 있을까요?");
+                scoreTr.gameObject.SetActive(true);
+                soundManager.SendMessage("ScoreBoardSound");
+            }
+            else if (candleOffed >= (10 * currStage))
+            {
+                scoreText.text = ("촛불을 모두 다 껐어요! 굉장해요!");
+                scoreTr.gameObject.SetActive(true);
+                //올클리어 이펙트
+                perfectEffect.Play();
+                soundManager.OnPerfectGame();
+            }
 
-        StartCoroutine(StarsAndProgress());
+            StartCoroutine(StarsAndProgress());
+        }
     }
 
     public void ResetScoreUI()
@@ -75,6 +97,7 @@ public class CandleUIManager : MonoBehaviour
         //단계별 별 보이기
         for (int i = 0; i < currStage; i++)
         {
+            Stars[i].SetActive(true);
             Stars[i].GetComponent<Animation>().Play();
             Stars[i].GetComponent<AudioSource>().Play();
             yield return new WaitForSeconds(0.5f);
@@ -87,16 +110,16 @@ public class CandleUIManager : MonoBehaviour
         Vector3 pos = astroman.position;
         while (nowX <= target)
         {
-            progressImage.fillAmount += ((((float)currStage / 5f) / moveTerm));
+            progressImage.fillAmount += (((0.2f * currStage) / moveTerm));
             nowX += ((0.15f * currStage) / moveTerm);
             astroman.localPosition = new Vector3(nowX, -0.09f, 0f);
-            yield return null;
+            yield return new WaitForSeconds(1/moveTerm);
         }
     }
 
     public void GetOffCandleStar(int num)
     {
-
+        showStarAnims[num - 1].gameObject.SetActive(true);
         showStarAnims[num - 1].Play();
         showStarAnims[num - 1].gameObject.GetComponent<AudioSource>().Play();
     }
@@ -105,7 +128,9 @@ public class CandleUIManager : MonoBehaviour
     {
         for (int i = 0; i < currStage; i++)
         {
+            Stars[i].SetActive(false);
             Stars[i].GetComponent<Animation>().Rewind();
+            Stars[i].GetComponent<Animation>().Stop();
         }
         progressImage.fillAmount = 0f;
         astroman.localPosition = new Vector3(-0.375f, -0.09f, 0f);
@@ -115,21 +140,43 @@ public class CandleUIManager : MonoBehaviour
 
     public void ResetShowStars()
     {
+        //for (int i = 1; i < 11; i++)
+        //{
+        //    try
+        //    {
+        //        Destroy(showStarAnims[i - 1].gameObject);
+        //    }
+        //    catch(System.NullReferenceException e1)
+        //    {
+        //        Debug.Log(e1);
+        //    }
+        //    catch(MissingReferenceException e2)
+        //    {
+        //        Debug.Log(e2);
+        //    }
+        //    string starThisTime = "ShowStar" + i;
+        //    GameObject parentObj = GameObject.Find(starThisTime);
+        //    Debug.Log(parentObj);
+        //    RectTransform parentTr = parentObj.GetComponent<RectTransform>();
+        //    GameObject obj = Instantiate(showStarSource, parentTr);
+        //    obj.name = "FillStar" + i;
+        //    Debug.Log("instantiated " + obj.name);
+        //    showStarAnims[i - 1] = obj.GetComponent<Animation>();
+        //    Debug.Log("showStarAnims에 " + obj.name + " 할당완료");
+        //}
         for (int i = 1; i < 11; i++)
         {
-            Destroy(showStarAnims[i - 1].gameObject);
-            GameObject obj = Instantiate(showStarSource, GameObject.Find("ShowStar" + i).GetComponent<Transform>());
-            obj.name = "FillStar" + i;
-            showStarAnims[i - 1] = obj.GetComponent<Animation>();
+            showStarAnims[i - 1].gameObject.SetActive(false);
+            showStarAnims[i - 1].Rewind(); 
+            showStarAnims[i - 1].Stop();
         }
-        if(showStarAnims[0]==null)
-        {
-            GameObject obj = Instantiate(showStarSource, GameObject.Find("ShowStar" + 1).GetComponent<Transform>());
-            obj.name = "FillStar" + 1;
-            showStarAnims[0] = obj.GetComponent<Animation>();
-        }
-
     }
 
+    public void FillShowStar()
+    {
+        GameObject obj = Instantiate(showStarSource, GameObject.Find("ShowStar1").GetComponent<Transform>());
+        obj.name = "FillStar" + 1;
+        showStarAnims[0] = obj.GetComponent<Animation>();
+    }
 }
 

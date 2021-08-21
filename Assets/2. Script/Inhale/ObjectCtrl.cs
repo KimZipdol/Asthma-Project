@@ -35,36 +35,38 @@ public class ObjectCtrl : MonoBehaviour
         //}
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        outliner.enabled = true;
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    outliner.enabled = true;
+    //}
 
-    private void OnTriggerExit(Collider other)
-    {
-        outliner.enabled = false;
-    }
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    outliner.enabled = false;
+    //}
 
-    public void HighlightOn()
-    {
-        //isTarget = true;
-        outliner.enabled = true;
-        //StartCoroutine(HighlightOff());
-    }
+    //public void HighlightOn()
+    //{
+    //    //isTarget = true;
+    //    outliner.enabled = true;
+    //    //StartCoroutine(HighlightOff());
+    //}
 
-    IEnumerator HighlightOff()
-    {
-        yield return new WaitForSeconds(0.5f);
-        isTarget = false;
-    }
+    //IEnumerator HighlightOff()
+    //{
+    //    yield return new WaitForSeconds(0.5f);
+    //    isTarget = false;
+    //}
 
-    public void LightOff()
-    {
-        outliner.enabled = false;
-    }
+    //public void LightOff()
+    //{
+    //    outliner.enabled = false;
+    //}
 
     public void Inhaled()
     {
+        this.GetComponent<Rigidbody>().useGravity = false;
+        this.GetComponent<Rigidbody>().isKinematic = true;
         StartCoroutine("ObjectInhale");
         StartCoroutine("ObjectRotate");
         StartCoroutine("ObjectShrink");

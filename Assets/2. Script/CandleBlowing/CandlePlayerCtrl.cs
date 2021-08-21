@@ -60,17 +60,17 @@ public class CandlePlayerCtrl : MonoBehaviour
         else line.SetPosition(1, ray.GetPoint(100.0f));
     }
 
-    IEnumerator PrevHighlightOff()
-    {
-        while (true)
-        {
-            if (prevHit != null && hit.collider.gameObject != prevHit)
-            {
-                yield return null;
-                prevHit.GetComponent<ObjectCtrl>().LightOff();
-            }
-        }
-    }
+    //IEnumerator PrevHighlightOff()
+    //{
+    //    while (true)
+    //    {
+    //        if (prevHit != null && hit.collider.gameObject != prevHit)
+    //        {
+    //            yield return null;
+    //            prevHit.GetComponent<ObjectCtrl>().LightOff();
+    //        }
+    //    }
+    //}
 
     public void ExhaleCandle()
     {

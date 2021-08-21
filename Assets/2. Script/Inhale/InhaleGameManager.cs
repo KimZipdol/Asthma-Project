@@ -31,6 +31,7 @@ public class InhaleGameManager : MonoBehaviour
     public GameObject foodReseter = null;
     public InhaleUIManager inhaleUIManager = null;
     public GameObject rayCastCam = null;
+    public GameObject selectionStick = null;
     public VRUIManager vrUiManager = null;
     public InhaleSoundManager soundManager = null;
     public GameObject loggingManager = null;
@@ -43,8 +44,9 @@ public class InhaleGameManager : MonoBehaviour
     public int guideCount = 1;
     public int currStage = 1;
 
-    private int maxFoodeat = 25;
+    private int maxFoodeat = 15;
     public int currFoodeat = 0;
+    public GameObject currFoodSeeing = null;
 
     public static InhaleGameManager instance = null;
     private void Awake()
@@ -103,7 +105,7 @@ public class InhaleGameManager : MonoBehaviour
                             if (guideCount == 5)
                             {
                                 vrUiManager.GetComponent<VRUIManager>().HideInhaleStartGuide(guideCount);
-                                currState = GameState.INHALEREADY;
+                                currState = GameState.SEEKINGFOOD;
                             }
                             else if (guideCount >= 0 && guideCount < 5)
                             {
@@ -121,16 +123,19 @@ public class InhaleGameManager : MonoBehaviour
                     }
                     break;
                 case (GameState.SEEKINGFOOD):
+                    selectionStick.SetActive(true);
                     VRUIManager.instance.HideInhaleHud();
                     clearTime += Time.deltaTime;
                     playerCtrl.SeekingFood();
                     vrUiManager.resetFill();
                     break;
                 case (GameState.INHALEREADY):
+                    //해당 state 처입장시 1회만 작동할 코드
                     if (!inhaleReady)
                     {
                         inhaleReady = true;
                     }
+                    //해당 state 시 반복작동할 코S
                     playerCtrl.SeekingFood();
                     VRUIManager.instance.ShowInhaleHud();
                     clearTime += Time.deltaTime;
@@ -155,13 +160,14 @@ public class InhaleGameManager : MonoBehaviour
                     vrUiManager.SendMessage("inHaleFill", sensorData);
                     if (vrUiManager.fillAmt>1f)
                     {
+                        currFoodSeeing.SendMessage("Inhaled");
                         playerCtrl.InhaleFood();
                         soundManager.OnBreatheSound();
                         EyesOffFood();
                         yield return new WaitForSeconds(1f);
                         soundManager.ChewSound();
                     }
-                    if(currFoodeat==currStage * 5)
+                    if(currFoodeat==currStage * 3)
                     {
                         currState = GameState.FINISH;
                     }
@@ -169,12 +175,29 @@ public class InhaleGameManager : MonoBehaviour
                 case (GameState.FINISH):
                     if (!isFinishScreen)
                     {
+                        selectionStick.SetActive(false);
+                        yield return new WaitForSeconds(0.5f);
                         inhaleUIManager.InhaleScoreUI();
                         soundManager.SendMessage("ScoreBoardSound");
                         loggingManager.SendMessage("logClearTime", clearTime.ToString());
                         vrUiManager.SendMessage("ShowInhaleHud");
                         //foodReseter.SendMessage("ResetFoods");
                         isFinishScreen = true;
+                    }
+
+
+                    if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
+                    {
+                        if (currStage == 5)
+                        {
+                            Application.Quit();
+                        }
+                        else
+                        {
+                            selectionStick.SetActive(false);
+                            if (isFinishScreen)
+                                toNextStage();
+                        }
                     }
                     break;
 

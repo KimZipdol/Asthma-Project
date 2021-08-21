@@ -6,48 +6,50 @@ using UnityEngine.UI;
 public class InhaleUIManager : MonoBehaviour
 {
     public Text scoreText = null;
+    public Text foodCountTxt = null;
     public Image progressImage = null;
     public Transform scoreTr = null;
     public Transform playerTr = null;
     public RectTransform astroman = null;
+    public ParticleSystem perfectEffect = null;
+    public InhaleSoundManager soundManager = null;
 
     public int currStage = 1;
     public GameObject[] Stars = null;
 
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="height"></param>
-    public void ScoreUI(float height)
+    private void Update()
     {
-        scoreTr.position = (playerTr.forward * 1.3f) + playerTr.up;
-        scoreTr.LookAt((playerTr.forward + (playerTr.up * 0.7f)) * 10f);
-        scoreText.text = ("점수: " + (int)(height * 100) + "점!");
-        scoreTr.gameObject.SetActive(true);
-        StartCoroutine(StarsAndProgress());
+        foodCountTxt.text = InhaleGameManager.instance.currFoodeat
+            + " / " + 15 + "개";
+
     }
+
 
     public void InhaleScoreUI()
     {
-        scoreTr.position = (playerTr.forward * 1.3f) + (playerTr.up * 3f);
+        scoreTr.position = (playerTr.forward * 1f) + (playerTr.up * 3f);
         //scoreTr.LookAt(playerTr.position);
         //scoreTr.rotation = Quaternion.Euler(
         //    new Vector3(scoreTr.rotation.eulerAngles.x
         //    , scoreTr.rotation.eulerAngles.y + 180f
         //    , scoreTr.rotation.eulerAngles.z));
-        scoreTr.LookAt((playerTr.forward + (playerTr.up * 0.7f)) * 10f);
+        //scoreTr.LookAt((playerTr.forward + (playerTr.up * 0.7f)) * 10f);
+        scoreTr.LookAt(playerTr.position);
+        scoreTr.Rotate(new Vector3(0f, 180f, 0f));
         if (currStage != 5)
         {
             scoreText.text = ("음식" + InhaleGameManager.instance.currFoodeat
-                + "개를 먹었어요!\n 25개까지 더 먹어볼까요?");
+                + "개를 먹었어요!\n 15개까지 더 먹어볼까요?");
+            scoreTr.gameObject.SetActive(true);
         }
         else
         {
-            scoreText.text = ("음식 25개를 다 먹었어요!");
-            //올클리어 이펙트 개발
+            scoreText.text = ("음식 15개를 다 먹었어요!");
+            scoreTr.gameObject.SetActive(true);
+            perfectEffect.Play();
+            soundManager.OnPerfectGame();
         }
-        scoreTr.gameObject.SetActive(true);
+        
         StartCoroutine(StarsAndProgress());
     }
 
@@ -68,6 +70,7 @@ public class InhaleUIManager : MonoBehaviour
         //단계별 별 보이기
         for (int i = 0; i < currStage; i++)
         {
+            Stars[i].SetActive(true);
             Stars[i].GetComponent<Animation>().Play();
             Stars[i].GetComponent<AudioSource>().Play();
             yield return new WaitForSeconds(0.5f);
@@ -91,7 +94,9 @@ public class InhaleUIManager : MonoBehaviour
     {
         for (int i = 0; i < currStage; i++)
         {
+            Stars[i].SetActive(false);
             Stars[i].GetComponent<Animation>().Rewind();
+            Stars[i].GetComponent<Animation>().Stop();
         }
         progressImage.fillAmount = 0f;
         astroman.localPosition = new Vector3(-0.375f, -0.09f, 0f);

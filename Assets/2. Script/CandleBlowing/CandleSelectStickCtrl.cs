@@ -11,9 +11,9 @@ public class CandleSelectStickCtrl : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("INTERACTABLE") && CandleGameManager2.instance.currState!=CandleGameManager2.GameState.FINISH)
+        if (other.gameObject.CompareTag("INTERACTABLE") && CandleGameManager2.instance.currState==CandleGameManager2.GameState.SEEKINGCANDLE)
         {
-            other.gameObject.GetComponent<ObjectCtrl>().outliner.enabled = true;
+            other.gameObject.GetComponent<Outline>().enabled = true;
             CandleGameManager2.instance.EyesOnCandle();
             switch (other.gameObject.name)
             {
@@ -40,9 +40,9 @@ public class CandleSelectStickCtrl : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
 
-        if (other.gameObject.CompareTag("INTERACTABLE") && CandleGameManager2.instance.currState != CandleGameManager2.GameState.FINISH)
+        if (other.gameObject.CompareTag("INTERACTABLE"))
         {
-            other.gameObject.GetComponent<ObjectCtrl>().outliner.enabled = false;
+            other.gameObject.GetComponent<Outline>().enabled = false;
             CandleGameManager2.instance.EyesOffCandle();
         }
     }
