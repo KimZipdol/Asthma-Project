@@ -47,6 +47,7 @@ public class RocketBehavior2 : MonoBehaviour
     public GameObject networkManager = null;
     public RocketGameManager rocketGameManager = null;
     public GameManager gameManager = null;
+    public RocketPlayerBehavior playerCtrl = null;
     
 
     private void Start()
@@ -114,7 +115,7 @@ public class RocketBehavior2 : MonoBehaviour
 
             //흡기 게이지 세팅
             float ratio = intake / gameManager.maxIntake;
-
+            //Debug.Log(ratio);
 
 
             //로켓형태변화
@@ -197,9 +198,10 @@ public class RocketBehavior2 : MonoBehaviour
     {
        StopCoroutine(toExhaleAndFinish());
 
+        playerCtrl.EndFollowing();
         float height = rocketTr.position.y;
         rocketRb.useGravity = false;
-        rocketRb.velocity = Vector3.zero;
+        rocketRb.AddForce(Vector3.up * 100f, ForceMode.Acceleration);
         endEffect.SetActive(true);
         UIManager.SendMessage("ScoreUI", height);
 
@@ -211,8 +213,8 @@ public class RocketBehavior2 : MonoBehaviour
 
         //GameManager.instance.SendMessage("SaveGameData");
 
-        rocketCam.gameObject.SetActive(false);
-        this.gameObject.SetActive(false);
+        //rocketCam.gameObject.SetActive(false);
+        //this.gameObject.SetActive(false);
     }
 
     public void ResetRocket()
@@ -222,5 +224,6 @@ public class RocketBehavior2 : MonoBehaviour
         x = 0.5f;
         y = 0.5f;
         z = 0.5f;
+        playerCtrl.StartFollowing();
     }
 }

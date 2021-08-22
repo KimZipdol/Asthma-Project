@@ -15,10 +15,11 @@ public class RocketPlayerBehavior : MonoBehaviour
     public Transform playerTr;
     public Vector3 camOffset;
     public float camMoveSpd = 1f;
+    public bool finished = false;
 
     private void Start()
     {
-
+        playerTr = this.gameObject.GetComponent<Transform>();
     }
 
     private void Update()
@@ -29,9 +30,9 @@ public class RocketPlayerBehavior : MonoBehaviour
             StartCoroutine(FollowRocket());
         }*/
 
-        if (rocketScript.rocketRb.velocity.magnitude >= 0.3f)
+        if (!finished)
         {
-            StartCoroutine(FollowRocket());
+            FollowRocket();
             menuButtons.SendMessage("FollowPlayer");
         }
     }
@@ -41,13 +42,19 @@ public class RocketPlayerBehavior : MonoBehaviour
     /// 로켓속도가 빠르면 뒤로 조금 쳐지는듯 하게 개발예정.
     /// </summary>
     /// <returns></returns>
-    IEnumerator FollowRocket()
+    private void FollowRocket()
     {
-        while (true)
-        {
-            Vector3 followPos = rocketTr.position + camOffset;
-            playerTr.position = Vector3.Lerp(playerTr.position, followPos, camMoveSpd);
-            yield return null;
-        }
+        Vector3 followPos = rocketTr.position + camOffset;
+        playerTr.position = Vector3.Lerp(playerTr.position, followPos, camMoveSpd);
+    }
+
+    public void EndFollowing()
+    {
+        finished = true;
+    }
+
+    public void StartFollowing()
+    {
+        finished = false;
     }
 }

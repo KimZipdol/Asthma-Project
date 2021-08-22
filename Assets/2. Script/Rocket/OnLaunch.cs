@@ -36,10 +36,10 @@ public class OnLaunch : MonoBehaviour
         while (angle < 90)
         {
             Vector3 leftAxis = new Vector3(-4.29f, 3.79f, 0);
-            leftCeiling.RotateAround(leftAxis, Vector3.forward, 1f);
+            leftCeiling.RotateAround(leftAxis, Vector3.forward, 3f);
             Vector3 rightAxis = new Vector3(3.45f, 3.79f, 0);
-            rightCeiling.RotateAround(rightAxis, Vector3.forward, -1f);
-            angle += 1f;
+            rightCeiling.RotateAround(rightAxis, Vector3.forward, -3f);
+            angle += 3f;
             yield return 0.01f;
         }
         RocketCam.SetActive(true);

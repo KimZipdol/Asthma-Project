@@ -9,6 +9,7 @@ public class RocketSoundManager: MonoBehaviour
     public AudioSource explode;
     public AudioSource flying;
     public AudioSource scoreBoard;
+    public AudioSource perfectSound;
     // 배경음악이 재생될 수 있도록 AudioSource 받아서 나오는 코드 
     void Awake()
     {
@@ -56,6 +57,11 @@ public class RocketSoundManager: MonoBehaviour
     public void ScoreBoardSound()
     {
         scoreBoard.Play();
+    }
+
+    public void OnPerfectGame()
+    {
+        perfectSound.Play();
     }
 }
 //https://ansohxxn.github.io/unity%20lesson%202/ch9-1/

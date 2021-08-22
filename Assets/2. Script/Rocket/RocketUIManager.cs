@@ -11,6 +11,9 @@ public class RocketUIManager : MonoBehaviour
     public Transform scoreTr = null;
     public Transform playerTr = null;
     public RectTransform astroman = null;
+    public VRUIManager vRUIManager = null;
+    public RocketSoundManager soundManager = null;
+    public ParticleSystem perfectEffect = null;
 
     public int currStage = 1;
     public GameObject[] Stars = null;
@@ -22,11 +25,22 @@ public class RocketUIManager : MonoBehaviour
     /// <param name="height"></param>
     public void ScoreUI(float height)
     {
-        scoreTr.position = playerTr.position + (playerTr.forward * 2f);
-        //scoreTr.LookAt(playerTr.position);
-        scoreText.text = (height.ToString("$$$.$") + "미터까지 비행에 성공했어요!");
-        scoreTr.gameObject.SetActive(true);
-        StartCoroutine(StarsAndProgress());
+        scoreTr.position = playerTr.position + ((playerTr.right+playerTr.forward) * 2f);
+        scoreTr.LookAt(playerTr.position);
+        scoreTr.Rotate(new Vector3(0f, 180f, 0f));
+        if (height <= vRUIManager.maxRocketHeight)
+        {
+            scoreText.text = (height.ToString() + "미터까지 비행에 성공했어요!");
+            scoreTr.gameObject.SetActive(true);
+            StartCoroutine(StarsAndProgress());
+        }
+        else
+        {
+            scoreText.text = (vRUIManager.maxRocketHeight + "미터까지 비행에 성공했어요!\n최고높이에요! 굉장해요!");
+            scoreTr.gameObject.SetActive(true);
+            perfectEffect.Play();
+            soundManager.OnPerfectGame();
+        }
     }
 
     public void ResetScoreUI()
@@ -46,6 +60,7 @@ public class RocketUIManager : MonoBehaviour
         //단계별 별 보이기
         for (int i=0; i < currStage; i++)
         {
+            Stars[i].SetActive(true);
             Stars[i].GetComponent<Animation>().Play();
             Stars[i].GetComponent<AudioSource>().Play();
             yield return new WaitForSeconds(0.5f);
@@ -69,12 +84,9 @@ public class RocketUIManager : MonoBehaviour
     {
         for (int i = 0; i < currStage; i++)
         {
-            Stars[i].GetComponent<Animation>().enabled = false;
             Stars[i].SetActive(false);
-            Stars[i].GetComponent<Animation>().Stop();
             Stars[i].GetComponent<Animation>().Rewind();
-            Stars[i].GetComponent<Animation>().enabled = true;
-            Stars[i].SetActive(true);
+            Stars[i].GetComponent<Animation>().Stop();
         }
         progressImage.fillAmount = 0f;
         astroman.localPosition = new Vector3(-0.375f, -0.09f, 0f);
