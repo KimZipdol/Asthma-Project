@@ -14,6 +14,7 @@ public class VRUIManager : MonoBehaviour
     public GameObject candleGuidePanel;
     public GameObject[] inhaleStartGuidePanels;
     public GameObject inhaleGuidePanel;
+    public GameObject[] tutoStartGuidePanels;
     public GameObject inhaleBarObj;
 
     private GameManager gameManager = null;
@@ -24,12 +25,18 @@ public class VRUIManager : MonoBehaviour
     private GameObject hudObj = null;
     public RectTransform inhalehudTr = null;
 
+    [SerializeField]
     private Image fillGuage = null;
     public Image eyeBlocker = null;
 
     private RectTransform hudTr;
     private float inhaled = 0f;
     public float fillAmt = 0f;
+
+    private float exhaled = 0f;
+    public float exhaleFillAmt = 0f;
+    [SerializeField]
+    private Image exhaleFillGuage = null;
 
     public Image heightProgressImg = null;
     public Text heightTxt = null;
@@ -94,6 +101,7 @@ public class VRUIManager : MonoBehaviour
     private void Start()
     {
         fillGuage = GameObject.Find("InhaleFill").GetComponent<Image>();
+        exhaleFillGuage = GameObject.Find("ExhaleFill").GetComponent<Image>();
         gameManager = GameManager.instance;
         hudTr = hudObj.GetComponent<RectTransform>();
     }
@@ -131,11 +139,26 @@ public class VRUIManager : MonoBehaviour
         fillGuage.fillAmount = fillAmt;
     }
 
+    public void exHaleFill(float inputExhale)
+    {
+        //Debug.Log("filling");
+        inhaled += inputExhale;
+        exhaleFillAmt = inhaled / gameManager.maxFvc;
+        exhaleFillGuage.fillAmount = exhaleFillAmt;
+    }
+
     public void resetFill()
     {
         inhaled = 0f;
         fillAmt = 0f;
         fillGuage.fillAmount = 0f;
+    }
+
+    public void ResetOutFill()
+    {
+        exhaled = 0f;
+        exhaleFillAmt = 0f;
+        exhaleFillGuage.fillAmount = 0f;
     }
 
     /// <summary>
@@ -265,6 +288,22 @@ public class VRUIManager : MonoBehaviour
     public void HideInhaleStartGuide(int guideNum)
     {
         inhaleStartGuidePanels[guideNum - 1].SetActive(false);
+
+    }
+
+    public void ShowTutoStartGuide(int guideNum)
+    {
+        if (guideNum != 1)
+        {
+            tutoStartGuidePanels[guideNum - 2].SetActive(false);
+        }
+        tutoStartGuidePanels[guideNum-1].SetActive(true);
+
+    }
+
+    public void HideTutoStartGuide(int guideNum)
+    {
+        tutoStartGuidePanels[guideNum - 1].SetActive(false);
 
     }
 
