@@ -7,7 +7,7 @@ public class TutorialGameManager : MonoBehaviour
     public GameObject UImanager = null;
     public Transform playerTr = null;
 
-    public float outtakeTime = 0f;
+    public float playTime = 0f;
     public float intakedAir = 0f;
     public float outtakedAir = 0f;
     public float sensorData { get; set; }
@@ -242,17 +242,21 @@ public class TutorialGameManager : MonoBehaviour
                     selectionStick.SetActive(true);
                     vrUiManager.resetFill();
                     vrUiManager.ResetOutFill();
+                    playTime += Time.deltaTime;
                     if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
                     {
-                        currState2 = GameState2.FINISH;
+                        if(playTime>=10f)
+                            currState2 = GameState2.FINISH;
                     }
                     break;
                 case GameState2.BREATHEREADY:
+                    playTime += Time.deltaTime;
                     if (sensorData < -1f || sensorData > 1f)
                         currState2 = GameState2.BREATHING;
                     if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
                     {
-                        currState2 = GameState2.FINISH;
+                        if (playTime >= 10f)
+                            currState2 = GameState2.FINISH;
                     }
                     break;
                 case GameState2.BREATHING:

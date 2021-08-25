@@ -2664,10 +2664,10 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: d1fc1366029bec14b9a3f9525a4b02fe, type: 3}
-  m_PlayOnAwake: 0
+  m_PlayOnAwake: 1
   m_Volume: 0.8
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -5981,12 +5981,16 @@ MonoBehaviour:
   - {fileID: 1846813987}
   - {fileID: 1510052803}
   inhaleGuidePanel: {fileID: 1096260958}
+  tutoStartGuidePanels: []
   inhaleBarObj: {fileID: 2090891816}
   playerTr: {fileID: 1759101600}
   hudObj: {fileID: 705635169}
   inhalehudTr: {fileID: 856428021}
+  fillGuage: {fileID: 0}
   eyeBlocker: {fileID: 281092630}
   fillAmt: 0
+  exhaleFillAmt: 0
+  exhaleFillGuage: {fileID: 0}
   heightProgressImg: {fileID: 0}
   heightTxt: {fileID: 0}
   rocketRect: {fileID: 0}
