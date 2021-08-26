@@ -16,6 +16,7 @@ public class VRUIManager : MonoBehaviour
     public GameObject inhaleGuidePanel;
     public GameObject[] tutoStartGuidePanels;
     public GameObject inhaleBarObj;
+    public GameObject exhaleBarObj;
 
     private GameManager gameManager = null;
 
@@ -142,8 +143,12 @@ public class VRUIManager : MonoBehaviour
     public void exHaleFill(float inputExhale)
     {
         //Debug.Log("filling");
-        inhaled += inputExhale;
-        exhaleFillAmt = inhaled / gameManager.maxFvc;
+        if (inputExhale < 0f)
+            inputExhale *= -1f;
+        exhaled += inputExhale;
+        exhaleFillAmt = exhaled / GameManager.instance.maxFev1;
+        if (exhaleFillAmt < 0f)
+            exhaleFillAmt *= -1f;
         exhaleFillGuage.fillAmount = exhaleFillAmt;
     }
 
@@ -172,6 +177,16 @@ public class VRUIManager : MonoBehaviour
     public void ShowInhaleHud()
     {
         inhaleBarObj.SetActive(true);
+    }
+
+    public void HideExhaleHud()
+    {
+        exhaleBarObj.SetActive(false);
+    }
+
+    public void ShowExhaleHud()
+    {
+        exhaleBarObj.SetActive(true);
     }
 
     public void BlockEye()

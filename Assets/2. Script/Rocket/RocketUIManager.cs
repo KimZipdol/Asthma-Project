@@ -17,6 +17,8 @@ public class RocketUIManager : MonoBehaviour
 
     public int currStage = 1;
     public GameObject[] Stars = null;
+
+
     
 
     /// <summary>
@@ -38,8 +40,10 @@ public class RocketUIManager : MonoBehaviour
         {
             scoreText.text = (vRUIManager.maxRocketHeight + "미터까지 비행에 성공했어요!\n최고높이에요! 굉장해요!");
             scoreTr.gameObject.SetActive(true);
+            perfectEffect.gameObject.SetActive(true);
             perfectEffect.Play();
             soundManager.OnPerfectGame();
+            StartCoroutine(StarsAndProgress());
         }
     }
 

@@ -48,7 +48,7 @@ public class PlayerCtrl2 : MonoBehaviour
                     //InhaleGameManager.instance.EyesOnFood();
                     //hit.collider.gameObject.SendMessage("HighlightOn");
                     //prevHit = hit.collider.gameObject;
-                    Debug.Log(hit.collider.gameObject.name);
+                    //Debug.Log(hit.collider.gameObject.name);
                 }
             }
             else

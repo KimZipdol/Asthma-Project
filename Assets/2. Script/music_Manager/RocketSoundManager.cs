@@ -61,6 +61,7 @@ public class RocketSoundManager: MonoBehaviour
 
     public void OnPerfectGame()
     {
+        perfectSound.gameObject.SetActive(true);
         perfectSound.Play();
     }
 }
