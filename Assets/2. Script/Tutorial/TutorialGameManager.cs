@@ -286,6 +286,7 @@ public class TutorialGameManager : MonoBehaviour
                 case GameState2.FINISH:
                     selectionStick.SetActive(false);
                     vrUiManager.HideInhaleHud();
+                    vrUiManager.HideExhaleHud();
                     if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
                     {
                         Application.Quit();

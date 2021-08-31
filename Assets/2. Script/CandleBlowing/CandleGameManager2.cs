@@ -113,8 +113,8 @@ public class CandleGameManager2 : MonoBehaviour
                         }
                         else
                         {
-                            vrUiManager.GetComponent<VRUIManager>().HideCandleGuide();
-
+                            yield return new WaitForSeconds(1f);
+                            vrUiManager.HideCandleGuide();
                             candleOffedOnThisStage = 0;
                             currState = GameState.SEEKINGCANDLE;
                         }

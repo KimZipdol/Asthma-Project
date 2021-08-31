@@ -116,6 +116,7 @@ public class InhaleGameManager : MonoBehaviour
                         }
                         else
                         {
+                            yield return new WaitForSeconds(1f);
                             vrUiManager.HideInhaleGuide();
                             currState = GameState.SEEKINGFOOD;
                         }

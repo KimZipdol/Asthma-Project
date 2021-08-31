@@ -136,6 +136,8 @@ public class RocketGameManager : MonoBehaviour
                         }
                         else
                         {
+                            yield return new WaitForSeconds(1f);
+                            vrUiManager.HideGuide(currStage);
                             currState = RocketState.INHALEREADY;
                         }
                     }
@@ -144,10 +146,10 @@ public class RocketGameManager : MonoBehaviour
                     if (!inhaleReady)
                     {
                         inhaleReady = true;
-                        vrUiManager.GetComponent<VRUIManager>().HideGuide(currStage);
                         vrUiManager.resetFill();
                         vrUiManager.ResetOutFill();
                         vrUiManager.ShowInhaleHud();
+                        vrUiManager.ShowExhaleHud();
                         vrUiManager.maxRocketHeight = 500 + (currStage * 100);
                     }
                     selectionStick.SetActive(true);
@@ -208,8 +210,8 @@ public class RocketGameManager : MonoBehaviour
                     if (outtakeTime >= 1f && sensorData > gameManager.sensorActionPotential)
                     {
                         rocketControl.SendMessage("FvcOuttake", sensorData);
-                        vrUiManager.SendMessage("HideInhaleHud");
-                        vrUiManager.HideExhaleHud();
+                        //vrUiManager.HideExhaleHud();
+                        //vrUiManager.HideInhaleHud();
                     }
                     else if (outtakeTime < 1f)
                     {
@@ -225,6 +227,8 @@ public class RocketGameManager : MonoBehaviour
                     selectionStick.SetActive(false);
                     if (!isFinishScreen)
                     {
+                        vrUiManager.HideExhaleHud();
+                        vrUiManager.HideInhaleHud();
                         soundManager.SendMessage("ScoreBoardSound");
                         loggingManager.SendMessage("logClearTime", clearTime.ToString());
                         //vrUiManager.SendMessage("ShowInhaleHud");
