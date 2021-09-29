@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
         string filePath = Application.persistentDataPath + GameDataFileName;
         File.WriteAllText(filePath, ToJsonData);
         saveCount++;
-        Debug.Log("저장 완료");
+        //Debug.Log("저장 완료");
     }
 
     private void OnApplicationQuit()

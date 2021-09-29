@@ -107,7 +107,11 @@ public class CamRayCast : MonoBehaviour
                         }
                         break;
                     case ("FOODGAME"):
-                        SceneManager.LoadScene("3. Inhaler", LoadSceneMode.Single);
+                        if (!messageSended)
+                        {
+                            GameObject.Find("InhaleGameManager").SendMessage("toNextStage");
+                            messageSended = true;
+                        }
                         break;
                     case ("ENDGAME"):
 #if UNITY_EDITOR
@@ -133,5 +137,6 @@ public class CamRayCast : MonoBehaviour
     public void ResetFlag()
     {
         messageSended = false;
+        SelectImg.fillAmount = 0f;
     }
 }

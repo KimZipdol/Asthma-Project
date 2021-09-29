@@ -5,6 +5,10 @@ using UnityEngine;
 public class PlayerCtrl : MonoBehaviour
 {
     public Transform tr = null;
+    public VRUIManager vrUIManager;
+
+    private RaycastHit hit;
+    private Ray ray;
 
     private LineRenderer line;
     private int effectTurn = 0;
@@ -28,24 +32,27 @@ public class PlayerCtrl : MonoBehaviour
     {
         
 
-        Ray ray = new Ray(tr.position, tr.forward);
-        RaycastHit hit;
+        ray = new Ray(tr.position, tr.forward);
+        
 
         line.SetPosition(0, tr.position);
         if (Physics.Raycast(tr.position, tr.forward, out hit, 100f))
         {
             line.SetPosition(1, hit.point);
-            if (hit.collider.gameObject.CompareTag("INTERACTABLE"))
+            if (hit.collider.gameObject.CompareTag("INTERACTABLE") && InhaleGameManager.instance.currState==InhaleGameManager.GameState.INHALEREADY)
             {
+                VRUIManager.instance.ShowInhaleHud();
                 hit.collider.gameObject.SendMessage("HighlightOn");
-                if (Input.GetMouseButtonDown(0) || Input.touchCount>0)
+                if (Input.GetMouseButtonDown(0) || Input.touchCount > 0)
                 {
-                    InhaleGameManager.instance.inhaleEffectPool[effectTurn%3].SetActive(true);
+                    InhaleGameManager.instance.inhaleEffectPool[effectTurn % 3].SetActive(true);
                     effectTurn++;
-                    
+
                     hit.collider.gameObject.SendMessage("Inhaled");
                 }
             }
+            else
+                VRUIManager.instance.HideInhaleHud();
         }
         else line.SetPosition(1, ray.GetPoint(100.0f));
 
@@ -59,4 +66,6 @@ public class PlayerCtrl : MonoBehaviour
         yield return new WaitForSeconds(Random.Range(0.01f, 0.2f));
         line.enabled = false;
     }
+
+    
 }

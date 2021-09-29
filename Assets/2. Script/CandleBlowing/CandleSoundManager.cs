@@ -7,6 +7,7 @@ public class CandleSoundManager : MonoBehaviour
     public AudioSource backmusic;
     public AudioSource scoreBoard;
     public AudioSource breathe;
+    public AudioSource perfectSound;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +31,11 @@ public class CandleSoundManager : MonoBehaviour
     public void ScoreBoardSound()
     {
         scoreBoard.Play();
+    }
+
+    public void OnPerfectGame()
+    {
+        perfectSound.Play();
     }
 
     public void OnBreatheSound()

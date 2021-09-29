@@ -100,7 +100,10 @@ public class BluetoothManager : MonoBehaviour
     {
         switch(scene.name)
         {
-            
+            case ("0. Tutorial"):
+                currGameManager = GameObject.Find("TutorialGameManager");
+                StartCoroutine(displaySensorData());
+                break;
             case ("1-1. RocketGame"):
                 currGameManager = GameObject.Find("RocketGameManager");
                 StartCoroutine(displaySensorData());

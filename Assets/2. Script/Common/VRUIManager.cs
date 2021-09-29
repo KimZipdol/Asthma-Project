@@ -8,9 +8,15 @@ public class VRUIManager : MonoBehaviour
 {
     public GameObject currGameManager = null;
 
+    public GameObject[] rocketStartGuidePanels;
     public GameObject[] rocketGuidePanels;
+    public GameObject[] candleStartGuidePanels;
     public GameObject candleGuidePanel;
+    public GameObject[] inhaleStartGuidePanels;
     public GameObject inhaleGuidePanel;
+    public GameObject[] tutoStartGuidePanels;
+    public GameObject inhaleBarObj;
+    public GameObject exhaleBarObj;
 
     private GameManager gameManager = null;
 
@@ -18,13 +24,25 @@ public class VRUIManager : MonoBehaviour
 
     [SerializeField]
     private GameObject hudObj = null;
+    public RectTransform inhalehudTr = null;
 
+    [SerializeField]
     private Image fillGuage = null;
     public Image eyeBlocker = null;
 
     private RectTransform hudTr;
     private float inhaled = 0f;
-    private float fillAmt = 0f;
+    public float fillAmt = 0f;
+
+    private float exhaled = 0f;
+    public float exhaleFillAmt = 0f;
+    [SerializeField]
+    private Image exhaleFillGuage = null;
+
+    public Image heightProgressImg = null;
+    public Text heightTxt = null;
+    public RectTransform rocketRect = null;
+    public float maxRocketHeight = 700f;
 
     //Singleton
     public static VRUIManager instance = null;
@@ -84,6 +102,7 @@ public class VRUIManager : MonoBehaviour
     private void Start()
     {
         fillGuage = GameObject.Find("InhaleFill").GetComponent<Image>();
+        exhaleFillGuage = GameObject.Find("ExhaleFill").GetComponent<Image>();
         gameManager = GameManager.instance;
         hudTr = hudObj.GetComponent<RectTransform>();
     }
@@ -96,19 +115,55 @@ public class VRUIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log(hudTr.position.ToString());
         //VR hud 위치 조절
-        hudTr.position = playerTr.position + (playerTr.forward*0.5f);
+        hudTr.position = playerTr.position + (playerTr.forward*0.4f);
         hudTr.rotation = playerTr.rotation;
+        inhalehudTr.position = playerTr.position + (playerTr.forward * 0.4f);
+        inhalehudTr.rotation = playerTr.rotation;
+    }
 
-        
+    public void SetHeightProgress(float height)
+    {
+        float progressRatio = (height / maxRocketHeight);
+        heightProgressImg.fillAmount = progressRatio;
+        heightTxt.text = height.ToString();
+        float target = (progressRatio *80f) - 40f;
+        rocketRect.localPosition = new Vector3(0f, target, 0f);
     }
 
     public void inHaleFill(float inputInhale)
     {
-        Debug.Log("filling");
+        //Debug.Log("filling");
         inhaled += inputInhale;
         fillAmt = inhaled / gameManager.maxIntake;
         fillGuage.fillAmount = fillAmt;
+    }
+
+    public void exHaleFill(float inputExhale)
+    {
+        //Debug.Log("filling");
+        if (inputExhale < 0f)
+            inputExhale *= -1f;
+        exhaled += inputExhale;
+        exhaleFillAmt = exhaled / GameManager.instance.maxFev1;
+        if (exhaleFillAmt < 0f)
+            exhaleFillAmt *= -1f;
+        exhaleFillGuage.fillAmount = exhaleFillAmt;
+    }
+
+    public void resetFill()
+    {
+        inhaled = 0f;
+        fillAmt = 0f;
+        fillGuage.fillAmount = 0f;
+    }
+
+    public void ResetOutFill()
+    {
+        exhaled = 0f;
+        exhaleFillAmt = 0f;
+        exhaleFillGuage.fillAmount = 0f;
     }
 
     /// <summary>
@@ -116,12 +171,22 @@ public class VRUIManager : MonoBehaviour
     /// </summary>
     public void HideInhaleHud()
     {
-        hudTr.gameObject.SetActive(false);
+        inhaleBarObj.SetActive(false);
     }
 
     public void ShowInhaleHud()
     {
-        hudTr.gameObject.SetActive(true);
+        inhaleBarObj.SetActive(true);
+    }
+
+    public void HideExhaleHud()
+    {
+        exhaleBarObj.SetActive(false);
+    }
+
+    public void ShowExhaleHud()
+    {
+        exhaleBarObj.SetActive(true);
     }
 
     public void BlockEye()
@@ -157,9 +222,32 @@ public class VRUIManager : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
     }
 
+    public void ShowRocketStartGuide(int guideNum)
+    {
+        if(guideNum!=0)
+        {
+            rocketStartGuidePanels[guideNum-1].SetActive(false);
+        }
+        rocketStartGuidePanels[guideNum].SetActive(true);
+
+    }
+
+    public void HideRocketStartGuide(int guideNum)
+    {
+        rocketStartGuidePanels[guideNum - 1].SetActive(false);
+
+    }
+
     public void ShowGuide(int currStage)
     {
-        rocketGuidePanels[currStage - 1].SetActive(true);
+        if (currStage == 1)
+        {
+            ShowRocketStartGuide(0);
+        }
+        else
+        {
+            rocketGuidePanels[currStage - 1].SetActive(true);
+        }
     }
 
     
@@ -169,9 +257,32 @@ public class VRUIManager : MonoBehaviour
         rocketGuidePanels[currStage - 1].SetActive(false);
     }
 
-    public void ShowCandleGuide()
+    public void ShowCandleStartGuide(int guideNum)
     {
-        candleGuidePanel.SetActive(true);
+        if (guideNum != 0)
+        {
+            candleStartGuidePanels[guideNum - 1].SetActive(false);
+        }
+        candleStartGuidePanels[guideNum].SetActive(true);
+
+    }
+
+    public void HideCandleStartGuide(int guideNum)
+    {
+        candleStartGuidePanels[guideNum - 1].SetActive(false);
+
+    }
+
+    public void ShowCandleGuide(int currStage)
+    {
+        if (currStage == 1)
+        {
+            ShowCandleStartGuide(0);
+        }
+        else
+        {
+            candleGuidePanel.SetActive(true);
+        }
     }
 
     public void HideCandleGuide()
@@ -179,9 +290,48 @@ public class VRUIManager : MonoBehaviour
         candleGuidePanel.SetActive(false);
     }
 
-    public void ShowInhaleGuide()
+    public void ShowInhaleStartGuide(int guideNum)
     {
-        inhaleGuidePanel.SetActive(true);
+        if (guideNum != 0)
+        {
+            inhaleStartGuidePanels[guideNum - 1].SetActive(false);
+        }
+        inhaleStartGuidePanels[guideNum].SetActive(true);
+
+    }
+
+    public void HideInhaleStartGuide(int guideNum)
+    {
+        inhaleStartGuidePanels[guideNum - 1].SetActive(false);
+
+    }
+
+    public void ShowTutoStartGuide(int guideNum)
+    {
+        if (guideNum != 1)
+        {
+            tutoStartGuidePanels[guideNum - 2].SetActive(false);
+        }
+        tutoStartGuidePanels[guideNum-1].SetActive(true);
+
+    }
+
+    public void HideTutoStartGuide(int guideNum)
+    {
+        tutoStartGuidePanels[guideNum - 1].SetActive(false);
+
+    }
+
+    public void ShowInhaleGuide(int currStage)
+    {
+        if (currStage == 1)
+        {
+            ShowInhaleStartGuide(0);
+        }
+        else
+        {
+            inhaleGuidePanel.SetActive(true);
+        }
     }
 
     public void HideInhaleGuide()
@@ -189,8 +339,4 @@ public class VRUIManager : MonoBehaviour
         inhaleGuidePanel.SetActive(false);
     }
 
-    //public void ff(string state)
-    //{
-    //    GameObject.Find("f").GetComponent<Text>().text = state;
-    //}
 }

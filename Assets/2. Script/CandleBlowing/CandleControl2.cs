@@ -10,12 +10,14 @@ public class CandleControl2 : MonoBehaviour
 
     private int candleCount = 10;
     private int offNum = 1;
-    private int candlesForOff = 0;
+    public int candlesForOff = 0;
 
     private float intakedAir = 0f;
     private float outtakedAir = 0f;
     private float outtakeTime = 0f;
     private float totalAir = 0f;
+    private float sensorPlus = 0f;
+    private float sensorMinus = 0f;
 
     public float tiltRatio = 300f;
     public float airPerOffcandle = 220f;
@@ -34,8 +36,18 @@ public class CandleControl2 : MonoBehaviour
 
     public void Intake(float sensorData)
     {
-        intakedAir += (sensorData * -1f);
-        TiltFire(sensorData);
+        if (sensorData > 0f)
+        {
+            sensorMinus = (sensorData * -1f);
+
+        }
+        else
+        {
+            sensorMinus = sensorData;
+        }
+        intakedAir += sensorMinus;
+        
+        TiltFire(sensorMinus);
     }
 
     private void TiltFire(float sensorData)
@@ -49,27 +61,37 @@ public class CandleControl2 : MonoBehaviour
 
     private void turningOffFire(float sensorData)
     {
-        if (sensorData < GameManager.instance.sensorActionPotential && outtakeTime>1f)
+        //if (sensorData < GameManager.instance.sensorActionPotential && outtakeTime>1f)
+        //{
+        //    uiManager.SendMessage("ScoreUI", totalAir);
+        //    candleGameManager.currState = CandleGameManager2.GameState.FINISH;
+        //}
+        if (sensorData < 0f)
         {
-            uiManager.SendMessage("ScoreUI", totalAir * -1);
-            candleGameManager.currState = CandleGameManager2.GameState.FINISH;
+            sensorPlus = (sensorData * -1f);
+
+        }
+        else
+        {
+            sensorPlus = sensorData;
         }
         outtakeTime += Time.deltaTime;
-        TiltFire(sensorData);
-        outtakedAir += sensorData;
+        TiltFire(sensorPlus);
+        outtakedAir += sensorPlus;
         totalAir = (1f + (intakedAir / GameManager.instance.maxIntake)) * outtakedAir;
-        Debug.Log(totalAir);
-        candlesForOff = (int)((totalAir * -1) / airPerOffcandle) ;
-        if (offNum == candlesForOff && offNum < 11)
+        candlesForOff = (int)(totalAir / airPerOffcandle) ;
+        //Debug.Log(candlesForOff);
+        //offNum은 이번에 끌 차례인 촛불, candlesForOff는 호흡입력 결과 꺼야하는 촛불 수
+        if (offNum <= candlesForOff && offNum < 11)
         {
             candleFires[offNum - 1].SendMessage("ShrinkAndOff");
-            candleFires[offNum - 1].SendMessage("FireOff");
+            uiManager.GetComponent<CandleUIManager>().GetOffCandleStar(offNum);
             offNum++;
-
+            candleGameManager.candleOffedOnThisStage++;
         }
     }
 
-    void ResetCandles()
+    public void ResetCandles()
     {
         for(int i = 0; i < candleCount; i++)
         {
@@ -82,5 +104,8 @@ public class CandleControl2 : MonoBehaviour
         totalAir = 0f;
         offNum = 1;
         outtakeTime = 0f;
+        sensorPlus = 0f;
+        sensorMinus = 0f;
+        candlesForOff = 0;
     }
 }

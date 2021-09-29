@@ -115,6 +115,5 @@ public class FireReaction : MonoBehaviour
     public void fireOff()
     {
         offEffect.SetActive(true);
-        StopAllCoroutines();
     }
 }

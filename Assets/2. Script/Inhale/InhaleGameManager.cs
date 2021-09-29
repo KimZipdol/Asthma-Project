@@ -12,8 +12,9 @@ public class InhaleGameManager : MonoBehaviour
     public List<GameObject> inhaleEffectPool = new List<GameObject>();
     private int maxEffectPool = 3;
 
+    public float inhaleActionPotential = -200f;
     public float outtakeTime = 0f;
-    private float intakeTime = 0f;
+    public float intakedAir = 0f;
     public float sensorData { get; set; }
     public void SetsensorData(float value)
     {
@@ -26,23 +27,26 @@ public class InhaleGameManager : MonoBehaviour
     public bool isFinishScreen = false;
 
     public GameManager gameManager = null;
+    public PlayerCtrl2 playerCtrl = null;
     public GameObject foodReseter = null;
-    public GameObject rocketControl;
-    public GameObject inhaleUIManager = null;
-    public GameObject stage3Planet = null;
-    public GameObject stage4Planet = null;
-    public GameObject stage5Planet = null;
+    public InhaleUIManager inhaleUIManager = null;
     public GameObject rayCastCam = null;
+    public GameObject selectionStick = null;
     public VRUIManager vrUiManager = null;
     public InhaleSoundManager soundManager = null;
     public GameObject loggingManager = null;
 
     public float clearTime = 0f;
 
-    public enum GameState { GUIDE = 0, INHALEREADY, INHALE, EXHALE, FINISH };
+    public enum GameState { GUIDE = 0, SEEKINGFOOD, INHALEREADY, INHALE, FINISH };
     public GameState currState = GameState.GUIDE;
 
+    public int guideCount = 1;
     public int currStage = 1;
+
+    private int maxFoodeat = 15;
+    public int currFoodeat = 0;
+    public GameObject currFoodSeeing = null;
 
     public static InhaleGameManager instance = null;
     private void Awake()
@@ -55,7 +59,7 @@ public class InhaleGameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        inhaleUIManager = GameObject.Find("UIManager");
+        inhaleUIManager = GameObject.Find("UIManager").GetComponent<InhaleUIManager>();
     }
 
 
@@ -71,6 +75,12 @@ public class InhaleGameManager : MonoBehaviour
         StartCoroutine(CheckState());
     }
 
+    private void Update()
+    {
+        
+    }
+
+
     /// <summary>
     /// State 컨트롤. state가 Inhale or exhale이면 촛불에 센서 전달, Inhale일때만 UI에 흡기센서 전달
     /// </summary>
@@ -84,21 +94,51 @@ public class InhaleGameManager : MonoBehaviour
                     if (!isGuiding)
                     {
                         isGuiding = true;
-                        vrUiManager.GetComponent<VRUIManager>().ShowCandleGuide();
+                        vrUiManager.GetComponent<VRUIManager>().ShowInhaleGuide(currStage);
+                        rayCastCam.GetComponent<CamRayCast>().ResetFlag();
                     }
 
                     if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
                     {
-                        currState = GameState.INHALEREADY;
+                        if (currStage == 1)
+                        {
+                            if (guideCount == 5)
+                            {
+                                vrUiManager.GetComponent<VRUIManager>().HideInhaleStartGuide(guideCount);
+                                currState = GameState.SEEKINGFOOD;
+                            }
+                            else if (guideCount >= 0 && guideCount < 5)
+                            {
+                                vrUiManager.GetComponent<VRUIManager>().ShowInhaleStartGuide(guideCount);
+                                guideCount++;
+                                yield return new WaitForSeconds(1f);
+                            }
+                        }
+                        else
+                        {
+                            yield return new WaitForSeconds(1f);
+                            vrUiManager.HideInhaleGuide();
+                            currState = GameState.SEEKINGFOOD;
+                        }
+                        
                     }
                     break;
+                case (GameState.SEEKINGFOOD):
+                    selectionStick.SetActive(true);
+                    VRUIManager.instance.HideInhaleHud();
+                    clearTime += Time.deltaTime;
+                    playerCtrl.SeekingFood();
+                    vrUiManager.resetFill();
+                    break;
                 case (GameState.INHALEREADY):
+                    //해당 state 처입장시 1회만 작동할 코드
                     if (!inhaleReady)
                     {
                         inhaleReady = true;
-                        vrUiManager.GetComponent<VRUIManager>().HideCandleGuide();
                     }
-
+                    //해당 state 시 반복작동할 코S
+                    playerCtrl.SeekingFood();
+                    VRUIManager.instance.ShowInhaleHud();
                     clearTime += Time.deltaTime;
                     rayCastCam.GetComponent<CamRayCast>().messageSended = false;
                     if (sensorData <= gameManager.sensorActionPotential * -1f)
@@ -111,33 +151,54 @@ public class InhaleGameManager : MonoBehaviour
                     if (isInhaleing == false)
                     {
                         isInhaleing = true;
-                        //candleControl.SendMessage("ReadyForLaunch");
                         loggingManager.SendMessage("logPressure", "Inhale Start");
                     }
+
                     rayCastCam.GetComponent<CamRayCast>().messageSended = false;
                     loggingManager.SendMessage("logPressure", sensorData.ToString());
                     clearTime += Time.deltaTime;
-                    intakeTime += Time.deltaTime;
-
+                    intakedAir += sensorData;
                     vrUiManager.SendMessage("inHaleFill", sensorData);
-
-                    if (sensorData > gameManager.sensorActionPotential * -1f)
+                    if (vrUiManager.fillAmt>1f)
                     {
-                        currState = GameState.EXHALE;
+                        currFoodSeeing.SendMessage("Inhaled");
+                        playerCtrl.InhaleFood();
+                        soundManager.OnBreatheSound();
+                        EyesOffFood();
+                        yield return new WaitForSeconds(1f);
+                        soundManager.ChewSound();
                     }
-
-
-
-
-
+                    if(currFoodeat==currStage * 3)
+                    {
+                        currState = GameState.FINISH;
+                    }
                     break;
                 case (GameState.FINISH):
                     if (!isFinishScreen)
                     {
+                        selectionStick.SetActive(false);
+                        yield return new WaitForSeconds(0.5f);
+                        inhaleUIManager.InhaleScoreUI();
                         soundManager.SendMessage("ScoreBoardSound");
                         loggingManager.SendMessage("logClearTime", clearTime.ToString());
                         vrUiManager.SendMessage("ShowInhaleHud");
+                        //foodReseter.SendMessage("ResetFoods");
                         isFinishScreen = true;
+                    }
+
+
+                    if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
+                    {
+                        if (currStage == 5)
+                        {
+                            Application.Quit();
+                        }
+                        else
+                        {
+                            selectionStick.SetActive(false);
+                            if (isFinishScreen)
+                                toNextStage();
+                        }
                     }
                     break;
 
@@ -148,6 +209,19 @@ public class InhaleGameManager : MonoBehaviour
 
 
 
+    }
+
+    public void EyesOnFood()
+    {
+        currState = GameState.INHALEREADY;
+    }
+
+    public void EyesOffFood()
+    {
+        currState = GameState.SEEKINGFOOD;
+        intakedAir = 0f;
+        vrUiManager.HideInhaleHud();
+        vrUiManager.resetFill();
     }
 
     public void toNextStage()
@@ -175,8 +249,8 @@ public class InhaleGameManager : MonoBehaviour
     private void resetStage()
     {
         vrUiManager.BlockEye();
+        currState = GameState.GUIDE;
         inhaleUIManager.SendMessage("ResetUI");
-        foodReseter.SendMessage("ResetFoods");
         inhaleUIManager.SendMessage("ResetScoreUI");
         isGuiding = false;
         inhaleReady = false;
@@ -184,8 +258,8 @@ public class InhaleGameManager : MonoBehaviour
         isFinishScreen = false;
         inhaleUIManager.SendMessage("SetStage", currStage);
         rayCastCam.GetComponent<CamRayCast>().messageSended = false;
-        soundManager.GetComponent<CandleSoundManager>().StopMusic();
-        soundManager.GetComponent<CandleSoundManager>().PlayMusic();
+        soundManager.GetComponent<InhaleSoundManager>().StopMusic();
+        soundManager.GetComponent<InhaleSoundManager>().PlayMusic();
         vrUiManager.UnBlockEye();
     }
 

@@ -20,9 +20,9 @@ public class FireControl : MonoBehaviour
 
     IEnumerator shrinkAndOff()
     {
-        while(true)
+        while (true)
         {
-            if(thisTr.localScale.x<=0.01)
+            if (thisTr.localScale.x <= 0.01)
             {
                 GetComponentInParent<AudioSource>().Play();
                 offEffect.SetActive(true);
