@@ -102,7 +102,7 @@ public class VRUIManager : MonoBehaviour
     private void Start()
     {
         fillGuage = GameObject.Find("InhaleFill").GetComponent<Image>();
-        exhaleFillGuage = GameObject.Find("ExhaleFill").GetComponent<Image>();
+        //exhaleFillGuage = GameObject.Find("ExhaleFill").GetComponent<Image>();
         gameManager = GameManager.instance;
         hudTr = hudObj.GetComponent<RectTransform>();
     }
