@@ -86,12 +86,22 @@ public class Logging : MonoBehaviour
 
         writer = new StreamWriter(fs);
 
-        string logfrm = DateTime.Now.ToString("yyyyMMdd hh:mm:ss.fff") + ", " + pressure;  //작성 내용. 임시로 현재날짜쓰게돼있음.
+        string logfrm = DateTime.Now.ToString("yyyyMMdd, hh:mm:ss.fff") + ", ";
+        if (float.Parse(pressure) < -1f)
+            logfrm += ("Inhaling," + pressure);
+        else if(float.Parse(pressure) > 1f)
+            logfrm += ("Exhaling," + pressure);
         writer.WriteLine(logfrm);
         writer.Close();
         fs.Close();
     }
 
+    /// <summary>
+    /// ClearTime logging
+    /// 디렉토리에 파일이 없으면 만들고, 있으면 열어서 끝으로 이동, 클리어타임을 기록하는 함수 
+    /// 
+    /// </summary>
+    /// <param name="clearTime">클리어타임(매 프레임마다 증가)</param>
     public void logClearTime(string clearTime)
     {
         //디렉토리에 파일이 없으면 만들고, 있으면 열어서 끝으로 이동.  
@@ -121,7 +131,7 @@ public class Logging : MonoBehaviour
         }
 
         StreamWriter writer = new StreamWriter(fs);
-        string logfrm = DateTime.Now.ToString("yyyyMMdd hh:mm:ss.fff") + ", ClearTime, " + clearTime;  //작성 내용. 임시로 현재날짜쓰게돼있음.
+        string logfrm = DateTime.Now.ToString("yyyyMMdd, hh:mm:ss.fff") + ", ClearTime, " + clearTime;  //작성 내용. 임시로 현재날짜쓰게돼있음.
         writer.WriteLine(logfrm);
         writer.Close();
         fs.Close();

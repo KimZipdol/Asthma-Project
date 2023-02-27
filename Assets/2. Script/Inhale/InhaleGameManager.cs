@@ -126,7 +126,7 @@ public class InhaleGameManager : MonoBehaviour
                 case (GameState.SEEKINGFOOD):
                     selectionStick.SetActive(true);
                     VRUIManager.instance.HideInhaleHud();
-                    clearTime += Time.deltaTime;
+                    clearTime += Time.fixedDeltaTime;
                     playerCtrl.SeekingFood();
                     vrUiManager.resetFill();
                     break;
@@ -139,7 +139,7 @@ public class InhaleGameManager : MonoBehaviour
                     //해당 state 시 반복작동할 코S
                     playerCtrl.SeekingFood();
                     VRUIManager.instance.ShowInhaleHud();
-                    clearTime += Time.deltaTime;
+                    clearTime += Time.fixedDeltaTime;
                     rayCastCam.GetComponent<CamRayCast>().messageSended = false;
                     if (sensorData <= gameManager.sensorActionPotential * -1f)
                     {
@@ -156,7 +156,7 @@ public class InhaleGameManager : MonoBehaviour
 
                     rayCastCam.GetComponent<CamRayCast>().messageSended = false;
                     loggingManager.SendMessage("logPressure", sensorData.ToString());
-                    clearTime += Time.deltaTime;
+                    clearTime += Time.fixedDeltaTime;
                     intakedAir += sensorData;
                     vrUiManager.SendMessage("inHaleFill", sensorData);
                     if (vrUiManager.fillAmt>1f)

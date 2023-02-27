@@ -124,7 +124,7 @@ public class CandleGameManager2 : MonoBehaviour
                 case (GameState.SEEKINGCANDLE):
                     //yield return new WaitForSeconds(0.5f);
                     selectionStick.SetActive(true);
-                    clearTime += Time.deltaTime;
+                    clearTime += Time.fixedDeltaTime;
                     //playerCtrl.SeekingCandle();
                     vrUiManager.resetFill();
                     vrUiManager.ResetOutFill();
@@ -137,7 +137,7 @@ public class CandleGameManager2 : MonoBehaviour
                     //}
                     vrUiManager.ShowExhaleHud();
                     vrUiManager.ShowInhaleHud();
-                    clearTime += Time.deltaTime;
+                    clearTime += Time.fixedDeltaTime;
                     rayCastCam.GetComponent<CamRayCast>().ResetFlag();
                     if (sensorData <= gameManager.sensorActionPotential * -1f)
                     {
@@ -159,8 +159,8 @@ public class CandleGameManager2 : MonoBehaviour
                     }
                     rayCastCam.GetComponent<CamRayCast>().messageSended = false;
                     loggingManager.SendMessage("logPressure", sensorData.ToString());
-                    clearTime += Time.deltaTime;
-                    intakeTime += Time.deltaTime;
+                    clearTime += Time.fixedDeltaTime;
+                    intakeTime += Time.fixedDeltaTime;
 
                     vrUiManager.SendMessage("inHaleFill", sensorData);
                     candleControl[currCandleSeeing].SendMessage("Intake", sensorData);
@@ -183,8 +183,8 @@ public class CandleGameManager2 : MonoBehaviour
                     vrUiManager.exHaleFill(sensorData);
                     rayCastCam.GetComponent<CamRayCast>().messageSended = false;
                     loggingManager.GetComponent<Logging>().logPressure(sensorData.ToString());
-                    clearTime += Time.deltaTime;
-                    outtakeTime += Time.deltaTime;
+                    clearTime += Time.fixedDeltaTime;
+                    outtakeTime += Time.fixedDeltaTime;
                     candleControl[currCandleSeeing].SendMessage("turningOffFire", sensorData);
                     if (outtakeTime >= 1f)
                         isExhaled = true;

@@ -153,7 +153,7 @@ public class RocketGameManager : MonoBehaviour
                         vrUiManager.maxRocketHeight = 500 + (currStage * 100);
                     }
                     selectionStick.SetActive(true);
-                    clearTime += Time.deltaTime;
+                    clearTime += Time.fixedDeltaTime;
                     rayCastCam.GetComponent<CamRayCast>().messageSended = false;
 
                     if (sensorData <= gameManager.sensorActionPotential * -1f && (sensorData - prevSensorData) <= -2f)
@@ -175,8 +175,8 @@ public class RocketGameManager : MonoBehaviour
                     }
                     rayCastCam.GetComponent<CamRayCast>().messageSended = false;
                     loggingManager.SendMessage("logPressure", sensorData.ToString());
-                    clearTime += Time.deltaTime;
-                    intakeTime += Time.deltaTime;
+                    clearTime += Time.fixedDeltaTime;
+                    intakeTime += Time.fixedDeltaTime;
 
                     vrUiManager.SendMessage("inHaleFill", sensorData);
                     rocketControl.SendMessage("Intake", sensorData);
@@ -203,8 +203,8 @@ public class RocketGameManager : MonoBehaviour
                     vrUiManager.exHaleFill(sensorData);
                     rayCastCam.GetComponent<CamRayCast>().messageSended = false;
                     loggingManager.GetComponent<Logging>().logPressure(sensorData.ToString());
-                    clearTime += Time.deltaTime;
-                    outtakeTime += Time.deltaTime;
+                    clearTime += Time.fixedDeltaTime;
+                    outtakeTime += Time.fixedDeltaTime;
                     vrUiManager.SetHeightProgress(rocketControl.GetComponent<Transform>().position.y);
 
                     if (outtakeTime >= 1f && sensorData > gameManager.sensorActionPotential)
