@@ -4824,7 +4824,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 1e-45, y: 2.6075e-41, z: 0, w: -1}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 2.7e-44}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -14237,11 +14237,11 @@ MonoBehaviour:
   playerTr: {fileID: 963194228}
   hudObj: {fileID: 371083663}
   inhalehudTr: {fileID: 1232517251}
-  fillGuage: {fileID: 0}
+  fillGuage: {fileID: 1661196321}
   eyeBlocker: {fileID: 319265523}
   fillAmt: 0
   exhaleFillAmt: 0
-  exhaleFillGuage: {fileID: 0}
+  exhaleFillGuage: {fileID: 852015484}
   heightProgressImg: {fileID: 1547729885}
   heightTxt: {fileID: 1521022541}
   rocketRect: {fileID: 2089191162}

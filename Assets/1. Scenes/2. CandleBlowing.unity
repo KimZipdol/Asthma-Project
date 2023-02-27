@@ -14620,11 +14620,11 @@ MonoBehaviour:
   playerTr: {fileID: 994903904}
   hudObj: {fileID: 1983960253}
   inhalehudTr: {fileID: 1601338939}
-  fillGuage: {fileID: 0}
+  fillGuage: {fileID: 456344677}
   eyeBlocker: {fileID: 921793682}
   fillAmt: 0
   exhaleFillAmt: 0
-  exhaleFillGuage: {fileID: 0}
+  exhaleFillGuage: {fileID: 2001369237}
   heightProgressImg: {fileID: 0}
   heightTxt: {fileID: 0}
   rocketRect: {fileID: 0}

@@ -12743,11 +12743,11 @@ MonoBehaviour:
   playerTr: {fileID: 963194228}
   hudObj: {fileID: 371083663}
   inhalehudTr: {fileID: 463735700}
-  fillGuage: {fileID: 0}
+  fillGuage: {fileID: 1661196321}
   eyeBlocker: {fileID: 866063507}
   fillAmt: 0
   exhaleFillAmt: 0
-  exhaleFillGuage: {fileID: 0}
+  exhaleFillGuage: {fileID: 1656464841}
   heightProgressImg: {fileID: 820032167}
   heightTxt: {fileID: 1159598346}
   rocketRect: {fileID: 460382592}
