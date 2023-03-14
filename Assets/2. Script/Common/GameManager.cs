@@ -81,6 +81,14 @@ public class GameManager : MonoBehaviour
         saveCount = PlayerPrefs.GetInt("SaveCount");
     }
 
+    /// <summary>
+    /// Capacity setting용 함수
+    /// /// </summary>
+    void CapacitySetter()
+    {
+
+    }
+
     public void LoadGameData()
     {
         string filePath = Application.persistentDataPath + GameDataFileName;
