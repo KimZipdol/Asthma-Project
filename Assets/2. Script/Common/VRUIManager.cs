@@ -15,6 +15,8 @@ public class VRUIManager : MonoBehaviour
     public GameObject[] inhaleStartGuidePanels;
     public GameObject inhaleGuidePanel;
     public GameObject[] tutoStartGuidePanels;
+    public GameObject[] testStartGuidePanels;
+    public GameObject testGuidePanel;
     public GameObject inhaleBarObj;
     public GameObject exhaleBarObj;
 
@@ -85,8 +87,11 @@ public class VRUIManager : MonoBehaviour
                 break;
             case ("3. Inhaler"):
                 currGameManager = GameObject.Find("InhaleGameManager");
-                
                 break;
+            case ("0. InitialBreathTest"):
+                currGameManager = GameObject.Find("BreathTestGameManager");
+                break;
+
             default:
                 currGameManager = null;
                 break;
@@ -102,7 +107,16 @@ public class VRUIManager : MonoBehaviour
     private void Start()
     {
         fillGuage = GameObject.Find("InhaleFill").GetComponent<Image>();
-        //exhaleFillGuage = GameObject.Find("ExhaleFill").GetComponent<Image>();
+        try
+        {
+            exhaleFillGuage = GameObject.Find("ExhaleFill").GetComponent<Image>();
+        }
+        catch (System.Exception ex)
+        {
+            Debug.Log(ex);
+            exhaleFillGuage = null;
+        }
+        
         gameManager = GameManager.instance;
         hudTr = hudObj.GetComponent<RectTransform>();
     }
@@ -306,22 +320,6 @@ public class VRUIManager : MonoBehaviour
 
     }
 
-    public void ShowTutoStartGuide(int guideNum)
-    {
-        if (guideNum != 1)
-        {
-            tutoStartGuidePanels[guideNum - 2].SetActive(false);
-        }
-        tutoStartGuidePanels[guideNum-1].SetActive(true);
-
-    }
-
-    public void HideTutoStartGuide(int guideNum)
-    {
-        tutoStartGuidePanels[guideNum - 1].SetActive(false);
-
-    }
-
     public void ShowInhaleGuide(int currStage)
     {
         if (currStage == 1)
@@ -337,6 +335,36 @@ public class VRUIManager : MonoBehaviour
     public void HideInhaleGuide()
     {
         inhaleGuidePanel.SetActive(false);
+    }
+
+    public void ShowTutoStartGuide(int guideNum)
+    {
+        if (guideNum != 1)
+        {
+            tutoStartGuidePanels[guideNum - 2].SetActive(false);
+        }
+        tutoStartGuidePanels[guideNum - 1].SetActive(true);
+
+    }
+
+    public void HideTutoStartGuide(int guideNum)
+    {
+        tutoStartGuidePanels[guideNum - 1].SetActive(false);
+    }
+
+    public void ShowTestStartGuide(int guideNum)
+    {
+        if (guideNum != 1)
+        {
+            testStartGuidePanels[guideNum - 2].SetActive(false);
+        }
+        testStartGuidePanels[guideNum - 1].SetActive(true);
+
+    }
+
+    public void HideTestGuide(int guideNum)
+    {
+        tutoStartGuidePanels[guideNum - 1].SetActive(false);
     }
 
 }
