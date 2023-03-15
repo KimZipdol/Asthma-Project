@@ -1441,7 +1441,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &605830475
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1736,6 +1736,49 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 671086724}
   m_CullTransparentMesh: 0
+--- !u!1 &684045910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 684045912}
+  - component: {fileID: 684045911}
+  m_Layer: 0
+  m_Name: LoggingManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &684045911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 684045910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d407ce2518634f4e8b8bae5dcb0ccbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &684045912
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 684045910}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &737579054
 GameObject:
   m_ObjectHideFlags: 0
@@ -2768,11 +2811,11 @@ MonoBehaviour:
   playerTr: {fileID: 1627294121}
   hudObj: {fileID: 1101758728}
   inhalehudTr: {fileID: 2054695736}
-  fillGuage: {fileID: 0}
+  fillGuage: {fileID: 1259876420}
   eyeBlocker: {fileID: 0}
   fillAmt: 0
   exhaleFillAmt: 0
-  exhaleFillGuage: {fileID: 0}
+  exhaleFillGuage: {fileID: 204202103}
   heightProgressImg: {fileID: 0}
   heightTxt: {fileID: 0}
   rocketRect: {fileID: 0}
@@ -3141,10 +3184,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1114738917}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f21b7082c9bf4b219ab2bdaf5abfbda, type: 3}
+  m_Script: {fileID: 11500000, guid: c04811be8ad5f4b5dbb27692e60502cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pressureGuage: {fileID: 2002011802}
+  pressureGuage: {fileID: 2017506322}
   pressureTxt: {fileID: 2074440427}
 --- !u!4 &1114738919
 Transform:
@@ -3870,6 +3913,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1440656213
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1440656215}
+  - component: {fileID: 1440656214}
+  m_Layer: 0
+  m_Name: BreathTestGameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1440656214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440656213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67c5f3b0ee41d4a278de85998a80a2bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UImanager: {fileID: 0}
+  playerTr: {fileID: 0}
+  playTime: 0
+  intakedAir: 0
+  outtakedAir: 0
+  isTutoGuiding: 0
+  gameManager: {fileID: 1317528639}
+  uiManager: {fileID: 0}
+  selectionStick: {fileID: 0}
+  vrUiManager: {fileID: 0}
+  soundManager: {fileID: 1820524106}
+  currObjSeeing: {fileID: 0}
+  currState2: 0
+  guideCount: 1
+--- !u!4 &1440656215
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440656213}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1451017519
 GameObject:
@@ -5256,9 +5356,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1820524105}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7197d6f68351a45c1876e4a92d297b59, type: 3}
+  m_Script: {fileID: 11500000, guid: 0a9aca82710f44147ad0e129b7deb767, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backmusic: {fileID: 1743229084}
+  scoreBoard: {fileID: 0}
+  breathe: {fileID: 0}
+  chew: {fileID: 0}
+  perfectSound: {fileID: 0}
 --- !u!4 &1820524107
 Transform:
   m_ObjectHideFlags: 0

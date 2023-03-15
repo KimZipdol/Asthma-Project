@@ -4580,14 +4580,15 @@ MonoBehaviour:
   - {fileID: 1787187873}
   - {fileID: 1546842544}
   inhaleBarObj: {fileID: 779201268}
+  exhaleBarObj: {fileID: 0}
   playerTr: {fileID: 1899540235}
   hudObj: {fileID: 1840566471}
   inhalehudTr: {fileID: 779201269}
-  fillGuage: {fileID: 0}
+  fillGuage: {fileID: 838603031}
   eyeBlocker: {fileID: 0}
   fillAmt: 0
   exhaleFillAmt: 0
-  exhaleFillGuage: {fileID: 0}
+  exhaleFillGuage: {fileID: 513711098}
   heightProgressImg: {fileID: 0}
   heightTxt: {fileID: 0}
   rocketRect: {fileID: 0}
@@ -11517,7 +11518,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UImanager: {fileID: 596236406}
   playerTr: {fileID: 1899540235}
-  outtakeTime: 0
+  playTime: 0
   intakedAir: 0
   outtakedAir: 0
   isTutoGuiding: 0

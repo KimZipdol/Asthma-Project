@@ -22,8 +22,9 @@ public class GameManager : MonoBehaviour
     public float maxFev1 = 1000f;
     [SerializeField]
     public float maxFvc = 1100f;
-
+    [SerializeField]
     public float maxInhalePressure = -300f;
+    [SerializeField]
     public float maxExhalePressure = 200f;
 
     [SerializeField]
@@ -82,11 +83,19 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Capacity setting용 함수
+    /// Inhale Capacity setting용 함수
     /// /// </summary>
-    void CapacitySetter()
+    public void InhaleCapacitySetter(float inputMaxInhale, float inputInhalePressure)
     {
+        maxIntake = inputMaxInhale;
+        maxInhalePressure = inputInhalePressure;
+    }
 
+    public void ExhaleCapacitySetter(float inputMaxExhale, float inputMaxFEV1, float inputExhalePressure)
+    {
+        maxFvc = inputMaxExhale;
+        maxFev1 = inputMaxFEV1;
+        maxExhalePressure = inputExhalePressure;
     }
 
     public void LoadGameData()

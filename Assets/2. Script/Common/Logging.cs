@@ -18,7 +18,7 @@ public class Logging : MonoBehaviour
 
     int count = 1;
 
-    //Singleton
+    //Singleton. 씬전환 시에도 로그 남기는 텍스트파일 유지위함.
     public static Logging instance = null;
     private void Awake()
     {
