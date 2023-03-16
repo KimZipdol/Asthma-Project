@@ -4111,7 +4111,7 @@ MonoBehaviour:
   isTutoGuiding: 0
   gameManager: {fileID: 1317528639}
   uiManager: {fileID: 0}
-  selectionStick: {fileID: 0}
+  selectionStick: {fileID: 495102041}
   vrUiManager: {fileID: 0}
   soundManager: {fileID: 1820524106}
   currObjSeeing: {fileID: 0}
@@ -4298,6 +4298,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1493991751}
+  - component: {fileID: 1493991752}
+  - component: {fileID: 1493991753}
   m_Layer: 0
   m_Name: Balloons
   m_TagString: Untagged
@@ -4324,6 +4326,39 @@ Transform:
   m_Father: {fileID: 383061188}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1493991752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493991750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1abcfa9e40ae94248ae5e102ead891ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inflation: {fileID: 8300000, guid: 013fc680d95ebac4fa51e507ff29d204, type: 3}
+  deflation: {fileID: 8300000, guid: 544b1113760c2a444b26405644e161ce, type: 3}
+  deformationRatio: 0.1
+--- !u!114 &1493991753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493991750}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dcd42887e1f94cd7b6f2b3e172ee776, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0.432435, g: 0.9622642, b: 0.41304737, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &1551084514
 GameObject:
   m_ObjectHideFlags: 0

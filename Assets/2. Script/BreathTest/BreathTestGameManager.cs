@@ -5,56 +5,55 @@ using UnityEngine.SceneManagement;
 
 public class BreathTestGameManager : MonoBehaviour
 {
-    public GameObject UImanager = null;
-    public Transform playerTr = null;
+    
 
-    public float playTime = 0f;
-    public float intakedAir = 0f;
-    public float outtakedAir = 0f;
+    public enum TestGameState
+    {
+        TUTORIALGUIDE = 0, BREATHEREADY, BREATHING, FINISH
+    };
+    public TestGameState currState3 = TestGameState.TUTORIALGUIDE;
+
+    public float outtakeTime = 0f;
+    private float intakeTime = 0f;
     public float sensorData { get; set; }
     public void SetsensorData(float value)
     {
         sensorData = value;
     }
 
-    //public bool isInhaleGuiding = false;
-    //public bool inhaleReady = false;
-    //public bool isInhaleing = false;
-    //public bool isExhaleGuiding = false;
-    //public bool exhaleReady = false;
-    //public bool isExhaleing = false;
-    //public bool isBreatheGuiding = false;
-    //public bool breatheReady = false;
-    //public bool isBreatheing = false;
-    //public bool isFinishScreen = false;
+    public float prevSensorData = 0;
 
-    public bool isTutoGuiding = false;
+    private Scene currScene;
+
+    public bool isGuiding = false;
+    public bool inhaleReady = false;
+    public bool launchReady = false;
+    public bool isRocketFlying = false;
+    public bool isFinishScreen = false;
+
+    public int guideCount = 1;
 
     public GameManager gameManager = null;
-    public BreathTestUIManager uiManager = null;
+    public GameObject rocketControl;
+    public GameObject rocketUIManager = null;
+    public GameObject stage3Planet = null;
+    public GameObject stage4Planet = null;
+    public GameObject stage5Planet = null;
+    public GameObject rayCastCam = null;
     public GameObject selectionStick = null;
     public VRUIManager vrUiManager = null;
-    public BreathTestSoundManager soundManager = null;
+    public RocketSoundManager soundManager = null;
+    public GameObject loggingManager = null;
 
-    public GameObject currObjSeeing = null;
+    public float clearTime = 0f;
 
-    //public enum GameState1
-    //{
-    //    INHALEGUIDE = 0, SEEKINGINHALETARGET, INHALEREADY, INHALE,
-    //    EXHALEGUIDE, SEEKINGEXHALETARGET, EXHALEREADY, EXHALE,
-    //    BREATHEGUIDE, SEEKINGBREEATHEETARGET, BREATHEREADY, BREATHE, FINISH
-    //};
-    //public GameState1 currState1;
+    public enum RocketState { GUIDE = 0, INHALEREADY, INHALE, EXHALE, FINISH };
+    public RocketState currState = RocketState.GUIDE;
 
-    public enum GameState2
-    {
-        TUTORIALGUIDE = 0, SEEKINGTARGET, BREATHEREADY, BREATHING, FINISH
-    };
-    public GameState2 currState2 = GameState2.TUTORIALGUIDE;
-
-    public int guideCount = 2;
+    public int currStage = 1;
 
     public static BreathTestGameManager instance = null;
+
     private void Awake()
     {
         if (instance == null)
@@ -65,251 +64,296 @@ public class BreathTestGameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        uiManager = GameObject.Find("UIManager").GetComponent<BreathTestUIManager>();
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        rocketUIManager = GameObject.Find("UIManager");
     }
 
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        switch (scene.name)
+        {
 
-    // Start is called before the first frame update
-    void Start()
+            case ("1-2. RocketStage2"):
+                currStage = 2;
+
+                break;
+            case ("1-345. RocketStage345"):
+                currStage = 3;
+                break;
+
+        }
+        Debug.Log("currstage: " + currStage);
+        rocketUIManager.SendMessage("SetStage", currStage);
+    }
+
+    private void Start()
     {
         gameManager = GameManager.instance;
         vrUiManager = VRUIManager.instance;
-        StartCoroutine(CheckState2());
+        loggingManager = GameObject.Find("LoggingManager");
+
+        StartCoroutine(CheckState());
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    // Update is called once per frame
-    void Update()
+    void GetCurrScene(Scene scene, LoadSceneMode mode)
+    {
+        currScene = scene;
+    }
+
+
+    private void Update()
     {
 
     }
 
     /// <summary>
-    /// State 컨트롤 1. 각각의 훈련을 따로 하는 코루틴
-    /// /// </summary>
-    //IEnumerator CheckState1()
-    //{
-    //    while (true)
-    //    {
-    //        switch (currState)
-    //        {
-    //            case (GameState.GUIDE):
-    //                if (!isGuiding)
-    //                {
-    //                    isGuiding = true;
-    //                    vrUiManager.GetComponent<VRUIManager>().ShowInhaleGuide(currStage);
-    //                    rayCastCam.GetComponent<CamRayCast>().ResetFlag();
-    //                }
-
-    //                if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
-    //                {
-    //                    if (currStage == 1)
-    //                    {
-    //                        if (guideCount == 5)
-    //                        {
-    //                            vrUiManager.GetComponent<VRUIManager>().HideInhaleStartGuide(guideCount);
-    //                            currState = GameState.SEEKINGFOOD;
-    //                        }
-    //                        else if (guideCount >= 0 && guideCount < 5)
-    //                        {
-    //                            vrUiManager.GetComponent<VRUIManager>().ShowInhaleStartGuide(guideCount);
-    //                            guideCount++;
-    //                            yield return new WaitForSeconds(1f);
-    //                        }
-    //                    }
-    //                    else
-    //                    {
-    //                        vrUiManager.HideInhaleGuide();
-    //                        currState = GameState.SEEKINGFOOD;
-    //                    }
-
-    //                }
-    //                break;
-    //            case (GameState.SEEKINGFOOD):
-    //                selectionStick.SetActive(true);
-    //                VRUIManager.instance.HideInhaleHud();
-    //                clearTime += Time.deltaTime;
-    //                playerCtrl.SeekingFood();
-    //                vrUiManager.resetFill();
-    //                break;
-    //            case (GameState.INHALEREADY):
-    //                //해당 state 처입장시 1회만 작동할 코드
-    //                if (!inhaleReady)
-    //                {
-    //                    inhaleReady = true;
-    //                }
-    //                //해당 state 시 반복작동할 코S
-    //                playerCtrl.SeekingFood();
-    //                VRUIManager.instance.ShowInhaleHud();
-    //                clearTime += Time.deltaTime;
-    //                rayCastCam.GetComponent<CamRayCast>().messageSended = false;
-    //                if (sensorData <= gameManager.sensorActionPotential * -1f)
-    //                {
-    //                    currState = GameState.INHALE;
-    //                    BluetoothManager.instance.checkingBLE = false;
-    //                }
-    //                break;
-    //            case (GameState.INHALE):
-    //                if (isInhaleing == false)
-    //                {
-    //                    isInhaleing = true;
-    //                    loggingManager.SendMessage("logPressure", "Inhale Start");
-    //                }
-
-    //                rayCastCam.GetComponent<CamRayCast>().messageSended = false;
-    //                loggingManager.SendMessage("logPressure", sensorData.ToString());
-    //                clearTime += Time.deltaTime;
-    //                intakedAir += sensorData;
-    //                vrUiManager.SendMessage("inHaleFill", sensorData);
-    //                if (vrUiManager.fillAmt > 1f)
-    //                {
-    //                    currFoodSeeing.SendMessage("Inhaled");
-    //                    playerCtrl.InhaleFood();
-    //                    soundManager.OnBreatheSound();
-    //                    EyesOffFood();
-    //                    yield return new WaitForSeconds(1f);
-    //                    soundManager.ChewSound();
-    //                }
-    //                if (currFoodeat == currStage * 3)
-    //                {
-    //                    currState = GameState.FINISH;
-    //                }
-    //                break;
-    //            case (GameState.FINISH):
-    //                if (!isFinishScreen)
-    //                {
-    //                    selectionStick.SetActive(false);
-    //                    yield return new WaitForSeconds(0.5f);
-    //                    inhaleUIManager.InhaleScoreUI();
-    //                    soundManager.SendMessage("ScoreBoardSound");
-    //                    loggingManager.SendMessage("logClearTime", clearTime.ToString());
-    //                    vrUiManager.SendMessage("ShowInhaleHud");
-    //                    //foodReseter.SendMessage("ResetFoods");
-    //                    isFinishScreen = true;
-    //                }
-
-
-    //                if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
-    //                {
-    //                    if (currStage == 5)
-    //                    {
-    //                        Application.Quit();
-    //                    }
-    //                    else
-    //                    {
-    //                        selectionStick.SetActive(false);
-    //                        if (isFinishScreen)
-    //                            toNextStage();
-    //                    }
-    //                }
-    //                break;
-
-    //        }
-
-    //        yield return null;
-    //    }
-
-    IEnumerator CheckState2()
+    /// State 컨트롤. state가 Inhale or exhale이면 로켓에 센서 전달, Inhale일때만 UI에 흡기센서 전달
+    /// </summary>
+    IEnumerator CheckState()
     {
         while (true)
         {
-            switch (currState2)
+            switch (currState)
             {
-                case GameState2.TUTORIALGUIDE:
-                    if (!isTutoGuiding)
+                case (RocketState.GUIDE):
+                    if (!isGuiding)
                     {
-                        vrUiManager.ShowTutoStartGuide(1);
-                        isTutoGuiding = true;
+                        isGuiding = true;
+                        vrUiManager.GetComponent<VRUIManager>().ShowGuide(currStage);
+                        vrUiManager.SetHeightProgress(0.0f);
+                        rocketUIManager.SendMessage("ResetUI");
                     }
-                    vrUiManager.HideInhaleHud();
 
                     if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
                     {
-                        Debug.Log("터치");
-                        if (guideCount == 5)
+                        if (currStage == 1)
                         {
-                            vrUiManager.HideTutoStartGuide(guideCount);
-                            currState2 = GameState2.SEEKINGTARGET;
+                            if (guideCount == 4)
+                            {
+                                vrUiManager.GetComponent<VRUIManager>().HideRocketStartGuide(guideCount);
+                                currState = RocketState.INHALEREADY;
+                            }
+                            else if (guideCount >= 0 && guideCount < 4)
+                            {
+                                vrUiManager.GetComponent<VRUIManager>().ShowRocketStartGuide(guideCount);
+                                guideCount++;
+                                yield return new WaitForSeconds(1f);
+                            }
                         }
-                        else if (guideCount >= 1 && guideCount < 5)
+                        else
                         {
-                            guideCount++;
-                            vrUiManager.ShowTutoStartGuide(guideCount);
                             yield return new WaitForSeconds(1f);
+                            vrUiManager.HideGuide(currStage);
+                            currState = RocketState.INHALEREADY;
                         }
-                        //currState2 = GameState2.SEEKINGTARGET;
                     }
                     break;
-                case GameState2.SEEKINGTARGET:
+                case (RocketState.INHALEREADY):
+                    if (!inhaleReady)
+                    {
+                        inhaleReady = true;
+                        vrUiManager.resetFill();
+                        vrUiManager.ResetOutFill();
+                        vrUiManager.ShowInhaleHud();
+                        vrUiManager.ShowExhaleHud();
+                        vrUiManager.maxRocketHeight = 500 + (currStage * 100);
+                    }
                     selectionStick.SetActive(true);
-                    vrUiManager.resetFill();
-                    vrUiManager.ResetOutFill();
-                    playTime += Time.deltaTime;
-                    if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
+                    clearTime += Time.fixedDeltaTime;
+                    rayCastCam.GetComponent<CamRayCast>().messageSended = false;
+
+                    if (sensorData <= gameManager.sensorActionPotential * -1f && (sensorData - prevSensorData) <= -2f)
                     {
-                        if (playTime >= 10f)
-                            currState2 = GameState2.FINISH;
+                        currState = RocketState.INHALE;
+                        //BluetoothManager.instance.checkingBLE = false;
                     }
+                    prevSensorData = sensorData;
                     break;
-                case GameState2.BREATHEREADY:
-                    playTime += Time.deltaTime;
-                    if (sensorData < -1f || sensorData > 1f)
-                        currState2 = GameState2.BREATHING;
-                    if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
+                case (RocketState.INHALE):
+                    if (launchReady == false)
                     {
-                        if (playTime >= 10f)
-                            currState2 = GameState2.FINISH;
+                        launchReady = true;
+                        if (currStage == 1)
+                        {
+                            rocketControl.SendMessage("ReadyForLaunch");
+                        }
+                        loggingManager.SendMessage("logPressure", "Inhale Start");
                     }
-                    break;
-                case GameState2.BREATHING:
-                    vrUiManager.ShowInhaleHud();
-                    uiManager.SetPressureTxt(sensorData);
-                    if (sensorData > 0f)
+                    rayCastCam.GetComponent<CamRayCast>().messageSended = false;
+                    loggingManager.SendMessage("logPressure", sensorData.ToString());
+                    clearTime += Time.fixedDeltaTime;
+                    intakeTime += Time.fixedDeltaTime;
+
+                    vrUiManager.SendMessage("inHaleFill", sensorData);
+                    rocketControl.SendMessage("Intake", sensorData);
+
+                    if (sensorData > gameManager.sensorActionPotential && (sensorData - prevSensorData) >= 2f)
                     {
-                        vrUiManager.exHaleFill(sensorData);
-                        currObjSeeing.SendMessage("OnExhale", sensorData);
-                        if ((sensorData / gameManager.maxInhalePressure) < 0f)
-                            uiManager.SetPressureGuage(sensorData / gameManager.maxInhalePressure * -1f);
-                        else
-                            uiManager.SetPressureGuage(sensorData / gameManager.maxInhalePressure);
+                        currState = RocketState.EXHALE;
                     }
-                    else if (sensorData < 0f)
-                    {
-                        vrUiManager.inHaleFill(sensorData);
-                        currObjSeeing.SendMessage("OnInhale", sensorData);
-                        if ((sensorData / gameManager.maxInhalePressure) > 0f)
-                            uiManager.SetPressureGuage(sensorData / gameManager.maxInhalePressure * -1f);
-                        else
-                            uiManager.SetPressureGuage(sensorData / gameManager.maxInhalePressure);
-                    }
+                    prevSensorData = sensorData;
+
+
 
 
                     break;
-                case GameState2.FINISH:
+                case (RocketState.EXHALE):
+                    if (!isRocketFlying)
+                    {
+                        isRocketFlying = true;
+                        rocketControl.SendMessage("startLaunching");
+                        soundManager.StopMusic();
+                        soundManager.SendMessage("OnLaunchSound");
+                        loggingManager.SendMessage("logPressure", "Exhale Start");
+                    }
+                    vrUiManager.exHaleFill(sensorData);
+                    rayCastCam.GetComponent<CamRayCast>().messageSended = false;
+                    loggingManager.GetComponent<Logging>().logPressure(sensorData.ToString());
+                    clearTime += Time.fixedDeltaTime;
+                    outtakeTime += Time.fixedDeltaTime;
+                    vrUiManager.SetHeightProgress(rocketControl.GetComponent<Transform>().position.y);
+
+                    if (outtakeTime >= 1f && sensorData > gameManager.sensorActionPotential)
+                    {
+                        rocketControl.SendMessage("FvcOuttake", sensorData);
+                        //vrUiManager.HideExhaleHud();
+                        //vrUiManager.HideInhaleHud();
+                    }
+                    else if (outtakeTime < 1f)
+                    {
+                        rocketControl.SendMessage("Fev1Outtake", sensorData);
+                    }
+
+
+
+
+                    break;
+
+                case (RocketState.FINISH):
                     selectionStick.SetActive(false);
-                    vrUiManager.HideInhaleHud();
-                    vrUiManager.HideExhaleHud();
-                    if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
+                    if (!isFinishScreen)
                     {
-                        Application.Quit();
+                        vrUiManager.HideExhaleHud();
+                        vrUiManager.HideInhaleHud();
+                        soundManager.SendMessage("ScoreBoardSound");
+                        loggingManager.SendMessage("logClearTime", clearTime.ToString());
+                        //vrUiManager.SendMessage("ShowInhaleHud");
+
+                        isFinishScreen = true;
+                    }
+                    else if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
+                    {
+                        if (currStage == 5)
+                        {
+                            Application.Quit();
+                        }
+                        else
+                        {
+                            toNextStage();
+                        }
+
                     }
                     break;
+
             }
+
             yield return null;
+        }
+
+
+
+    }
+
+
+    void InhaleFinished()
+    {
+        currState = RocketState.EXHALE;
+        rocketControl.SendMessage("startLaunching");
+    }
+
+    public void SensorStart()
+    {
+        rocketControl.SendMessage("InHaleStart");
+    }
+
+    public void toFinishState()
+    {
+        currState3 = BreathTestGameManager.TestGameState.FINISH;
+
+    }
+
+    public void toNextStage()
+    {
+        switch (currStage)
+        {
+            case 1:
+                SceneManager.LoadScene("1-2. RocketStage2", LoadSceneMode.Single);
+                break;
+            case 2:
+                SceneManager.LoadScene("1-345. RocketStage345", LoadSceneMode.Single);
+                break;
+            case 3:
+                currStage = 4;
+                setStage4();
+                currState = RocketState.GUIDE;
+                break;
+            case 4:
+                currStage = 5;
+                setStage5();
+                currState = RocketState.GUIDE;
+                break;
         }
     }
 
-    public void EyesOnBall()
+
+
+
+    private void resetStage()
     {
-        currState2 = GameState2.BREATHEREADY;
+        rocketControl.gameObject.SetActive(true);
+        rocketControl.SendMessage("ResetRocket");
+        rocketUIManager.SendMessage("ResetScoreUI");
     }
 
-    public void EyesOffBall()
+    void setStage4()
     {
-        currState2 = GameState2.SEEKINGTARGET;
-        intakedAir = 0f;
-        outtakedAir = 0f;
-        vrUiManager.HideInhaleHud();
+        vrUiManager.BlockEye();
+        rocketUIManager.SendMessage("ResetUI");
+        stage3Planet.gameObject.SetActive(false);
+        stage4Planet.gameObject.SetActive(true);
         vrUiManager.resetFill();
+        vrUiManager.ResetOutFill();
+        resetStage();
+        isGuiding = false;
+        inhaleReady = false;
+        launchReady = false;
+        isRocketFlying = false;
+        isFinishScreen = false;
+        rocketUIManager.SendMessage("SetStage", currStage);
+        rayCastCam.GetComponent<CamRayCast>().messageSended = false;
+        soundManager.GetComponent<RocketSoundManager>().PlayMusic();
+        vrUiManager.UnBlockEye();
+    }
+
+    void setStage5()
+    {
+        vrUiManager.BlockEye();
+        rocketUIManager.SendMessage("ResetUI");
+        stage4Planet.gameObject.SetActive(false);
+        stage5Planet.gameObject.SetActive(true);
+        vrUiManager.resetFill();
+        vrUiManager.ResetOutFill();
+        resetStage();
+        isGuiding = false;
+        inhaleReady = false;
+        launchReady = false;
+        isRocketFlying = false;
+        isFinishScreen = false;
+        rocketUIManager.SendMessage("SetStage", currStage);
+        soundManager.GetComponent<RocketSoundManager>().PlayMusic();
+        vrUiManager.UnBlockEye();
     }
 
 }

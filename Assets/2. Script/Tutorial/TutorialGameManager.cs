@@ -51,6 +51,8 @@ public class TutorialGameManager : MonoBehaviour
     };
     public GameState2 currState2 = GameState2.TUTORIALGUIDE;
 
+    
+
     public int guideCount = 2;
 
     public static TutorialGameManager instance = null;
