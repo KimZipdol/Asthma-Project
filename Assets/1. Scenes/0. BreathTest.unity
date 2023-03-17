@@ -1822,7 +1822,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Sensor Start
+  m_Text: Next Stage
 --- !u!222 &671086727
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2377,7 +2377,7 @@ GameObject:
   - component: {fileID: 890985959}
   - component: {fileID: 890985958}
   m_Layer: 5
-  m_Name: SensorStartButton
+  m_Name: NextStageButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2907,15 +2907,20 @@ MonoBehaviour:
   - {fileID: 909823653}
   - {fileID: 347423239}
   - {fileID: 1451017519}
-  testStartGuidePanels: []
+  testStartGuidePanels:
+  - {fileID: 2111719020}
+  - {fileID: 1659264615}
+  - {fileID: 909823653}
+  - {fileID: 347423239}
+  - {fileID: 1451017519}
   testGuidePanel: {fileID: 0}
-  inhaleBarObj: {fileID: 2054695735}
-  exhaleBarObj: {fileID: 0}
+  inhaleBarObj: {fileID: 1124680361}
+  exhaleBarObj: {fileID: 1768571350}
   playerTr: {fileID: 1627294121}
   hudObj: {fileID: 1101758728}
   inhalehudTr: {fileID: 2054695736}
   fillGuage: {fileID: 1259876420}
-  eyeBlocker: {fileID: 0}
+  eyeBlocker: {fileID: 1699143349}
   fillAmt: 0
   exhaleFillAmt: 0
   exhaleFillGuage: {fileID: 204202103}
@@ -3613,8 +3618,8 @@ MonoBehaviour:
   sensorText: {fileID: 369193661}
   vrSensorText: {fileID: 0}
   checkingBLE: 1
-  logging: {fileID: 0}
-  currGameManager: {fileID: 0}
+  logging: {fileID: 684045910}
+  currGameManager: {fileID: 1440656213}
 --- !u!4 &1204370618
 Transform:
   m_ObjectHideFlags: 0
@@ -4103,20 +4108,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67c5f3b0ee41d4a278de85998a80a2bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UImanager: {fileID: 0}
-  playerTr: {fileID: 0}
-  playTime: 0
-  intakedAir: 0
-  outtakedAir: 0
-  isTutoGuiding: 0
+  currState3: 0
+  outtakeTime: 0
+  prevSensorData: 0
+  isGuiding: 0
+  inhaleReady: 0
+  launchReady: 0
+  isRocketFlying: 0
+  isFinishScreen: 0
+  guideCount: 0
   gameManager: {fileID: 1317528639}
-  uiManager: {fileID: 0}
+  rocketControl: {fileID: 0}
+  testUIManager: {fileID: 0}
+  stage3Planet: {fileID: 0}
+  stage4Planet: {fileID: 0}
+  stage5Planet: {fileID: 0}
+  rayCastCam: {fileID: 1627294120}
   selectionStick: {fileID: 495102041}
-  vrUiManager: {fileID: 0}
+  vrUiManager: {fileID: 1070941317}
   soundManager: {fileID: 1820524106}
-  currObjSeeing: {fileID: 0}
-  currState2: 0
-  guideCount: 1
+  loggingManager: {fileID: 684045910}
+  clearTime: 0
+  currStage: 1
 --- !u!4 &1440656215
 Transform:
   m_ObjectHideFlags: 0
@@ -4455,7 +4468,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1561188157
 RectTransform:
   m_ObjectHideFlags: 0

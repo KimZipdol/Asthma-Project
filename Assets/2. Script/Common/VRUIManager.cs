@@ -306,7 +306,7 @@ public class VRUIManager : MonoBehaviour
 
     public void ShowInhaleStartGuide(int guideNum)
     {
-        if (guideNum != 0)
+        if (guideNum > 1)
         {
             inhaleStartGuidePanels[guideNum - 1].SetActive(false);
         }
@@ -339,11 +339,11 @@ public class VRUIManager : MonoBehaviour
 
     public void ShowTutoStartGuide(int guideNum)
     {
-        if (guideNum != 1)
+        if (guideNum > 1)
         {
-            tutoStartGuidePanels[guideNum - 2].SetActive(false);
+            tutoStartGuidePanels[guideNum - 1].SetActive(false);
         }
-        tutoStartGuidePanels[guideNum - 1].SetActive(true);
+        tutoStartGuidePanels[guideNum].SetActive(true);
 
     }
 
@@ -354,12 +354,20 @@ public class VRUIManager : MonoBehaviour
 
     public void ShowTestStartGuide(int guideNum)
     {
-        if (guideNum != 1)
+        if (guideNum >= 1 && guideNum < 5)
         {
-            testStartGuidePanels[guideNum - 2].SetActive(false);
+            testStartGuidePanels[guideNum - 1].SetActive(false);
+            testStartGuidePanels[guideNum].SetActive(true);
         }
-        testStartGuidePanels[guideNum - 1].SetActive(true);
-
+        else if(guideNum== 0)
+        {
+            testStartGuidePanels[guideNum].SetActive(true);
+        }
+        else
+        {
+            Debug.Log("GuideNum error: " + guideNum);
+        }
+        
     }
 
     public void HideTestGuide(int guideNum)

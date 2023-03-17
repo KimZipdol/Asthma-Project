@@ -9,12 +9,19 @@ public class BreathTestGameManager : MonoBehaviour
 
     public enum TestGameState
     {
-        TUTORIALGUIDE = 0, BREATHEREADY, BREATHING, FINISH
+        TUTORIALGUIDE = 0, INHALEREADY, INHALE, EXHALE, FINISH
     };
     public TestGameState currState3 = TestGameState.TUTORIALGUIDE;
 
     public float outtakeTime = 0f;
     private float intakeTime = 0f;
+
+    private float[] maxInhalePressure = new float[3];
+    private float[] maxInhaleCapacity = new float[3];
+    private float[] maxExhalePressure = new float[3];
+    private float[] maxExhaleCapacity = new float[3];
+
+
     public float sensorData { get; set; }
     public void SetsensorData(float value)
     {
@@ -31,24 +38,21 @@ public class BreathTestGameManager : MonoBehaviour
     public bool isRocketFlying = false;
     public bool isFinishScreen = false;
 
-    public int guideCount = 1;
+    public int guideCount = 0;
 
     public GameManager gameManager = null;
     public GameObject rocketControl;
-    public GameObject rocketUIManager = null;
+    public GameObject testUIManager = null;
     public GameObject stage3Planet = null;
     public GameObject stage4Planet = null;
     public GameObject stage5Planet = null;
     public GameObject rayCastCam = null;
     public GameObject selectionStick = null;
     public VRUIManager vrUiManager = null;
-    public RocketSoundManager soundManager = null;
+    public BreathTestSoundManager soundManager = null;
     public GameObject loggingManager = null;
 
     public float clearTime = 0f;
-
-    public enum RocketState { GUIDE = 0, INHALEREADY, INHALE, EXHALE, FINISH };
-    public RocketState currState = RocketState.GUIDE;
 
     public int currStage = 1;
 
@@ -66,7 +70,7 @@ public class BreathTestGameManager : MonoBehaviour
         }
 
         SceneManager.sceneLoaded += OnSceneLoaded;
-        rocketUIManager = GameObject.Find("UIManager");
+        testUIManager = GameObject.Find("UIManager");
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -84,7 +88,7 @@ public class BreathTestGameManager : MonoBehaviour
 
         }
         Debug.Log("currstage: " + currStage);
-        rocketUIManager.SendMessage("SetStage", currStage);
+        testUIManager.SendMessage("SetStage", currStage);
     }
 
     private void Start()
@@ -115,29 +119,29 @@ public class BreathTestGameManager : MonoBehaviour
     {
         while (true)
         {
-            switch (currState)
+            switch (currState3)
             {
-                case (RocketState.GUIDE):
+                case (TestGameState.TUTORIALGUIDE):
                     if (!isGuiding)
                     {
                         isGuiding = true;
-                        vrUiManager.GetComponent<VRUIManager>().ShowGuide(currStage);
-                        vrUiManager.SetHeightProgress(0.0f);
-                        rocketUIManager.SendMessage("ResetUI");
+                        vrUiManager.GetComponent<VRUIManager>().ShowTestStartGuide(guideCount);
+                        //vrUiManager.SetHeightProgress(0.0f);
+                        testUIManager.SendMessage("ResetUI");
                     }
 
                     if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
                     {
                         if (currStage == 1)
                         {
-                            if (guideCount == 4)
+                            if (guideCount == 5)
                             {
-                                vrUiManager.GetComponent<VRUIManager>().HideRocketStartGuide(guideCount);
-                                currState = RocketState.INHALEREADY;
+                                vrUiManager.GetComponent<VRUIManager>().HideTestGuide(guideCount);
+                                currState3 = TestGameState.INHALEREADY;
                             }
-                            else if (guideCount >= 0 && guideCount < 4)
+                            else if (guideCount >= 0 && guideCount < 5)
                             {
-                                vrUiManager.GetComponent<VRUIManager>().ShowRocketStartGuide(guideCount);
+                                vrUiManager.GetComponent<VRUIManager>().ShowTestStartGuide(guideCount);
                                 guideCount++;
                                 yield return new WaitForSeconds(1f);
                             }
@@ -145,12 +149,12 @@ public class BreathTestGameManager : MonoBehaviour
                         else
                         {
                             yield return new WaitForSeconds(1f);
-                            vrUiManager.HideGuide(currStage);
-                            currState = RocketState.INHALEREADY;
+                            vrUiManager.ShowTestStartGuide(currStage);
+                            currState3 = TestGameState.INHALEREADY;
                         }
                     }
                     break;
-                case (RocketState.INHALEREADY):
+                case (TestGameState.INHALEREADY):
                     if (!inhaleReady)
                     {
                         inhaleReady = true;
@@ -158,7 +162,6 @@ public class BreathTestGameManager : MonoBehaviour
                         vrUiManager.ResetOutFill();
                         vrUiManager.ShowInhaleHud();
                         vrUiManager.ShowExhaleHud();
-                        vrUiManager.maxRocketHeight = 500 + (currStage * 100);
                     }
                     selectionStick.SetActive(true);
                     clearTime += Time.fixedDeltaTime;
@@ -166,12 +169,12 @@ public class BreathTestGameManager : MonoBehaviour
 
                     if (sensorData <= gameManager.sensorActionPotential * -1f && (sensorData - prevSensorData) <= -2f)
                     {
-                        currState = RocketState.INHALE;
+                        currState3 = TestGameState.INHALE;
                         //BluetoothManager.instance.checkingBLE = false;
                     }
                     prevSensorData = sensorData;
                     break;
-                case (RocketState.INHALE):
+                case (TestGameState.INHALE):
                     if (launchReady == false)
                     {
                         launchReady = true;
@@ -191,7 +194,7 @@ public class BreathTestGameManager : MonoBehaviour
 
                     if (sensorData > gameManager.sensorActionPotential && (sensorData - prevSensorData) >= 2f)
                     {
-                        currState = RocketState.EXHALE;
+                        currState3 = TestGameState.EXHALE;
                     }
                     prevSensorData = sensorData;
 
@@ -199,7 +202,7 @@ public class BreathTestGameManager : MonoBehaviour
 
 
                     break;
-                case (RocketState.EXHALE):
+                case (TestGameState.EXHALE):
                     if (!isRocketFlying)
                     {
                         isRocketFlying = true;
@@ -231,7 +234,7 @@ public class BreathTestGameManager : MonoBehaviour
 
                     break;
 
-                case (RocketState.FINISH):
+                case (TestGameState.FINISH):
                     selectionStick.SetActive(false);
                     if (!isFinishScreen)
                     {
@@ -269,7 +272,7 @@ public class BreathTestGameManager : MonoBehaviour
 
     void InhaleFinished()
     {
-        currState = RocketState.EXHALE;
+        currState3 = TestGameState.EXHALE;
         rocketControl.SendMessage("startLaunching");
     }
 
@@ -297,12 +300,12 @@ public class BreathTestGameManager : MonoBehaviour
             case 3:
                 currStage = 4;
                 setStage4();
-                currState = RocketState.GUIDE;
+                currState3 = TestGameState.TUTORIALGUIDE;
                 break;
             case 4:
                 currStage = 5;
                 setStage5();
-                currState = RocketState.GUIDE;
+                currState3 = TestGameState.TUTORIALGUIDE;
                 break;
         }
     }
@@ -314,13 +317,13 @@ public class BreathTestGameManager : MonoBehaviour
     {
         rocketControl.gameObject.SetActive(true);
         rocketControl.SendMessage("ResetRocket");
-        rocketUIManager.SendMessage("ResetScoreUI");
+        testUIManager.SendMessage("ResetScoreUI");
     }
 
     void setStage4()
     {
         vrUiManager.BlockEye();
-        rocketUIManager.SendMessage("ResetUI");
+        testUIManager.SendMessage("ResetUI");
         stage3Planet.gameObject.SetActive(false);
         stage4Planet.gameObject.SetActive(true);
         vrUiManager.resetFill();
@@ -331,16 +334,16 @@ public class BreathTestGameManager : MonoBehaviour
         launchReady = false;
         isRocketFlying = false;
         isFinishScreen = false;
-        rocketUIManager.SendMessage("SetStage", currStage);
+        testUIManager.SendMessage("SetStage", currStage);
         rayCastCam.GetComponent<CamRayCast>().messageSended = false;
-        soundManager.GetComponent<RocketSoundManager>().PlayMusic();
+        soundManager.GetComponent<BreathTestSoundManager>().PlayMusic();
         vrUiManager.UnBlockEye();
     }
 
     void setStage5()
     {
         vrUiManager.BlockEye();
-        rocketUIManager.SendMessage("ResetUI");
+        testUIManager.SendMessage("ResetUI");
         stage4Planet.gameObject.SetActive(false);
         stage5Planet.gameObject.SetActive(true);
         vrUiManager.resetFill();
@@ -351,8 +354,8 @@ public class BreathTestGameManager : MonoBehaviour
         launchReady = false;
         isRocketFlying = false;
         isFinishScreen = false;
-        rocketUIManager.SendMessage("SetStage", currStage);
-        soundManager.GetComponent<RocketSoundManager>().PlayMusic();
+        testUIManager.SendMessage("SetStage", currStage);
+        soundManager.GetComponent<BreathTestSoundManager>().PlayMusic();
         vrUiManager.UnBlockEye();
     }
 

@@ -20,6 +20,11 @@ public class BreathTestUIManager : MonoBehaviour
 
     }
 
+    public void ResetUI()
+    {
+
+    }
+
     public void SetPressureGuage(float pressure)
     {
         pressureGuage.localPosition = new Vector3(0f, pressure * 40f, 0f);
@@ -28,5 +33,10 @@ public class BreathTestUIManager : MonoBehaviour
     public void SetPressureTxt(float pressure)
     {
         pressureTxt.text = pressure.ToString();
+    }
+
+    public void SetStage(int currStage)
+    {
+
     }
 }

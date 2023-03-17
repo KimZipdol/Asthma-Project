@@ -23,7 +23,7 @@ public class RocketGameManager : MonoBehaviour
     public bool isRocketFlying = false;
     public bool isFinishScreen = false;
 
-    public int guideCount = 1;
+    public int guideCount = 0;
 
     public GameManager gameManager = null;
     public GameObject rocketControl;
