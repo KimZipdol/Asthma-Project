@@ -10168,7 +10168,7 @@ GameObject:
   - component: {fileID: 1269984630}
   - component: {fileID: 1269984629}
   m_Layer: 5
-  m_Name: SensorStopButton
+  m_Name: NextSceneButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10303,7 +10303,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1272841486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11816,7 +11816,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Sensor Stop
+  m_Text: Next Scene
 --- !u!222 &1463842161
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -15570,6 +15570,8 @@ MonoBehaviour:
   inhaleStartGuidePanels: []
   inhaleGuidePanel: {fileID: 0}
   tutoStartGuidePanels: []
+  testStartGuidePanels: []
+  testGuidePanel: {fileID: 0}
   inhaleBarObj: {fileID: 173841267}
   exhaleBarObj: {fileID: 619449351}
   playerTr: {fileID: 963194228}

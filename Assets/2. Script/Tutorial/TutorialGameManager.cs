@@ -289,10 +289,10 @@ public class TutorialGameManager : MonoBehaviour
                     selectionStick.SetActive(false);
                     vrUiManager.HideInhaleHud();
                     vrUiManager.HideExhaleHud();
-                    if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
+                    /*if ((Input.touchCount > 0) || Input.GetMouseButtonUp(0))
                     {
                         Application.Quit();
-                    }
+                    }*/
                     break;
             }
             yield return null;
@@ -311,6 +311,17 @@ public class TutorialGameManager : MonoBehaviour
         outtakedAir = 0f;
         vrUiManager.HideInhaleHud();
         vrUiManager.resetFill();
+    }
+
+    public void SimulNextScene()
+    {
+        currState2 = GameState2.FINISH;
+        Invoke("ToNextScene", 1f);
+    }
+
+    public void ToNextScene()
+    {
+
     }
 
 }

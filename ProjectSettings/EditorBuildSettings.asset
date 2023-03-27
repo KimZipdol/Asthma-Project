@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/1. Scenes/0. Tutorial.unity
     guid: 69512629a5fd940488c9ce93882faa6a
   - enabled: 1
+    path: Assets/1. Scenes/0. BreathTest.unity
+    guid: dd0cdfc71c6cb419f9695ba9cc314e5c
+  - enabled: 1
     path: Assets/1. Scenes/1-1. RocketGame.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1

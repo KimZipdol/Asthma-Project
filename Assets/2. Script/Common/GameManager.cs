@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.IO;
 using System;
 
@@ -42,6 +43,13 @@ public class GameManager : MonoBehaviour
 
     int saveCount = 0;
 
+    [SerializeField]
+    private int loadSceneSeed = -1;
+    [SerializeField]
+    private int currScenePlayed = 0;
+
+    private String[] sceneNames = { "1-1. RocketGame", "2. CandleBlowing", "3. Inhaler" };
+
     public int getStage { get; set; } = -1;
 
     public float getProgress { get; set; } = -1f;
@@ -74,6 +82,18 @@ public class GameManager : MonoBehaviour
         else if (instance != this)
         {
             Destroy(this.gameObject);
+        }
+
+        if (PlayerPrefs.GetInt("IsSeedSet", 0) == 0)
+        {
+            System.Random sceneSeed = new System.Random();
+            loadSceneSeed = sceneSeed.Next(3, 21);
+            PlayerPrefs.SetInt("SceneSeed", loadSceneSeed);
+        }
+        else if(PlayerPrefs.GetInt("IsSeedSet") != 0)
+        {
+            loadSceneSeed = PlayerPrefs.GetInt("IsSeedSet");
+            PlayerPrefs.SetInt("SceneSeed", 1);
         }
     }
 
@@ -125,9 +145,124 @@ public class GameManager : MonoBehaviour
         //Debug.Log("저장 완료");
     }
 
+    public void SimulNextScene()
+    {
+        switch(loadSceneSeed%6)
+        {
+            case 0:
+                if (currScenePlayed == 0)
+                {
+                    currScenePlayed += 1;
+                    SceneManager.LoadScene(sceneNames[0]);
+                }
+                else if (currScenePlayed == 1)
+                {
+                    currScenePlayed += 1;
+                    SceneManager.LoadScene(sceneNames[2]);
+                }
+                else
+                {
+                    currScenePlayed += 1;
+                    SceneManager.LoadScene(sceneNames[1]);
+                }
+                break;
+            case 1:
+                if (currScenePlayed == 0)
+                {
+                    currScenePlayed += 1;
+                    SceneManager.LoadScene(sceneNames[0]);
+                }
+                else if (currScenePlayed == 1)
+                {
+                    currScenePlayed += 1;
+                    SceneManager.LoadScene(sceneNames[2]);
+                }
+                else
+                {
+                    currScenePlayed += 1;
+                    SceneManager.LoadScene(sceneNames[1]);
+                }
+                break;
+            case 2:
+                if (currScenePlayed == 0)
+                {
+                    currScenePlayed += 1;
+                    SceneManager.LoadScene(sceneNames[0]);
+                }
+                else if (currScenePlayed == 1)
+                {
+                    currScenePlayed += 1;
+                    SceneManager.LoadScene(sceneNames[2]);
+                }
+                else
+                {
+                    currScenePlayed += 1;
+                    SceneManager.LoadScene(sceneNames[1]);
+                }
+                break;
+            case 3:
+                if (currScenePlayed == 0)
+                {
+                    currScenePlayed += 1;
+                    SceneManager.LoadScene(sceneNames[0]);
+                }
+                else if (currScenePlayed == 1)
+                {
+                    currScenePlayed += 1;
+                    SceneManager.LoadScene(sceneNames[2]);
+                }
+                else
+                {
+                    currScenePlayed += 1;
+                    SceneManager.LoadScene(sceneNames[1]);
+                }
+                break;
+            case 4:
+                if (currScenePlayed == 0)
+                {
+                    currScenePlayed += 1;
+                    SceneManager.LoadScene(sceneNames[0]);
+                }
+                else if (currScenePlayed == 1)
+                {
+                    currScenePlayed += 1;
+                    SceneManager.LoadScene(sceneNames[2]);
+                }
+                else
+                {
+                    currScenePlayed += 1;
+                    SceneManager.LoadScene(sceneNames[1]);
+                }
+                break;
+            case 5:
+                if (currScenePlayed == 0)
+                {
+                    currScenePlayed += 1;
+                    SceneManager.LoadScene(sceneNames[0]);
+                }
+                else if (currScenePlayed == 1)
+                {
+                    currScenePlayed += 1;
+                    SceneManager.LoadScene(sceneNames[2]);
+                }
+                else
+                {
+                    currScenePlayed += 1;
+                    SceneManager.LoadScene(sceneNames[1]);
+                }
+                break;
+            default:
+                break;
+
+        }
+
+    }
+
     private void OnApplicationQuit()
     {
         SaveGameData();
         PlayerPrefs.SetInt("SaveCount", saveCount);
+        if(currScenePlayed == 3)
+            PlayerPrefs.SetInt("SceneSeed", ++loadSceneSeed);
     }
 }

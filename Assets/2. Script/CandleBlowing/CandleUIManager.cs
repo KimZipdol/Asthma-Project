@@ -43,8 +43,10 @@ public class CandleUIManager : MonoBehaviour
 
     private void Update()
     {
-        offCandleTxt.text = CandleGameManager2.instance.candleOffedOnThisStage
-            + " / " + (10 * currStage) + "개";
+        string offText = CandleGameManager2.instance.candleOffedOnThisStage.ToString();
+        offText += " / " + (10 * currStage) + "개";
+        offCandleTxt.text = offText;
+            
         
     }
 
