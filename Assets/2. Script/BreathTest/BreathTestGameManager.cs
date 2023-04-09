@@ -87,7 +87,6 @@ public class BreathTestGameManager : MonoBehaviour
                 break;
 
         }
-        Debug.Log("currstage: " + currStage);
         testUIManager.SendMessage("SetStage", currStage);
     }
 
@@ -98,7 +97,6 @@ public class BreathTestGameManager : MonoBehaviour
         loggingManager = GameObject.Find("LoggingManager");
 
         StartCoroutine(CheckState());
-        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void GetCurrScene(Scene scene, LoadSceneMode mode)
@@ -269,7 +267,6 @@ public class BreathTestGameManager : MonoBehaviour
 
     }
 
-
     void InhaleFinished()
     {
         currState3 = TestGameState.EXHALE;
@@ -309,9 +306,6 @@ public class BreathTestGameManager : MonoBehaviour
                 break;
         }
     }
-
-
-
 
     private void resetStage()
     {
@@ -359,4 +353,8 @@ public class BreathTestGameManager : MonoBehaviour
         vrUiManager.UnBlockEye();
     }
 
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
 }

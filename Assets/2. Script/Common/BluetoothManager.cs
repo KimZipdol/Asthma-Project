@@ -91,14 +91,14 @@ public class BluetoothManager : MonoBehaviour
             Destroy(this);
         }
 
-        logging = GameObject.Find("LoggingManager");
+        
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void OnSceneLoaded (Scene scene, LoadSceneMode mode)
     {
-        switch(scene.name)
+        switch (scene.name)
         {
             case ("0. Tutorial"):
                 currGameManager = GameObject.Find("TutorialGameManager");
@@ -130,6 +130,49 @@ public class BluetoothManager : MonoBehaviour
                 currGameManager = null;
                 break;
         }
+
+        /*try
+        {
+            switch (scene.name)
+            {
+                case ("0. Tutorial"):
+                    currGameManager = GameObject.Find("TutorialGameManager");
+                    StartCoroutine(displaySensorData());
+                    break;
+                case ("1-1. RocketGame"):
+                    currGameManager = GameObject.Find("RocketGameManager");
+                    StartCoroutine(displaySensorData());
+                    break;
+                case ("1-2. RocketStage2"):
+                    currGameManager = GameObject.Find("RocketGameManager");
+                    StartCoroutine(displaySensorData());
+                    Start();
+                    break;
+                case ("1-345. RocketStage345"):
+                    currGameManager = GameObject.Find("RocketGameManager");
+                    StartCoroutine(displaySensorData());
+                    Start();
+                    break;
+                case ("2. CandleBlowing"):
+                    currGameManager = GameObject.Find("CandleGameManager");
+                    StartCoroutine(displaySensorData());
+                    break;
+                case ("3. Inhaler"):
+                    currGameManager = GameObject.Find("InhaleGameManager");
+                    StartCoroutine(displaySensorData());
+                    break;
+                default:
+                    currGameManager = null;
+                    break;
+            }
+        }
+        catch (Exception)
+        {
+            Scene thisScene = SceneManager.GetSceneByName(scene.name);
+            OnSceneLoaded(thisScene, LoadSceneMode.Single);
+            throw;
+        }
+        */
     }
 
     IEnumerator displaySensorData()
@@ -165,6 +208,7 @@ public class BluetoothManager : MonoBehaviour
         //bluetoothHelperInstance.setDeviceName("BreatheInput");
         //bluetoothHelperInstance.setDeviceAddress("09:40:40:8a:39:3a");
 
+        logging = GameObject.Find("LoggingManager");
     }
 
     private void SetBLEEvents()

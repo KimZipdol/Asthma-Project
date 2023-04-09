@@ -92,6 +92,9 @@ public class GameManager : MonoBehaviour
         }
         else if(PlayerPrefs.GetInt("IsSeedSet") != 0)
         {
+            while (loadSceneSeed > 38)
+                loadSceneSeed = loadSceneSeed - 18;
+
             loadSceneSeed = PlayerPrefs.GetInt("IsSeedSet");
             PlayerPrefs.SetInt("SceneSeed", 1);
         }
@@ -147,57 +150,67 @@ public class GameManager : MonoBehaviour
 
     public void SimulNextScene()
     {
-        switch(loadSceneSeed%6)
+        Debug.Log("SimulNextScene clicked");
+        switch (loadSceneSeed%6)
         {
             case 0:
                 if (currScenePlayed == 0)
                 {
                     currScenePlayed += 1;
                     SceneManager.LoadScene(sceneNames[0]);
+                    Debug.Log("Load Scene 0");
                 }
                 else if (currScenePlayed == 1)
                 {
                     currScenePlayed += 1;
                     SceneManager.LoadScene(sceneNames[2]);
+                    Debug.Log("Load Scene 2");
                 }
                 else
                 {
                     currScenePlayed += 1;
                     SceneManager.LoadScene(sceneNames[1]);
+                    Debug.Log("Load Scene 1");
                 }
                 break;
             case 1:
                 if (currScenePlayed == 0)
                 {
                     currScenePlayed += 1;
-                    SceneManager.LoadScene(sceneNames[0]);
+                    SceneManager.LoadScene(sceneNames[1]);
+                    Debug.Log("Load Scene 1");
                 }
                 else if (currScenePlayed == 1)
                 {
                     currScenePlayed += 1;
-                    SceneManager.LoadScene(sceneNames[2]);
+                    SceneManager.LoadScene(sceneNames[0]);
+                    Debug.Log("Load Scene 0");
                 }
                 else
                 {
                     currScenePlayed += 1;
-                    SceneManager.LoadScene(sceneNames[1]);
+                    SceneManager.LoadScene(sceneNames[2]);
+                    Debug.Log("Load Scene 2");
                 }
                 break;
             case 2:
                 if (currScenePlayed == 0)
                 {
                     currScenePlayed += 1;
-                    SceneManager.LoadScene(sceneNames[0]);
+                    SceneManager.LoadScene(sceneNames[2]);
+                    Debug.Log("Load Scene 2");
                 }
                 else if (currScenePlayed == 1)
                 {
                     currScenePlayed += 1;
-                    SceneManager.LoadScene(sceneNames[2]);
+                    SceneManager.LoadScene(sceneNames[1]);
+                    Debug.Log("Load Scene 1");
                 }
                 else
                 {
                     currScenePlayed += 1;
-                    SceneManager.LoadScene(sceneNames[1]);
+                    SceneManager.LoadScene(sceneNames[0]);
+                    Debug.Log("Load Scene 0");
                 }
                 break;
             case 3:
@@ -205,33 +218,39 @@ public class GameManager : MonoBehaviour
                 {
                     currScenePlayed += 1;
                     SceneManager.LoadScene(sceneNames[0]);
+                    Debug.Log("Load Scene 0");
                 }
                 else if (currScenePlayed == 1)
                 {
                     currScenePlayed += 1;
-                    SceneManager.LoadScene(sceneNames[2]);
+                    SceneManager.LoadScene(sceneNames[1]);
+                    Debug.Log("Load Scene 1");
                 }
                 else
                 {
                     currScenePlayed += 1;
-                    SceneManager.LoadScene(sceneNames[1]);
+                    SceneManager.LoadScene(sceneNames[2]);
+                    Debug.Log("Load Scene 2");
                 }
                 break;
             case 4:
                 if (currScenePlayed == 0)
                 {
                     currScenePlayed += 1;
-                    SceneManager.LoadScene(sceneNames[0]);
+                    SceneManager.LoadScene(sceneNames[1]);
+                    Debug.Log("Load Scene 1");
                 }
                 else if (currScenePlayed == 1)
                 {
                     currScenePlayed += 1;
                     SceneManager.LoadScene(sceneNames[2]);
+                    Debug.Log("Load Scene 2");
                 }
                 else
                 {
                     currScenePlayed += 1;
-                    SceneManager.LoadScene(sceneNames[1]);
+                    SceneManager.LoadScene(sceneNames[0]);
+                    Debug.Log("Load Scene 0");
                 }
                 break;
             case 5:
@@ -239,16 +258,19 @@ public class GameManager : MonoBehaviour
                 {
                     currScenePlayed += 1;
                     SceneManager.LoadScene(sceneNames[0]);
+                    Debug.Log("Load Scene 0");
                 }
                 else if (currScenePlayed == 1)
                 {
                     currScenePlayed += 1;
-                    SceneManager.LoadScene(sceneNames[2]);
+                    SceneManager.LoadScene(sceneNames[1]);
+                    Debug.Log("Load Scene 1");
                 }
                 else
                 {
                     currScenePlayed += 1;
-                    SceneManager.LoadScene(sceneNames[1]);
+                    SceneManager.LoadScene(sceneNames[2]);
+                    Debug.Log("Load Scene 2");
                 }
                 break;
             default:

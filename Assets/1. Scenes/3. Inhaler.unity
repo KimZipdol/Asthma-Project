@@ -12149,7 +12149,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1426047147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13202,6 +13202,8 @@ MonoBehaviour:
   outtakeToSpeedRatio: 0.8
   sensorActionPotential: 1
   GameDataFileName: .json
+  loadSceneSeed: -1
+  currScenePlayed: 0
 --- !u!4 &1577806904
 Transform:
   m_ObjectHideFlags: 0

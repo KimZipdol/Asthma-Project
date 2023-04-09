@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.5425668, g: 0.5047162, b: 0.52498007, a: 1}
+  m_IndirectSpecularColor: {r: 0.5425508, g: 0.5047037, b: 0.524967, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5868,6 +5868,8 @@ MonoBehaviour:
   outtakeToSpeedRatio: 0.1
   sensorActionPotential: 1
   GameDataFileName: .json
+  loadSceneSeed: -1
+  currScenePlayed: 0
 --- !u!4 &738313536
 Transform:
   m_ObjectHideFlags: 0
@@ -10237,8 +10239,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 329054397}
-        m_MethodName: stopSensor
+      - m_Target: {fileID: 738313535}
+        m_MethodName: SimulNextScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10247,7 +10249,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
 --- !u!114 &1269984630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10303,7 +10305,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1272841486
 MonoBehaviour:
   m_ObjectHideFlags: 0
